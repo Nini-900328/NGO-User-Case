@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NGOPlatformWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+77d31510f03c9badad92b43a2b58a7d2af6b214a")]
 [assembly: System.Reflection.AssemblyProductAttribute("NGOPlatformWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NGOPlatformWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

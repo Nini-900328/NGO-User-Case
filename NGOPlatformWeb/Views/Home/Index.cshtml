@@ -1,8 +1,160 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model HomeViewModel
+@{
+    ViewData["Title"] = "首頁";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- 滿版主要輪播區域 -->
+<section class="hero-section-fullwidth mb-0">
+    <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            @for (int i = 0; i < Model.CarouselItems.Count; i++)
+            {
+                <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="@i"
+                        class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")"
+                        aria-label="Slide @(i + 1)"></button>
+            }
+        </div>
+        <div class="carousel-inner">
+            @for (int i = 0; i < Model.CarouselItems.Count; i++)
+            {
+                var item = Model.CarouselItems[i];
+                <div class="carousel-item @(i == 0 ? "active" : "")">
+                    <div class="hero-slide" style="background-image: url('@item.ImageUrl');">
+                        <div class="hero-overlay"></div>
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8 text-center">
+                                    <div class="hero-content">
+                                        <h1 class="display-4 fw-bold text-white mb-4">@item.Title</h1>
+                                        <p class="lead text-white mb-4">@item.Description</p>
+                                        <button class="btn btn-primary btn-lg me-3">立即行動</button>
+                                        <button class="btn btn-outline-light btn-lg">了解更多</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+
+
+
+<div class="container-lg py-5" style="max-width: 1200px;">
+    <!-- 功能列表卡片 -->
+    <section class="features-section mb-5">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold text-dark">功能服務</h2>
+            <p class="text-muted">提供完整的NGO服務平台功能</p>
+        </div>
+        <div class="row g-4">
+            @foreach (var card in Model.FeatureCards)
+            {
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 text-center border-0 shadow-sm hover-card">
+                        <div class="card-body p-4">
+                            <div class="feature-icon mb-3 mx-auto" style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-@GetIconName(card.Title) fa-2x text-white"></i>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark">@card.Title</h5>
+                            <p class="card-text text-muted">@card.Description</p>
+                            <a href="#" class="btn btn-outline-primary btn-sm">了解更多</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <!-- 活動權證區域 -->
+    <section class="activity-section mb-5">
+        <div class="row align-items-center bg-light p-4 rounded-3 shadow-sm">
+            <div class="col-lg-5">
+                <img src="@Model.ActivityInfo.ImageUrl" alt="活動權證" class="img-fluid rounded-3 shadow" style="width: 100%; height: 250px; object-fit: cover;">
+            </div>
+            <div class="col-lg-7 ps-lg-4">
+                <div class="activity-content">
+                    <span class="badge bg-dark mb-2">
+                        <i class="fas fa-calendar me-1"></i>最新活動
+                    </span>
+                    <p class="text-muted small">@Model.ActivityInfo.StartDate.ToString("yyyy年MM月dd日")</p>
+                    <h3 class="fw-bold text-dark mb-3">@Model.ActivityInfo.Title</h3>
+                    <p class="text-muted mb-4">@Model.ActivityInfo.Description</p>
+                    <div>
+                        <button class="btn btn-dark me-2">
+                            <i class="fas fa-info-circle me-1"></i>了解更多
+                        </button>
+                        <button class="btn btn-outline-dark">
+                            <i class="fas fa-user-plus me-1"></i>立即報名
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
+
+@functions {
+    private string GetIconName(string title)
+    {
+        return title switch
+        {
+            "報名證照" => "certificate",
+            "活動管理" => "calendar-alt",
+            "組織介紹" => "building",
+            "智庫資料" => "database",
+            _ => "star"
+        };
+    }
+}
+
+<!-- 滿版橫幅樣式 -->
+<style>
+    .hero-slide {
+        height: 70vh;
+        min-height: 500px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hover-card {
+        transition: all 0.3s ease;
+    }
+
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+        }
+
+    .bg-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    }
+</style>
