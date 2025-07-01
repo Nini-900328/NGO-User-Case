@@ -9,77 +9,85 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = NGOPlatformWeb
 build_property.RootNamespace = NGOPlatformWeb
-build_property.ProjectDir = C:\Users\lanli\Source\Repos\NGO-User-Case\NGOPlatformWeb\
+build_property.ProjectDir = C:\Users\lanli\Source\Repos\TestDB\NGOPlatformWeb\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\lanli\Source\Repos\NGO-User-Case\NGOPlatformWeb
+build_property.MSBuildProjectDirectory = C:\Users\lanli\Source\Repos\TestDB\NGOPlatformWeb
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/lanli/Source/Repos/NGO-User-Case/NGOPlatformWeb/Views/Auth/Index.cshtml]
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/Activity/ActivityIndex.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWN0aXZpdHlcQWN0aXZpdHlJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/Activity/Signup.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWN0aXZpdHlcU2lnbnVwLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/Auth/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lanli/Source/Repos/NGO-User-Case/NGOPlatformWeb/Views/Case/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FzZVxJbmRleC5jc2h0bWw=
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/Case/ShoppingIndex.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FzZVxTaG9wcGluZ0luZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lanli/Source/Repos/NGO-User-Case/NGOPlatformWeb/Views/Event/Index.cshtml]
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/Event/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lanli/Source/Repos/NGO-User-Case/NGOPlatformWeb/Views/Home/Contact.cshtml]
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/Home/Contact.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDb250YWN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lanli/Source/Repos/NGO-User-Case/NGOPlatformWeb/Views/Home/Index.cshtml]
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lanli/Source/Repos/NGO-User-Case/NGOPlatformWeb/Views/Home/Organization.cshtml]
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/Home/Organization.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxPcmdhbml6YXRpb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lanli/Source/Repos/NGO-User-Case/NGOPlatformWeb/Views/Home/Privacy.cshtml]
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lanli/Source/Repos/NGO-User-Case/NGOPlatformWeb/Views/Purchase/Index.cshtml]
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/Purchase/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lanli/Source/Repos/NGO-User-Case/NGOPlatformWeb/Views/Shared/Error.cshtml]
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lanli/Source/Repos/NGO-User-Case/NGOPlatformWeb/Views/Shared/_Footer.cshtml]
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/Shared/_Footer.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Gb290ZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lanli/Source/Repos/NGO-User-Case/NGOPlatformWeb/Views/Shared/_Navigation.cshtml]
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/Shared/_Navigation.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9OYXZpZ2F0aW9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lanli/Source/Repos/NGO-User-Case/NGOPlatformWeb/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lanli/Source/Repos/NGO-User-Case/NGOPlatformWeb/Views/User/Index.cshtml]
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/User/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lanli/Source/Repos/NGO-User-Case/NGOPlatformWeb/Views/_ViewImports.cshtml]
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lanli/Source/Repos/NGO-User-Case/NGOPlatformWeb/Views/_ViewStart.cshtml]
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lanli/Source/Repos/NGO-User-Case/NGOPlatformWeb/Views/Shared/_Layout.cshtml]
+[C:/Users/lanli/Source/Repos/TestDB/NGOPlatformWeb/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-3ce52ezwpn
