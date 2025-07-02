@@ -20,3 +20,44 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/*測試用 styles*/
+@keyframes scroll-left {
+    0% {
+        transform: translate3d(100%, 0, 0);
+    }
+
+    100% {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+marquee {
+    animation: scroll-left 20s linear infinite;
+}
+
+.tag-buttons {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.navbar-light .nav-link {
+    color: #5e4632; /* 深咖啡色 */
+    transition: color 0.2s ease;
+}
+
+    .navbar-light .nav-link:hover,
+    .navbar-light .nav-link.active {
+        color: #2e221a; /* 點擊或 hover 時更深更明顯 */
+        font-weight: bold;
+    }
+
+.navbar-light .btn-outline-dark {
+    border-color: #5e4632;
+    color: #5e4632;
+}
+
+    .navbar-light .btn-outline-dark:hover {
+        background-color: #5e4632;
+        color: white;
+    }

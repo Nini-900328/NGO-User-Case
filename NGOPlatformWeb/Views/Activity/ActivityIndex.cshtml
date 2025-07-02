@@ -1,0 +1,66 @@
+﻿@model List<NGOPlatformWeb.Models.Entity.Activity>
+
+<!-- 標題與說明區塊 -->
+<div class="py-4 mb-4" style="background-color: #FBB37F;">
+    <div class="container text-center">
+        <h3 class="text-white fw-bold">活動總覽</h3>
+        <p class="text-white">快找親朋好友一起參與活動吧~</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="mb-4">
+        <div class="d-flex flex-wrap justify-content-center align-items-center gap-2">
+            <input type="text" class="form-control search-box" placeholder="搜尋活動名稱…" />
+            <a asp-action="ActivityIndex" class="btn btn-outline-success">全部活動</a>
+            <a asp-action="ActivityIndex" asp-route-category="手作" class="btn btn-outline-success">手作</a>
+            <a asp-action="ActivityIndex" asp-route-category="環保" class="btn btn-outline-secondary">環保</a>
+            <a asp-action="ActivityIndex" asp-route-category="運動" class="btn btn-outline-secondary">運動</a>
+            <a asp-action="ActivityIndex" asp-route-category="娛樂" class="btn btn-outline-secondary">娛樂</a>
+            <a asp-action="ActivityIndex" asp-route-category="教育" class="btn btn-outline-secondary">教育</a>
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex">
+                <div class="card h-100 shadow-sm search-card w-100">
+                    <img src="@item.ImageUrl" class="card-img-top" alt="活動圖片" style="height: 180px; object-fit: cover;" />
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@item.ActivityName</h5>
+                        <p class="card-text text-muted">@item.Description</p>
+                        <p class="card-text text-muted">地點 : @item.Location</p>
+                        <p class="text-muted small">開始時間 : @item.StartDate.ToShortDateString()</p>
+                        <p class="text-muted small">結束時間 : @item.EndDate.ToShortDateString()</p>
+                        <div class="mt-auto">
+                            <p class="text-muted small">參與人數 : @item.CurrentParticipants / @item.MaxParticipants</p>
+                            <p class="text-muted small">進度條</p>
+                            <p class="text-muted small">參與條件(討論)</p>
+                            <p class="text-muted small">報名截止時間(討論)</p>
+                            <button type="button"
+                                    class="btn btn-success btn-sm"
+                                    style="background-color: #F28C45; color: white; border: none;">
+                                立即參與
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".search-box").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $(".search-card").each(function () {
+                    const text = $(this).text().toLowerCase();
+                    $(this).toggle(text.includes(value));
+                });
+            });
+        });
+    </script>
+}

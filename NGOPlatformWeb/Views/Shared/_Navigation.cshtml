@@ -1,0 +1,83 @@
+﻿<nav class="navbar navbar-expand-lg navbar-light"
+     style="background: linear-gradient(to right, #e8dacd, #d5bfa3); box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+
+    <div class="container-fluid">
+        <div class="row w-100 align-items-center">
+            <!-- 左：LOGO + 社工管理 -->
+            <div class="col-auto d-flex align-items-center">
+                <a class="navbar-brand fw-bold me-3" href="@Url.Action("Index", "Home")" style="font-size: 1.5rem;">
+                    <i class="fas fa-hands-helping me-2"></i>NGO管理平台
+                </a>
+                <a class="btn btn-outline-dark btn-sm" href="@Url.Action("Index", "Admin")">
+                    <i class="fas fa-user-shield me-1"></i>社工管理
+                </a>
+            </div>
+
+            <!-- 中：選單 -->
+            <div class="col text-center">
+                <ul class="navbar-nav d-inline-flex justify-content-center">
+                    <!-- 首頁 -->
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"
+                           href="@Url.Action("Index", "Home")">
+                            <i class="fas fa-home me-1"></i> 首頁
+                        </a>
+                    </li>
+
+                    <!-- 物資認購 -->
+                    <li class="nav-item">
+                        <a asp-controller="Case" asp-action="ShoppingIndex"
+                           class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Case" && ViewContext.RouteData.Values["action"]?.ToString() == "ShoppingIndex" ? "active" : "")">
+                            <i class="fas fa-cogs"></i> <span class="ms-1">物資認購</span>
+                        </a>
+                    </li>
+
+                    <!-- 活動報名 -->
+                    <li class="nav-item">
+                        <a asp-controller="Activity" asp-action="ActivityIndex"
+                           class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Activity" && ViewContext.RouteData.Values["action"]?.ToString() == "ActivityIndex" ? "active" : "")">
+                            <i class="fas fa-calendar-alt"></i> 活動報名
+                        </a>
+                    </li>
+
+                    <!-- 組織介紹 -->
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Organization"
+                           class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "Organization" ? "active" : "")">
+                            <i class="fas fa-building"></i> <span class="ms-1">組織介紹</span>
+                        </a>
+                    </li>
+
+                    <!-- 聯絡我們 -->
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "Contact" ? "active" : "")"
+                           href="@Url.Action("Contact", "Home")">
+                            <i class="fas fa-database me-1"></i> 聯絡我們
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 右：購物車與使用者 -->
+            <div class="col-auto d-flex justify-content-end align-items-center">
+                <a href="#" class="btn btn-outline-dark me-3">
+                    <i class="fas fa-shopping-cart me-1"></i>設購清單
+                </a>
+                <div class="dropdown">
+                    <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user me-1"></i>Hi 使用者A
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>example@gmail.com</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-calendar-check me-2"></i>報名的活動</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-receipt me-2"></i>認購紀錄</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user-edit me-2"></i>個人資料</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>登出</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
