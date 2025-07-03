@@ -17,12 +17,12 @@ namespace NGOPlatformWeb.Controllers
         public IActionResult ShoppingIndex(string category)
         {
             var query = _context.Supplies
-                .Include(s => s.MaterialCategory) // 確保類別有被載入
+                .Include(s => s.SupplyCategory) // 確保類別有被載入
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(category))
             {
-                query = query.Where(s => s.MaterialCategory != null && s.MaterialCategory.MaterialCategoryName.Contains(category));
+                query = query.Where(s => s.SupplyCategory != null && s.SupplyCategory.SupplyCategoryName.Contains(category));
             }
 
             var supplies = query.ToList();

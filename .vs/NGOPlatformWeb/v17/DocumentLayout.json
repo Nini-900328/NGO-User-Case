@@ -3,6 +3,61 @@
   "WorkspaceRootPath": "D:\\MSIT67\\\u5927\u5C08\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\9.0.300\\Sdks\\Microsoft.NET.Sdk.StaticWebAssets\\targets\\Microsoft.NET.Sdk.StaticWebAssets.Compression.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\models\\entity\\supply.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\models\\entity\\supply.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\models\\entity\\supplycategory .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\models\\entity\\supplycategory .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\controllers\\purchasecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\controllers\\purchasecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\controllers\\activitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\controllers\\activitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\controllers\\casecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\controllers\\casecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\controllers\\eventcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\controllers\\eventcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\models\\entity\\activity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\models\\entity\\activity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\views\\case\\shoppingindex.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\views\\case\\shoppingindex.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\models\\homeviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\models\\homeviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\models\\ngodbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\models\\ngodbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
@@ -21,29 +76,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
       "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\controllers\\casecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\controllers\\casecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\views\\case\\shoppingindex.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\views\\case\\shoppingindex.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\9.0.300\\Sdks\\Microsoft.NET.Sdk.StaticWebAssets\\targets\\Microsoft.NET.Sdk.StaticWebAssets.Compression.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\models\\entity\\materialcategory .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\models\\entity\\materialcategory .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\models\\entity\\activity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\models\\entity\\activity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|d:\\msit67\\\u5927\u5C08\\ngoplatformweb\\models\\entity\\supply.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{41216798-5F5E-4C59-A5C0-AB594AF3D82A}|NGOPlatformWeb\\NGOPlatformWeb.csproj|solutionrelative:ngoplatformweb\\models\\entity\\supply.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -53,7 +85,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 16,
           "Children": [
             {
               "$type": "Bookmark",
@@ -69,20 +101,115 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 12,
+              "Title": "HomeViewModel.cs",
+              "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Models\\HomeViewModel.cs",
+              "RelativeDocumentMoniker": "NGOPlatformWeb\\Models\\HomeViewModel.cs",
+              "ToolTip": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Models\\HomeViewModel.cs",
+              "RelativeToolTip": "NGOPlatformWeb\\Models\\HomeViewModel.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-03T01:28:18.713Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "NGODbContext.cs",
+              "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Models\\NGODbContext.cs",
+              "RelativeDocumentMoniker": "NGOPlatformWeb\\Models\\NGODbContext.cs",
+              "ToolTip": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Models\\NGODbContext.cs",
+              "RelativeToolTip": "NGOPlatformWeb\\Models\\NGODbContext.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAAwAgAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-02T06:42:05.293Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "NGOPlatformWeb\\Controllers\\UserController.cs",
+              "ToolTip": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Controllers\\UserController.cs",
+              "RelativeToolTip": "NGOPlatformWeb\\Controllers\\UserController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-02T06:41:41.925Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "PurchaseController.cs",
+              "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Controllers\\PurchaseController.cs",
+              "RelativeDocumentMoniker": "NGOPlatformWeb\\Controllers\\PurchaseController.cs",
+              "ToolTip": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Controllers\\PurchaseController.cs",
+              "RelativeToolTip": "NGOPlatformWeb\\Controllers\\PurchaseController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-02T06:41:39.573Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "NGOPlatformWeb\\Controllers\\HomeController.cs",
+              "ToolTip": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "NGOPlatformWeb\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAF0AAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-02T06:41:32.427Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "EventController.cs",
+              "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Controllers\\EventController.cs",
+              "RelativeDocumentMoniker": "NGOPlatformWeb\\Controllers\\EventController.cs",
+              "ToolTip": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Controllers\\EventController.cs",
+              "RelativeToolTip": "NGOPlatformWeb\\Controllers\\EventController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-02T06:41:14.211Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "NGOPlatformWeb\\Controllers\\AuthController.cs",
+              "ToolTip": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "NGOPlatformWeb\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-02T06:41:13.336Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ActivityController.cs",
+              "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Controllers\\ActivityController.cs",
+              "RelativeDocumentMoniker": "NGOPlatformWeb\\Controllers\\ActivityController.cs",
+              "ToolTip": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Controllers\\ActivityController.cs",
+              "RelativeToolTip": "NGOPlatformWeb\\Controllers\\ActivityController.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-02T06:41:11.211Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\appsettings.json",
               "RelativeDocumentMoniker": "NGOPlatformWeb\\appsettings.json",
               "ToolTip": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\appsettings.json",
               "RelativeToolTip": "NGOPlatformWeb\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-07-02T05:47:23.779Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-02T05:47:23.779Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 16,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Program.cs",
               "RelativeDocumentMoniker": "NGOPlatformWeb\\Program.cs",
@@ -94,7 +221,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 15,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\appsettings.Development.json",
               "RelativeDocumentMoniker": "NGOPlatformWeb\\appsettings.Development.json",
@@ -106,7 +233,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 18,
               "Title": "site.css",
               "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\wwwroot\\css\\site.css",
               "RelativeDocumentMoniker": "NGOPlatformWeb\\wwwroot\\css\\site.css",
@@ -118,7 +245,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 17,
               "Title": "_Navigation.cshtml",
               "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Views\\Shared\\_Navigation.cshtml",
               "RelativeDocumentMoniker": "NGOPlatformWeb\\Views\\Shared\\_Navigation.cshtml",
@@ -130,71 +257,72 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 0,
               "Title": "Microsoft.NET.Sdk.StaticWebAssets.Compression.targets",
               "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\9.0.300\\Sdks\\Microsoft.NET.Sdk.StaticWebAssets\\targets\\Microsoft.NET.Sdk.StaticWebAssets.Compression.targets",
               "ToolTip": "C:\\Program Files\\dotnet\\sdk\\9.0.300\\Sdks\\Microsoft.NET.Sdk.StaticWebAssets\\targets\\Microsoft.NET.Sdk.StaticWebAssets.Compression.targets",
-              "ViewState": "AgIAAAMBAAAAAAAAAAAjwAgBAACpAAAAAAAAAA==",
+              "ViewState": "AgIAAFABAAAAAAAAAAAlwFcBAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
-              "WhenOpened": "2025-07-01T14:25:40.358Z"
+              "WhenOpened": "2025-07-01T14:25:40.358Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "MaterialCategory .cs",
-              "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Models\\Entity\\MaterialCategory .cs",
-              "RelativeDocumentMoniker": "NGOPlatformWeb\\Models\\Entity\\MaterialCategory .cs",
-              "ToolTip": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Models\\Entity\\MaterialCategory .cs",
-              "RelativeToolTip": "NGOPlatformWeb\\Models\\Entity\\MaterialCategory .cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "SupplyCategory .cs",
+              "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Models\\Entity\\SupplyCategory .cs",
+              "RelativeDocumentMoniker": "NGOPlatformWeb\\Models\\Entity\\SupplyCategory .cs",
+              "ToolTip": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Models\\Entity\\SupplyCategory .cs",
+              "RelativeToolTip": "NGOPlatformWeb\\Models\\Entity\\SupplyCategory .cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwgAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-01T14:25:30.372Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "Activity.cs",
               "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Models\\Entity\\Activity.cs",
               "RelativeDocumentMoniker": "NGOPlatformWeb\\Models\\Entity\\Activity.cs",
               "ToolTip": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Models\\Entity\\Activity.cs",
               "RelativeToolTip": "NGOPlatformWeb\\Models\\Entity\\Activity.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAABcAAAAAAAAAAAAswB4AAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-01T14:25:15.146Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 1,
               "Title": "Supply.cs",
               "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Models\\Entity\\Supply.cs",
               "RelativeDocumentMoniker": "NGOPlatformWeb\\Models\\Entity\\Supply.cs",
               "ToolTip": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Models\\Entity\\Supply.cs",
               "RelativeToolTip": "NGOPlatformWeb\\Models\\Entity\\Supply.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-01T14:24:29.079Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "CaseController.cs",
               "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Controllers\\CaseController.cs",
               "RelativeDocumentMoniker": "NGOPlatformWeb\\Controllers\\CaseController.cs",
               "ToolTip": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Controllers\\CaseController.cs",
               "RelativeToolTip": "NGOPlatformWeb\\Controllers\\CaseController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAA9AAAAAAAAAA==",
+              "ViewState": "AgIAABIAAAAAAAAAAAAYwBcAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-01T14:21:47.896Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 11,
               "Title": "ShoppingIndex.cshtml",
               "DocumentMoniker": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Views\\Case\\ShoppingIndex.cshtml",
               "RelativeDocumentMoniker": "NGOPlatformWeb\\Views\\Case\\ShoppingIndex.cshtml",
               "ToolTip": "D:\\MSIT67\\\u5927\u5C08\\NGOPlatformWeb\\Views\\Case\\ShoppingIndex.cshtml",
               "RelativeToolTip": "NGOPlatformWeb\\Views\\Case\\ShoppingIndex.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-07-01T14:20:41.838Z"
             }
