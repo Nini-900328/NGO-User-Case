@@ -1,0 +1,22 @@
+# Build artifacts
+bin/
+obj/
+*.nuget.cache
+*.nuget.g.props
+*.nuget.g.targets
+project.assets.json
+
+# User-specific files
+*.user
+*.suo
+*.vsp
+*.psess
+
+# IDE folders
+.vs/
+.vscode/
+.idea/
+
+# Others
+*.log
+*.tmp
