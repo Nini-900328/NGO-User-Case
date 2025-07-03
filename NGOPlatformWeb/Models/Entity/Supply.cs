@@ -14,8 +14,8 @@ namespace NGOPlatformWeb.Models.Entity
         [Column(TypeName = "decimal(18,2)")]
         public decimal? SupplyPrice { get; set; }
 
-        [ForeignKey("MaterialCategory")]
-        public int MaterialCategoryId { get; set; }
+        [ForeignKey("SupplyCategory")]
+        public int SupplyCategoryId { get; set; }
 
         public int SupplyQuantity { get; set; }
 
@@ -26,6 +26,6 @@ namespace NGOPlatformWeb.Models.Entity
         public string? SupplyDescription { get; set; }
 
         // 導覽屬性（可選）
-        public virtual MaterialCategory? MaterialCategory { get; set; }
+        public virtual SupplyCategory? SupplyCategory { get; set; }
     }
 }
