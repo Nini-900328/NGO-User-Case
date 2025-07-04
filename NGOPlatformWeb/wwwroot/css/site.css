@@ -21,7 +21,7 @@ body {
   margin-bottom: 60px;
 }
 
-/*´ú¸Õ¥Î styles*/
+/*æ¸¬è©¦ç”¨ styles*/
 @keyframes scroll-left {
     0% {
         transform: translate3d(100%, 0, 0);
@@ -42,13 +42,13 @@ marquee {
 }
 
 .navbar-light .nav-link {
-    color: #5e4632; /* ²`©@°Ø¦â */
+    color: #5e4632; /* æ·±å’–å•¡è‰² */
     transition: color 0.2s ease;
 }
 
     .navbar-light .nav-link:hover,
     .navbar-light .nav-link.active {
-        color: #2e221a; /* ÂIÀ»©Î hover ®É§ó²`§ó©úÅã */
+        color: #2e221a; /* é»žæ“Šæˆ– hover æ™‚æ›´æ·±æ›´æ˜Žé¡¯ */
         font-weight: bold;
     }
 

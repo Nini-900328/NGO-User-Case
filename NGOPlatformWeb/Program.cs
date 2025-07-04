@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Service registration
 builder.Services.AddControllersWithViews();
 
-// ¥[¤J DbContext
+// Â¥[Â¤J DbContext
 builder.Services.AddDbContext<NGODbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("NGODb")));
 
