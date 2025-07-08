@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using NGOPlatformWeb.Models.Entity;      // User, Case, CaseLogin, NGODbContext
-using NGOPlatformWeb.Models.ViewModels; // LoginViewModel
+using NGOPlatformWeb.Models.Entity;
+using NGOPlatformWeb.Models.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -39,12 +39,13 @@ namespace NGOPlatformWeb.Controllers
             if (user != null)
             {
                 await SignInAsync(
+                    httpContext: HttpContext,
+                    email: user.Email,
                     id: user.UserId.ToString(),
                     name: user.Name,
                     role: "User"
                 );
 
-                // 民眾登入後導回首頁
                 return RedirectToAction("Index", "Home");
             }
 
@@ -53,17 +54,17 @@ namespace NGOPlatformWeb.Controllers
                 .FirstOrDefault(c => c.Email == vm.Email && c.Password == vm.Password);
             if (caseLogin != null)
             {
-                // 取出對應 Case 主檔以取得名稱
                 var cas = _context.Cases.Find(caseLogin.CaseId);
                 var caseName = cas?.Name ?? "個案";
 
                 await SignInAsync(
+                    httpContext: HttpContext,
+                    email: caseLogin.Email,
                     id: caseLogin.CaseId.ToString(),
                     name: caseName,
                     role: "Case"
                 );
 
-                // 個案登入後導向首頁
                 return RedirectToAction("Index", "Home");
             }
 
@@ -81,21 +82,22 @@ namespace NGOPlatformWeb.Controllers
         }
 
         /// <summary>
-        /// 統一建立 Cookie Authentication
+        /// 統一建立 Cookie Authentication，供其他 Controller 共用
         /// </summary>
-        private Task SignInAsync(string id, string name, string role)
+        public static async Task SignInAsync(HttpContext httpContext, string id, string name, string role, string email)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, id),
-                new Claim(ClaimTypes.Name,           name),
-                new Claim(ClaimTypes.Role,           role)
+                new Claim(ClaimTypes.Email,           email),
+                new Claim(ClaimTypes.NameIdentifier,  id),
+                new Claim(ClaimTypes.Name,            name),
+                new Claim(ClaimTypes.Role,            role)
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
-            return HttpContext.SignInAsync(
+            await httpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 principal,
                 new AuthenticationProperties { IsPersistent = true }
