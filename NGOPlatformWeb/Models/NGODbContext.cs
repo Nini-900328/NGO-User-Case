@@ -13,5 +13,8 @@ namespace NGOPlatformWeb.Models.Entity
         public DbSet<Case> Cases { get; set; }
         public DbSet<CaseLogin> CaseLogins { get; set; }
         // 後續其他 DbSet 也可一起加上
+        public DbSet<RegularSupplyNeeds> RegularSuppliesNeeds { get; set; }
+        public DbSet<EmergencySupplyNeeds> EmergencySupplyNeeds { get; set; }
+
     }
 }

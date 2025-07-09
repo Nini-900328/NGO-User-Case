@@ -4,6 +4,7 @@ using NGOPlatformWeb.Models.Entity;
 using NGOPlatformWeb.Models.ViewModels;
 using System.Security.Claims;
 // 個案身份操作功能，例如查看適用活動或可領取物資
+
 namespace NGOPlatformWeb.Controllers
 {
     public class CaseController : Controller
@@ -30,27 +31,62 @@ namespace NGOPlatformWeb.Controllers
             var supplies = query.ToList();
             return View(supplies);
         }
-        public IActionResult Profile()
+        public IActionResult CasePurchaseList(string category)
         {
-            var email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (email == null) return RedirectToAction("Login", "Auth");
+            int caseId = 1; // 假資料，之後可從 Claims or Session 取代
 
-            var caseData = _context.Cases.FirstOrDefault(c => c.Email == email);
-            if (caseData == null) return NotFound();
-
-            var vm = new CaseProfileViewModel
+            var viewModel = new SupplyRecordViewModel
             {
-                Name = caseData.Name,
-                Email = caseData.Email,
-                Phone = caseData.Phone,
-                ProfileImage = caseData.ProfileImage,
-                City = caseData.City,
-                District = caseData.District,
-                DetailAddress = caseData.DetailAddress,
-                Role = "Case"
-            };
+                UnreceivedSupplies = _context.RegularSuppliesNeeds
+        .Include(r => r.Supply)
+            .ThenInclude(s => s.SupplyCategory)
+        .Where(r => r.CaseId == caseId && r.Status == "未領取")
+        .Select(r => new SupplyRecordItem
+        {
+            Name = r.Supply.SupplyName,
+            Category = r.Supply.SupplyCategory.SupplyCategoryName,
+            Quantity = r.Quantity,
+            ApplyDate = r.ApplyDate,
+            PickupDate = r.PickupDate,
+            Status = r.Status,
+            ImageUrl = r.Supply.ImageUrl
+        }).ToList(),
 
-            return View(vm);
+                ReceivedSupplies =
+    _context.RegularSuppliesNeeds
+        .Include(r => r.Supply)
+        .ThenInclude(s => s.SupplyCategory)
+        .Where(r => r.CaseId == caseId && (r.Status == "已領取" || r.Status == "訪談物資"))
+        .Select(r => new SupplyRecordItem
+        {
+            Name = r.Supply.SupplyName,
+            Category = r.Supply.SupplyCategory.SupplyCategoryName,
+            Quantity = r.Quantity,
+            ApplyDate = r.ApplyDate,
+            PickupDate = r.PickupDate,
+            Status = r.Status,
+            ImageUrl = r.Supply.ImageUrl
+        })
+    .Union(
+        _context.EmergencySupplyNeeds
+            .Include(e => e.Supply)
+            .ThenInclude(s => s.SupplyCategory)
+            .Where(e => e.CaseId == caseId && e.Status == "已領取")
+            .Select(e => new SupplyRecordItem
+            {
+                Name = e.Supply.SupplyName,
+                Category = e.Supply.SupplyCategory.SupplyCategoryName,
+                Quantity = e.Quantity,
+                ApplyDate = e.VisitDate,
+                PickupDate = e.PickupDate,
+                Status = "訪談物資", // 強制標示為訪談物資
+                ImageUrl = e.Supply.ImageUrl
+            })
+    )
+    .ToList()
+
+            };
+            return View("~/Views/User/CasePurchaseList.cshtml", viewModel);
         }
     }
 }
