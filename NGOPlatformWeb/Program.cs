@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Service registration
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
-// ¥[¤J DbContext
+// DbContext
 builder.Services.AddDbContext<NGODbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("NGODb")));
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

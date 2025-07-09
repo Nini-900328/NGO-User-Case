@@ -29,6 +29,9 @@ project.nuget.cache
 .vscode/
 .idea/
 
+# Dev containers
+.devcontainer/
+
 # Temporary files and logs
 *.log
 *.tmp
