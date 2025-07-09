@@ -81,6 +81,62 @@ namespace NGOPlatformWeb.Controllers
             return RedirectToAction("Login", "Auth");
         }
 
+        // GET: /Auth/Register
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View(new RegisterViewModel());
+        }
+
+        // POST: /Auth/Register
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel vm)
+        {
+            if (!ModelState.IsValid)
+                return View(vm);
+
+            // 檢查 Email 是否已存在
+            var existingUser = _context.Users.FirstOrDefault(u => u.Email == vm.Email);
+            if (existingUser != null)
+            {
+                ModelState.AddModelError(nameof(vm.Email), "此電子信箱已被註冊");
+                return View(vm);
+            }
+
+            // 檢查身份證字號是否已存在
+            var existingIdentity = _context.Users.FirstOrDefault(u => u.IdentityNumber == vm.IdentityNumber);
+            if (existingIdentity != null)
+            {
+                ModelState.AddModelError(nameof(vm.IdentityNumber), "此身份證字號已被註冊");
+                return View(vm);
+            }
+
+            // 創建新使用者
+            var newUser = new User
+            {
+                Name = vm.Name,
+                Email = vm.Email,
+                Password = vm.Password,
+                Phone = vm.Phone,
+                IdentityNumber = vm.IdentityNumber
+            };
+
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+
+            // 自動登入
+            await SignInAsync(
+                httpContext: HttpContext,
+                email: newUser.Email,
+                id: newUser.UserId.ToString(),
+                name: newUser.Name,
+                role: "User"
+            );
+
+            TempData["SuccessMessage"] = "註冊成功！歡迎加入恩舉平台。";
+            return RedirectToAction("Index", "Home");
+        }
+
         /// <summary>
         /// 統一建立 Cookie Authentication，供其他 Controller 共用
         /// </summary>
