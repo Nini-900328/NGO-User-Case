@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NGOPlatformWeb.Models.Entity;
 using NGOPlatformWeb.Models.ViewModels;
@@ -88,5 +89,51 @@ namespace NGOPlatformWeb.Controllers
             };
             return View("~/Views/User/CasePurchaseList.cshtml", viewModel);
         }
+
+        //for case edit page
+        [Authorize(Roles = "Case")]
+        public IActionResult CaseProfile()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(email)) return RedirectToAction("Login", "Auth");
+
+            var caseLogin = _context.CaseLogins.FirstOrDefault(c => c.Email == email);
+            var cas = _context.Cases.FirstOrDefault(c => c.CaseId == caseLogin.CaseId);
+            if (cas == null) return NotFound();
+
+            var vm = new CaseProfileViewModel
+            {
+                Name = cas.Name,
+                Email = caseLogin.Email,
+                Phone = cas.Phone,
+                IdentityNumber = cas.IdentityNumber,
+                Birthday = cas.Birthday,
+                Address = cas.Address
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Case")]
+        public IActionResult CaseProfile(CaseProfileViewModel vm)
+        {
+            if (vm.NewPassword != vm.ConfirmPassword)
+            {
+                ModelState.AddModelError("ConfirmPassword", "密碼與確認密碼不一致");
+                return View(vm);
+            }
+
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            var caseLogin = _context.CaseLogins.FirstOrDefault(c => c.Email == email);
+            if (caseLogin == null) return NotFound();
+
+            caseLogin.Password = vm.NewPassword;
+            _context.SaveChanges();
+
+            ViewBag.SuccessMessage = "密碼修改成功";
+            return View(vm);
+        }
+
     }
 }

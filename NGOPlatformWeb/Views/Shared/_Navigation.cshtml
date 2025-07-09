@@ -95,8 +95,8 @@
                             </li>
                             <li>
                                 <a class="dropdown-item d-flex align-items-center"
-                                   asp-controller="User"
-                                   asp-action="UserProfile">
+                                   asp-controller="@(role == "User" ? "User" : "Case")"
+                                   asp-action="@(role == "User" ? "UserProfile" : "CaseProfile")">
                                     <i class="fas fa-user-edit fixed-icon"></i>
                                     <span class="ms-2">個人資料</span>
                                 </a>
