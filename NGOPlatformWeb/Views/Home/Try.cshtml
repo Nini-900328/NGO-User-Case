@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!-- 如果你還沒有用 _Layout.cshtml 的話，這樣寫即可 -->
+    <!-- 如果你還沒有用 _Layout.cshtml 的話，這樣寫即可 -->
 
 <!DOCTYPE html>
 <html>
@@ -11,6 +11,43 @@
     <meta charset="utf-8" />
     <title>聯絡我們</title>
     <style>
+        /* 導覽列 */
+        .navbar {
+            display: flex;
+            justify-content: space-between; /* 中間對齊整條 navbar */
+            align-items: center;
+            background-color: #f3f3f3;
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
+            gap: 60px; /* 每個連結之間的間距 */
+        }
+
+        .nav-left, .nav-right {
+            display: flex;
+            gap: 20px; /* 每個連結之間間距 */
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+            .navbar a:hover {
+                background-color: #fbd0a2; /* hover 橘膚色 */
+                color: white; /* 讓文字變白 */
+            }
+
+            .navbar a.active {
+                background-color: #fbd0a2;
+                color: white;
+            }
+
+
+
         /* 頁面標題 */
         .page-title {
             background-color: #fbd0a2;
@@ -66,6 +103,23 @@
     </style>
 </head>
 <body>
+
+    <!-- 導覽列 -->
+    <div class="navbar">
+        
+        <div>
+            <a href="#">社工管理</a>
+            <a href="#">首頁</a>
+            <a href="#">物資認購</a>
+            <a href="#">活動</a>
+            <a href="#">組織介紹</a>
+            <a href="#">聯絡我們</a>
+        </div>
+        <div class="nav-right">
+            <a href="#">登入</a>
+        </div>
+    </div>
+
     <!-- 頁面標題 -->
     <div class="page-title">
         聯絡我們
