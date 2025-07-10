@@ -1,0 +1,46 @@
+﻿@model NGOPlatformWeb.Models.ViewModels.UserEditViewModel
+@{
+    ViewData["Title"] = "編輯個人資料";
+}
+
+<div class="container py-5">
+    <h3 class="mb-4">編輯個人資料</h3>
+
+    <form asp-action="EditProfile" method="post">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">姓名</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">Email（不可更改）</label>
+            <input asp-for="Email" class="form-control" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Phone" class="form-label">電話</label>
+            <input asp-for="Phone" class="form-control" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="IdentityNumber" class="form-label">身分證字號</label>
+            <input asp-for="IdentityNumber" class="form-control" />
+            <span asp-validation-for="IdentityNumber" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label">密碼</label>
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">儲存變更</button>
+        <a asp-action="UserProfile" class="btn btn-secondary ms-2">取消</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

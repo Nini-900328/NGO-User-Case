@@ -1,0 +1,76 @@
+﻿@model NGOPlatformWeb.Models.ViewModels.SupplyRecordViewModel
+
+
+
+<h2 class="section-title">物資申請紀錄</h2>
+@* <p class="record-summary">
+    未領取：1 項 ｜ 已領取：1 項 ｜ 訪談物資：1 項
+</p> *@
+<p class="record-summary">
+    未領取：@Model.UnreceivedSupplies.Count 項 ｜
+    已領取：@Model.ReceivedSupplies.Count(s => s.Status == "已領取") 項 ｜
+    訪談物資：@Model.ReceivedSupplies.Count(s => s.Status == "訪談物資") 項
+</p>
+
+<div class="tab-buttons">
+    <button class="tab-btn active" data-tab="unreceived">未領取</button>
+    <button class="tab-btn" data-tab="received">已領取</button>
+</div>
+
+<!-- 未領取 -->
+<div class="selection-list" id="tab-unreceived">
+    @foreach (var item in Model.UnreceivedSupplies)
+    {
+        <div class="item-card">
+            <img src="@item.ImageUrl" alt="@item.Name" class="item-img">
+            <div class="item-info">
+                <div class="item-name">@item.Name</div>
+                <div class="item-meta">
+                    <span>@item.Category</span> |
+                    <span>數量：@item.Quantity</span> |
+                    <span>登記：@item.ApplyDate.ToString("yyyy/MM/dd")</span>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- 已領取（含訪談物資） -->
+<div class="selection-list" id="tab-received" style="display: none;">
+    @foreach (var item in Model.ReceivedSupplies)
+    {
+        <div class="item-card">
+            <img src="@item.ImageUrl" alt="@item.Name" class="item-img">
+            <div class="item-info">
+                <div class="item-name">
+                    @item.Name
+                    @if (item.Status == "訪談物資")
+                    {
+                        <span class="tag-emergency">訪談物資</span>
+                    }
+                </div>
+                <div class="item-meta">
+                    @item.Category｜數量：@item.Quantity｜
+                    @if (item.ApplyDate != null)
+                    {
+                        <span>登記：@item.ApplyDate.ToString("yyyy/MM/dd")｜</span>
+                    }
+                    領取：@item.PickupDate?.ToString("yyyy/MM/dd")
+                </div>
+            </div>
+        </div>
+        }
+</div>
+
+<script>
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const tab = btn.getAttribute("data-tab");
+        document.getElementById("tab-unreceived").style.display = tab === "unreceived" ? "block" : "none";
+        document.getElementById("tab-received").style.display = tab === "received" ? "block" : "none";
+      });
+    });
+</script>

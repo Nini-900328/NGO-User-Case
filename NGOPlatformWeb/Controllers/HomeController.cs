@@ -10,16 +10,16 @@ namespace NGOPlatformWeb.Controllers
         {
             var model = new HomeViewModel
             {
-                // ½ü¼½¹Ï¼Æ¾Ú
+                // è¼ªæ’­åœ–æ•¸æ“š
                 CarouselItems = GetCarouselItems(),
 
-                // ¥\¯à¥d¤ù¼Æ¾Ú
+                // åŠŸèƒ½å¡ç‰‡æ•¸æ“š
                 FeatureCards = GetFeatureCards(),
 
-                // ·s®ø®§¼Æ¾Ú
+                // æ–°æ¶ˆæ¯æ•¸æ“š
                 NewsItems = GetNewsItems(),
 
-                // ¬¡°ÊÅvÃÒ¼Æ¾Ú
+                // æ´»å‹•æ¬Šè­‰æ•¸æ“š
                 ActivityInfo = GetActivityInfo()
             };
 
@@ -28,16 +28,16 @@ namespace NGOPlatformWeb.Controllers
 
         public IActionResult Contact()
         {
-            ViewData["Title"] = "³o¸Ì¬OÁpµ¸§Ú­Ì";
-            return View(); // Ápµ¸§Ú­Ì
+            ViewData["Title"] = "é€™è£¡æ˜¯è¯çµ¡æˆ‘å€‘";
+            return View(); // è¯çµ¡æˆ‘å€‘
         }
 
         public IActionResult Organization()
         {
-            ViewData["Title"] = "³o¸Ì¬O²ÕÂ´¤¶²Ğ";
-            return View(); // ²ÕÂ´¤¶²Ğ
+            ViewData["Title"] = "é€™è£¡æ˜¯çµ„ç¹”ä»‹ç´¹";
+            return View(); // çµ„ç¹”ä»‹ç´¹
         }
-        // ¼ÒÀÀ¼Æ¾Ú¤èªk
+        // æ¨¡æ“¬æ•¸æ“šæ–¹æ³•
         private List<CarouselItem> GetCarouselItems()
         {
             return new List<CarouselItem>
@@ -45,20 +45,20 @@ namespace NGOPlatformWeb.Controllers
         new CarouselItem
         {
             ImageUrl = "https://images.unsplash.com/photo-1559027615-cd4628902d4a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-            Title = "Åwªï¨Ó¨ìNGOª«¸ê¥­¥x",
-            Description = "³sµ²NGO²ÕÂ´»P¸ê·½¡A¦@³Ğ¬ü¦nªÀ·|"
+            Title = "æ­¡è¿ä¾†åˆ°NGOç‰©è³‡å¹³å°",
+            Description = "é€£çµNGOçµ„ç¹”èˆ‡è³‡æºï¼Œå…±å‰µç¾å¥½ç¤¾æœƒ"
         },
         new CarouselItem
         {
             ImageUrl = "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-            Title = "±M·~ªÀ¤u°ö°V½Òµ{",
-            Description = "´£¤É±M·~§Ş¯à¡AªA°ÈªÀ·|¤j²³"
+            Title = "å°ˆæ¥­ç¤¾å·¥åŸ¹è¨“èª²ç¨‹",
+            Description = "æå‡å°ˆæ¥­æŠ€èƒ½ï¼Œæœå‹™ç¤¾æœƒå¤§çœ¾"
         },
         new CarouselItem
         {
             ImageUrl = "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-            Title = "§Ó¤u©Û¶Ò¤¤",
-            Description = "¥[¤J§Ú­Ì¡A¤@°_¬°ªÀ·|°^Äm¤O¶q"
+            Title = "å¿—å·¥æ‹›å‹Ÿä¸­",
+            Description = "åŠ å…¥æˆ‘å€‘ï¼Œä¸€èµ·ç‚ºç¤¾æœƒè²¢ç»åŠ›é‡"
         }
     };
         }
@@ -69,26 +69,26 @@ namespace NGOPlatformWeb.Controllers
     {
         new FeatureCard
         {
-            Title = "³ø¦WÃÒ·Ó",
-            Description = "±M·~ÃÒ·Ó½Òµ{³ø¦W»PºŞ²z",
+            Title = "å ±åè­‰ç…§",
+            Description = "å°ˆæ¥­è­‰ç…§èª²ç¨‹å ±åèˆ‡ç®¡ç†",
             IconUrl = "/images/icon1.png"
         },
         new FeatureCard
         {
-            Title = "¬¡°ÊºŞ²z",
-            Description = "§Ó¤u¬¡°Ê»PªÀ°ÏªA°È",
+            Title = "æ´»å‹•ç®¡ç†",
+            Description = "å¿—å·¥æ´»å‹•èˆ‡ç¤¾å€æœå‹™",
             IconUrl = "/images/icon2.png"
         },
         new FeatureCard
         {
-            Title = "²ÕÂ´¤¶²Ğ",
-            Description = "¤F¸Ñ¦UNGO²ÕÂ´¸ê°T",
+            Title = "çµ„ç¹”ä»‹ç´¹",
+            Description = "äº†è§£å„NGOçµ„ç¹”è³‡è¨Š",
             IconUrl = "/images/icon3.png"
         },
         new FeatureCard
         {
-            Title = "´¼®w¸ê®Æ",
-            Description = "±M·~ª¾ÃÑ»P¸ê·½¤À¨É",
+            Title = "æ™ºåº«è³‡æ–™",
+            Description = "å°ˆæ¥­çŸ¥è­˜èˆ‡è³‡æºåˆ†äº«",
             IconUrl = "/images/icon4.png"
         }
     };
@@ -100,15 +100,15 @@ namespace NGOPlatformWeb.Controllers
     {
         new NewsItem
         {
-            Title = "2024¦~ªÀ¤u±M·~»{ÃÒ¶}©l³ø¦W",
+            Title = "2024å¹´ç¤¾å·¥å°ˆæ¥­èªè­‰é–‹å§‹å ±å",
             Date = DateTime.Now.AddDays(-1),
-            Content = "§Y¤é°_¶}©ñ³ø¦W¡A¦WÃB¦³­­½Ğ§â´¤¾÷·|"
+            Content = "å³æ—¥èµ·é–‹æ”¾å ±åï¼Œåé¡æœ‰é™è«‹æŠŠæ¡æ©Ÿæœƒ"
         },
         new NewsItem
         {
-            Title = "·s¼W½u¤W½Òµ{¥\¯à",
+            Title = "æ–°å¢ç·šä¸Šèª²ç¨‹åŠŸèƒ½",
             Date = DateTime.Now.AddDays(-2),
-            Content = "²{¦b¥i¥H³z¹L½u¤W¤è¦¡°Ñ»P½Òµ{¾Ç²ß"
+            Content = "ç¾åœ¨å¯ä»¥é€éç·šä¸Šæ–¹å¼åƒèˆ‡èª²ç¨‹å­¸ç¿’"
         }
     };
         }
@@ -117,8 +117,8 @@ namespace NGOPlatformWeb.Controllers
         {
             return new ActivityInfo
             {
-                Title = "¬¡°ÊÅvÃÒ",
-                Description = "°Ñ»PªÀ°ÏªA°È¬¡°Ê¡AÀò±oªA°È®É¼Æ»{ÃÒ¡A²Ö¿nªÀ·|ªA°È¸gÅç¡C³z¹L¹ê»Ú°Ñ»P¡A°ö¾iªÀ·|³d¥ô·P¡A¬°ªÀ°Ï±a¨Ó¥¿­±¼vÅT¡C",
+                Title = "æ´»å‹•æ¬Šè­‰",
+                Description = "åƒèˆ‡ç¤¾å€æœå‹™æ´»å‹•ï¼Œç²å¾—æœå‹™æ™‚æ•¸èªè­‰ï¼Œç´¯ç©ç¤¾æœƒæœå‹™ç¶“é©—ã€‚é€éå¯¦éš›åƒèˆ‡ï¼ŒåŸ¹é¤Šç¤¾æœƒè²¬ä»»æ„Ÿï¼Œç‚ºç¤¾å€å¸¶ä¾†æ­£é¢å½±éŸ¿ã€‚",
                 StartDate = DateTime.Now.AddDays(7),
                 ImageUrl = "https://images.unsplash.com/photo-1544027993-37dbfe43562a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
             };

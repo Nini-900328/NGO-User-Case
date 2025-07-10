@@ -1,0 +1,97 @@
+﻿/* 全屏居中背景 */
+.login-wrapper {
+    height: 100vh;
+    background: #f9f9f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 卡片容器 */
+.login-container {
+    max-width: 1200px;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 24px rgba(0,0,0,0.05);
+}
+
+/* 左侧背景图 */
+.login-image {
+    background: url("/images/LoginImage.png") center/cover no-repeat;
+    min-height: 600px;
+}
+
+/* 右侧表单内距 */
+.login-form-area {
+    padding: 2.5rem 2rem;
+}
+
+/* 共用：大号浅灰输入框 */
+.form-control-lg,
+.input-group .form-control,
+.input-group .btn {
+    background: #f2f2f2;
+    border: none;
+    height: 3rem;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* placeholder 颜色 */
+.form-control::placeholder {
+    color: #999;
+    opacity: 1;
+}
+
+/* 去掉 focus 时默认 outline/box-shadow */
+.input-group .form-control:focus,
+.input-group .btn:focus,
+.login-container:focus-within {
+    outline: none;
+    box-shadow: none;
+}
+
+
+
+/* 圆角 Pill 组 + 密码切换按钮 */
+.password-input-group {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    background: #f2f2f2;
+    transition: background-color 0.2s;
+}
+
+    .password-input-group:hover,
+    .password-input-group:focus-within {
+        background-color: #e9e9e9;
+    }
+
+    .password-input-group .btn {
+        border: none;
+        background: transparent;
+        color: #6c757d;
+        padding: 0 1rem;
+    }
+
+        .password-input-group .btn:hover {
+            background: rgba(0,0,0,0.03);
+        }
+
+        .password-input-group .btn i {
+            font-size: 1.2rem;
+        }
+
+/* 手机版隐藏左图 & 去圆角阴影 */
+@media (max-width: 767.98px) {
+    .login-container {
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .login-image {
+        display: none;
+    }
+}

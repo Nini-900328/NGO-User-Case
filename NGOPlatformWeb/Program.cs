@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using NGOPlatformWeb.Models.Entity;
 
@@ -6,11 +7,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Service registration
 builder.Services.AddControllersWithViews();
-
-// ¥[¤J DbContext
+builder.Services.AddSession();
+// Â¥[Â¤J DbContext
 builder.Services.AddDbContext<NGODbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("NGODb")));
-
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auth/Login";
+        options.ExpireTimeSpan = TimeSpan.FromHours(2);
+    });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,11 +32,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Case}/{action=ShoppingIndex}/{id?}");
+    pattern: "{controller=Case}/{action=CasePurchaseList}/{id?}");
 
 app.Run();
