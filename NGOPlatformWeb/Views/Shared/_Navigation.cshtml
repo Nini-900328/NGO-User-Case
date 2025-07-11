@@ -26,11 +26,22 @@
                         <i class="fas fa-home me-1"></i>首頁
                     </a>
                 </li>
+                @* 角色導向導航 - Case用戶看申請頁面，一般用戶看捐贈頁面 *@
                 <li class="nav-item">
-                    <a asp-controller="Case" asp-action="ShoppingIndex"
-                       class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Case" && ViewContext.RouteData.Values["action"]?.ToString() == "ShoppingIndex" ? "active" : "")">
-                        <i class="fas fa-cogs"></i><span class="ms-1">物資認購</span>
-                    </a>
+                    @if (User.FindFirstValue(ClaimTypes.Role) == "Case")
+                    {
+                        <a asp-controller="Case" asp-action="CasePurchaseList"
+                           class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Case" && ViewContext.RouteData.Values["action"]?.ToString() == "CasePurchaseList" ? "active" : "")">
+                            <i class="fas fa-cogs"></i><span class="ms-1">物資申請</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Purchase" asp-action="Index"
+                           class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Purchase" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
+                            <i class="fas fa-cogs"></i><span class="ms-1">物資認購</span>
+                        </a>
+                    }
                 </li>
                 <li class="nav-item">
                     <a asp-controller="Activity" asp-action="CaseActivityIndex"
