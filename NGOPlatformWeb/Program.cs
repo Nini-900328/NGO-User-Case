@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using NGOPlatformWeb.Models.Entity;
+using NGOPlatformWeb.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Service registration
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
+// Add Service Dependent Injection
+builder.Services.AddScoped<EmailService>();
+// Add Background Service
+builder.Services.AddHostedService<TokenCleanupService>();
 // DbContext
 builder.Services.AddDbContext<NGODbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("NGODb")));

@@ -70,3 +70,7 @@ desktop.ini
 
 # Linux / WSL backup files
 *~
+
+# Documentation and config files
+docs/
+.prettierrc
