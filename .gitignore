@@ -29,6 +29,9 @@ project.nuget.cache
 .vscode/
 .idea/
 
+# Dev containers
+.devcontainer/
+
 # Temporary files and logs
 *.log
 *.tmp
@@ -67,3 +70,7 @@ desktop.ini
 
 # Linux / WSL backup files
 *~
+
+# Documentation and config files
+docs/
+.prettierrc

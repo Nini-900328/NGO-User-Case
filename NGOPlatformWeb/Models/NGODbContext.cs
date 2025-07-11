@@ -15,6 +15,6 @@ namespace NGOPlatformWeb.Models.Entity
         // 後續其他 DbSet 也可一起加上
         public DbSet<RegularSupplyNeeds> RegularSuppliesNeeds { get; set; }
         public DbSet<EmergencySupplyNeeds> EmergencySupplyNeeds { get; set; }
-
+        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
     }
 }
