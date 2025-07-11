@@ -38,11 +38,13 @@
                             <p class="text-muted small">進度條</p>
                             <p class="text-muted small">參與條件(討論)</p>
                             <p class="text-muted small">報名截止時間(討論)</p>
-                            <button type="button"
-                                    class="btn btn-success btn-sm"
-                                    style="background-color: #F28C45; color: white; border: none;">
+                            <a class="btn btn-success btn-sm"
+                               style="background-color: #F28C45; color: white; border: none;"
+                               asp-controller="Activity"
+                               asp-action="CaseSignup"
+                               asp-route-id="@item.ActivityId">
                                 立即參與
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>

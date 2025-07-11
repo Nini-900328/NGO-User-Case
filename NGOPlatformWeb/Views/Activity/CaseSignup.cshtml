@@ -1,4 +1,6 @@
-﻿<!-- 標題與說明區塊 -->
+﻿@model NGOPlatformWeb.Models.Entity.Activity
+
+<!-- 標題與說明區塊 -->
 <!-- 滿版背景 -->
 <div class=" py-4 mb-4" style="background-color: #FBB37F;">
     <div class="container text-center">
@@ -8,9 +10,13 @@
 </div>
 
 <div class="container d-flex justify-content-center">
-    <div class="p-5 mb-5 rounded-4 shadow" style="background-color: #FBB37F; width: 600px; max-width: 90%;">
+    <form asp-action="CaseSignup" method="post" class="p-5 mb-5 rounded-4 shadow"
+          style="background-color: #FBB37F; width: 600px; max-width: 90%;">
+        <input type="hidden" name="ActivityTitle" value="@Model.ActivityName" />
+          
+          @* <div class="p-5 mb-5 rounded-4 shadow" style="background-color: #FBB37F; width: 600px; max-width: 90%;"> *@
         <div class="fw-bold text-white text-start w-100 mx-auto" style="max-width: 400px;">
-            <h3 class="fw-bold fs-2 text-center mb-4">活動名稱</h3>
+            <h3 class="fw-bold fs-2 text-center mb-4">@Model.ActivityName</h3>
 
             <div class="mb-3">
                 <label class="form-label fs-5">姓名：</label>
@@ -31,7 +37,11 @@
                 <label class="form-label fs-5">總參與人數(包括報名者)：</label>
                 <input type="number" class="form-control bg-light" />
             </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-light px-4">送出報名</button>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 

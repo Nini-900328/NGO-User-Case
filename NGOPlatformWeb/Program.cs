@@ -38,6 +38,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Case}/{action=CasePurchaseList}/{id?}");
+    pattern: "{controller=Activity}/{action=CaseActivityIndex}/{id?}");
 
 app.Run();
