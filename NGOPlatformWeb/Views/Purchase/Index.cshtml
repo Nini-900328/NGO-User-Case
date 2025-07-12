@@ -6,553 +6,493 @@
 
 @if (ViewBag.Error != null)
 {
-    <div class="alert alert-danger">
-        @ViewBag.Error
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>@ViewBag.Error
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 }
 
-@if (ViewBag.EmergencyError != null)
-{
-    <div class="alert alert-warning">
-        @ViewBag.EmergencyError
-    </div>
-}
-
-@if (ViewBag.RegularError != null)
-{
-    <div class="alert alert-warning">
-        @ViewBag.RegularError
-    </div>
-}
+<div class="purchase-page">
 
 <!-- Hero Section -->
-<div class="hero-section">
+<section class="purchase-hero">
+    <div class="hero-particles"></div>
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <i class="fas fa-heart me-2"></i>透明公益 · 專業服務
+                    </div>
+                    <h1 class="hero-title">
+                        每一份愛心<br><span class="gradient-text">都是希望的種子</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        您的慷慨捐助，將為需要幫助的個案帶來溫暖與希望。<br>
+                        透過專業的物資配送系統，確保每一份愛心都能精準送達。
+                    </p>
+                    
+                    <div class="stats-container">
+                        <div class="row g-0">
+                            @foreach(var stat in new[] { 
+                                new { num = "1,247", label = "家庭受惠", icon = "fa-home" },
+                                new { num = "98%", label = "送達成功", icon = "fa-check-circle" },
+                                new { num = "24hrs", label = "快速響應", icon = "fa-clock" }
+                            })
+                            {
+                                <div class="col-4">
+                                    <div class="stat-card">
+                                        <div class="stat-number">@stat.num</div>
+                                        <div class="stat-label">@stat.label</div>
+                                        <div class="stat-icon"><i class="fas @stat.icon"></i></div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-visual">
+                    <div class="hero-image-container">
+                        <img src="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=600&h=500&fit=crop&crop=center" 
+                             class="hero-image" alt="愛心捐助">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 緊急需求 -->
+<section class="emergency-section">
+    <div class="container">
+        <div class="section-header text-center">
+            <div class="section-badge emergency-badge">
+                <i class="fas fa-exclamation-triangle me-2"></i>緊急救援
+            </div>
+            <h2 class="section-title">即時救援需求</h2>
+            <p class="section-subtitle">這些個案正面臨急迫困境，需要您的即時援助</p>
+        </div>
+        
+        <div class="emergency-grid">
+            @if (ViewBag.EmergencyNeeds != null && ((IEnumerable<dynamic>)ViewBag.EmergencyNeeds).Any())
+            {
+                @foreach (var item in ViewBag.EmergencyNeeds)
+                {
+                    <div class="emergency-card">
+                        <div class="emergency-indicator">
+                            <div class="urgent-pulse"></div>
+                            <span class="urgent-label">急需</span>
+                        </div>
+                        
+                        <div class="card-img">
+                            <img src="@item.ImageUrl" alt="@item.SupplyName" 
+                                 onerror="this.src='https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=250&fit=crop'">
+                            <div class="card-overlay">
+                                <div class="case-badge">個案 #@item.CaseId</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body">
+                            <h4 class="card-title">@item.SupplyName</h4>
+                            <div class="progress-section">
+                                <div class="progress-info">
+                                    <span>募集進度</span>
+                                    <span>@(item.NeededQuantity - item.RemainingQuantity)/@item.NeededQuantity</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: @((item.NeededQuantity - item.RemainingQuantity) * 100 / item.NeededQuantity)%"></div>
+                                </div>
+                                <div class="remaining">還需要 <strong>@item.RemainingQuantity 份</strong></div>
+                            </div>
+                            
+                            <button class="emergency-btn" data-bs-toggle="modal" data-bs-target="#modal@(item.Id)">
+                                <span>立即援助</span><i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Emergency Modal -->
+                    <div class="modal fade" id="modal@(item.Id)" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header emergency-header">
+                                    <h5><i class="fas fa-heartbeat me-2"></i>緊急援助</h5>
+                                    <button type="button" class="purchase-modal-close" data-bs-dismiss="modal">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="modal-item">
+                                        <img src="@item.ImageUrl" alt="@item.SupplyName">
+                                        <div>
+                                            <h6>@item.SupplyName</h6>
+                                            <p>個案 #@item.CaseId 的緊急需求</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="quantity-selector">
+                                        <label>選擇援助數量</label>
+                                        <select class="purchase-form-select">
+                                            @for (int i = 1; i <= item.RemainingQuantity; i++)
+                                            {
+                                                <option value="@i">@i 份 - 幫助度過難關</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="trust-note">
+                                        <i class="fas fa-shield-alt me-2"></i>
+                                        您的援助將直接送達個案手中，全程透明追蹤
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="purchase-btn secondary" data-bs-dismiss="modal">稍後決定</button>
+                                    <button type="button" class="purchase-btn emergency">
+                                        <i class="fas fa-heart me-2"></i>確認援助
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="no-emergency">
+                    <div class="no-emergency-icon"><i class="fas fa-check-circle"></i></div>
+                    <h4>目前沒有緊急需求</h4>
+                    <p>感謝大家的愛心，目前所有緊急案件都已獲得協助</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- 愛心組合包 -->
+<section class="packages-section">
+    <div class="container">
+        <div class="section-header text-center">
+            <div class="section-badge success-badge">
+                <i class="fas fa-gift me-2"></i>精選組合
+            </div>
+            <h2 class="section-title">愛心組合包</h2>
+            <p class="section-subtitle">專業團隊精心搭配，讓您的愛心發揮最大效用</p>
+        </div>
+        
+        <div class="packages-grid">
+            @foreach(var pkg in new[] {
+                new { name = "醫療照護包", price = "800", icon = "fa-medkit", theme = "medical",
+                      items = new[] { "醫療口罩 x 1盒", "酒精消毒液 x 1瓶", "體溫計 x 1支", "紗布繃帶 x 1組" },
+                      desc = "適合需要醫療照護的長者或慢性病患" },
+                new { name = "營養食物包", price = "600", icon = "fa-utensils", theme = "food",
+                      items = new[] { "糙米 x 2包", "玉米罐頭 x 3罐", "蘋果麵包 x 4個", "豆奶 x 6瓶" },
+                      desc = "提供一周基本營養需求，幫助家庭度過困難" },
+                new { name = "清潔護理包", price = "400", icon = "fa-spa", theme = "hygiene",
+                      items = new[] { "洗髮精 x 1瓶", "沐浴乳 x 1瓶", "肥皂 x 2塊", "濕紙巾 x 2包" },
+                      desc = "維持基本清潔衛生，提升生活品質" }
+            })
+            {
+                <div class="package-card">
+                    <div class="package-header @pkg.theme">
+                        <div class="package-icon"><i class="fas @pkg.icon"></i></div>
+                        <h4>@pkg.name</h4>
+                        <div class="package-price">NT$ @pkg.price</div>
+                    </div>
+                    
+                    <div class="package-body">
+                        <div class="package-items">
+                            @foreach(var item in pkg.items)
+                            {
+                                <div class="package-item">
+                                    <i class="fas fa-check"></i><span>@item</span>
+                                </div>
+                            }
+                        </div>
+                        
+                        <p class="package-desc">@pkg.desc</p>
+                        
+                        <button class="package-btn @pkg.theme" data-bs-toggle="modal" data-bs-target="#@(pkg.theme)Modal">
+                            <span>立即捐贈</span><i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- 單項物資 -->
+<section class="supplies-section">
+    <div class="container">
+        <div class="section-header text-center">
+            <div class="section-badge primary-badge">
+                <i class="fas fa-box me-2"></i>單項選擇
+            </div>
+            <h2 class="section-title">單項物資捐贈</h2>
+            <p class="section-subtitle">您可以選擇特定物資進行捐贈，直接幫助有需要的個案</p>
+        </div>
+        
+        @foreach(var cat in new[] {
+            new { id = 1, name = "食品類", desc = "提供基本營養需求", icon = "fa-utensils", theme = "food" },
+            new { id = 2, name = "衣物類", desc = "基本穿著需求", icon = "fa-tshirt", theme = "clothing" },
+            new { id = 3, name = "醫療類", desc = "健康照護用品", icon = "fa-medkit", theme = "medical" },
+            new { id = 4, name = "清潔類", desc = "日常清潔用品", icon = "fa-spa", theme = "hygiene" },
+            new { id = 5, name = "文具類", desc = "學習用品支援", icon = "fa-pen", theme = "stationery" }
+        })
+        {
+            <div class="category-section">
+                <div class="category-header">
+                    <div class="category-icon @cat.theme">
+                        <i class="fas @cat.icon"></i>
+                    </div>
+                    <h3>@cat.name</h3>
+                    <div class="category-desc">@cat.desc</div>
+                </div>
+                
+                <div class="supplies-grid">
+                    @if (ViewBag.RegularSupplies != null)
+                    {
+                        @foreach (var item in ViewBag.RegularSupplies)
+                        {
+                            @if (item.SupplyCategoryId == cat.id)
+                            {
+                                <div class="supply-card @cat.theme">
+                                    <div class="supply-img">
+                                        <img src="@item.ImageUrl" alt="@item.SupplyName">
+                                        @{
+                                            var demandClass = item.SupplyType == "emergency" ? "high-demand" : 
+                                                             cat.id == 1 ? "medium-demand" : "low-demand";
+                                            var demandText = item.SupplyType == "emergency" ? "高需求" : 
+                                                           cat.id == 1 ? "中需求" : "低需求";
+                                        }
+                                        <div class="@demandClass-badge">@demandText</div>
+                                    </div>
+                                    
+                                    <div class="supply-body">
+                                        <h5>@item.SupplyName</h5>
+                                        <p>@item.SupplyDescription</p>
+                                        
+                                        <div class="supply-footer">
+                                            <div class="price">
+                                                @if (item.SupplyPrice > 0)
+                                                {
+                                                    <span class="price-amount">NT$ @item.SupplyPrice</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="price-free">免費提供</span>
+                                                }
+                                            </div>
+                                            
+                                            <button class="supply-btn @cat.theme" data-bs-toggle="modal" data-bs-target="#supply@(item.SupplyId)">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Supply Modal -->
+                                <div class="modal fade" id="supply@(item.SupplyId)" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header supply-header">
+                                                <h5><i class="fas fa-gift me-2"></i>@item.SupplyName</h5>
+                                                <button type="button" class="purchase-modal-close" data-bs-dismiss="modal">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="modal-item">
+                                                    <img src="@item.ImageUrl" alt="@item.SupplyName">
+                                                    <div>
+                                                        <h6>@item.SupplyName</h6>
+                                                        <p>@item.SupplyDescription</p>
+                                                        <div class="price">
+                                                            @if (item.SupplyPrice > 0)
+                                                            {
+                                                                <span class="price-amount">NT$ @item.SupplyPrice</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="price-free">免費提供</span>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="quantity-selector">
+                                                    <label>選擇捐贈數量</label>
+                                                    <select class="purchase-form-select">
+                                                        @if (item.SupplyPrice > 0)
+                                                        {
+                                                            <option value="1">1 份 - NT$ @item.SupplyPrice</option>
+                                                            <option value="2">2 份 - NT$ @(item.SupplyPrice * 2)</option>
+                                                            <option value="5">5 份 - NT$ @(item.SupplyPrice * 5)</option>
+                                                            <option value="10">10 份 - NT$ @(item.SupplyPrice * 10)</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="1">1 份</option>
+                                                            <option value="2">2 份</option>
+                                                            <option value="5">5 份</option>
+                                                            <option value="10">10 份</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                
+                                                <div class="trust-note">
+                                                    <i class="fas fa-shield-alt me-2"></i>
+                                                    您的捐贈將直接幫助到需要的個案家庭
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="purchase-btn secondary" data-bs-dismiss="modal">取消</button>
+                                                <button type="button" class="purchase-btn primary">
+                                                    <i class="fas fa-plus me-2"></i>加入捐贈清單
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- 信任區域 -->
+<section class="trust-section">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6">
-                <div class="hero-content">
-                    <h1 class="display-4 fw-bold text-white mb-4">
-                        每一份愛心<br>
-                        <span class="text-warning">都是希望的種子</span>
-                    </h1>
-                    <p class="lead text-white-75 mb-4">
-                        您的慷慨捐助，將為需要幫助的個案帶來溫暖與希望。
-                        無論是緊急救援還是日常支援，每一份貢獻都彌足珍貴。
-                    </p>
-                    <div class="d-flex align-items-center">
-                        <div class="me-4">
-                            <div class="text-warning fw-bold fs-2">1,247</div>
-                            <div class="text-white-75 small">家庭受惠</div>
-                        </div>
-                        <div class="me-4">
-                            <div class="text-warning fw-bold fs-2">89%</div>
-                            <div class="text-white-75 small">直接送達</div>
-                        </div>
-                        <div>
-                            <div class="text-warning fw-bold fs-2">24hr</div>
-                            <div class="text-white-75 small">快速響應</div>
-                        </div>
+                <div class="trust-content">
+                    <h3>透明公益，值得信賴</h3>
+                    <p>我們堅持透明化運作，每一筆捐款都有詳細記錄，確保您的愛心能夠精準送達需要幫助的個案手中。</p>
+                    
+                    <div class="trust-features">
+                        @foreach(var feature in new[] {
+                            new { icon = "fa-shield-alt", title = "資料安全保護", desc = "採用銀行級加密技術保護您的個人資訊" },
+                            new { icon = "fa-chart-line", title = "即時追蹤系統", desc = "隨時查看您的捐贈狀態和配送進度" },
+                            new { icon = "fa-certificate", title = "合法立案組織", desc = "政府認證的非營利組織，公開透明運作" }
+                        })
+                        {
+                            <div class="trust-feature">
+                                <div class="feature-icon">
+                                    <i class="fas @feature.icon"></i>
+                                </div>
+                                <div>
+                                    <h5>@feature.title</h5>
+                                    <p>@feature.desc</p>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="hero-image">
-                    <img src="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=600&h=400&fit=crop" 
-                         class="img-fluid rounded-3 shadow-lg" alt="愛心捐助">
+                <div class="trust-visual">
+                    <div class="trust-stats">
+                        @foreach(var stat in new[] {
+                            new { icon = "fa-users", num = "1,247", desc = "受惠家庭" },
+                            new { icon = "fa-truck", num = "98%", desc = "送達成功率" },
+                            new { icon = "fa-heart", num = "5,832", desc = "愛心捐贈" },
+                            new { icon = "fa-clock", num = "24hrs", desc = "平均處理時間" }
+                        })
+                        {
+                            <div class="trust-stat">
+                                <div class="stat-icon">
+                                    <i class="fas @stat.icon"></i>
+                                </div>
+                                <div>
+                                    <div class="stat-number">@stat.num</div>
+                                    <div class="stat-desc">@stat.desc</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    
+                    <div class="cert-badges">
+                        @foreach(var cert in new[] {
+                            new { icon = "fa-award", text = "政府認證" },
+                            new { icon = "fa-star", text = "品質保證" },
+                            new { icon = "fa-check-circle", text = "透明運作" }
+                        })
+                        {
+                            <div class="cert-badge">
+                                <i class="fas @cert.icon"></i>
+                                <span>@cert.text</span>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<!-- 🔴 上半部：緊急需求 - 個案故事 -->
-<div class="urgent-area py-5 mb-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="text-danger fw-bold mb-3">
-                <i class="fas fa-heartbeat me-2"></i>緊急救援需求
-            </h2>
-            <p class="lead text-muted">每一份關懷，都是他們重新站起來的力量</p>
-            <div class="bg-danger" style="height: 3px; width: 60px; margin: 0 auto;"></div>
-        </div>
-        
-        <div class="row g-4">
-            @foreach (var item in ViewBag.EmergencyNeeds)
-            {
-                <div class="col-lg-6 mb-4">
-                    <div class="card border-0 shadow-sm urgent-card h-100">
-                        <div class="row g-0 h-100">
-                            <div class="col-md-5">
-                                <img src="@item.ImageUrl" class="img-fluid h-100 w-100" alt="@item.SupplyName" style="object-fit: cover; border-radius: 0.375rem 0 0 0.375rem;">
-                            </div>
-                            <div class="col-md-7">
-                                <div class="card-body d-flex flex-column h-100 p-4">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <span class="badge bg-danger me-2">
-                                            <i class="fas fa-clock me-1"></i>急需
-                                        </span>
-                                        <small class="text-muted">個案編號：@item.CaseId</small>
-                                    </div>
-                                    <h5 class="card-title text-danger mb-3">@item.SupplyName</h5>
-                                    <div class="mb-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <span class="small text-muted">需求進度</span>
-                                            <span class="small fw-bold text-danger">還需 @item.RemainingQuantity 份</span>
-                                        </div>
-                                        <div class="progress" style="height: 6px;">
-                                            <div class="progress-bar bg-danger" role="progressbar" style="width: @((item.NeededQuantity - item.RemainingQuantity) * 100 / item.NeededQuantity)%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-auto">
-                                        <button type="button" class="btn btn-danger w-100 urgent-help-btn" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#urgentModal@(item.Id)">
-                                            <i class="fas fa-hands-helping me-2"></i>立即幫助
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 緊急需求 Modal -->
-                <div class="modal fade" id="urgentModal@(item.Id)" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content border-0">
-                            <div class="modal-header bg-danger text-white">
-                                <h5 class="modal-title">
-                                    <i class="fas fa-heart me-2"></i>幫助個案 @item.CaseId
-                                </h5>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body p-4">
-                                <div class="text-center mb-4">
-                                    <img src="@item.ImageUrl" class="img-fluid rounded mb-3" alt="@item.SupplyName" style="max-height: 200px;">
-                                    <h6 class="text-danger">@item.SupplyName</h6>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="urgentQuantity@(item.Id)" class="form-label fw-bold">我要幫助：</label>
-                                    <select class="form-select form-select-lg" id="urgentQuantity@(item.Id)">
-                                        @for (int i = 1; i <= item.RemainingQuantity; i++)
-                                        {
-                                            <option value="@i">@i 份 - 幫助個案度過難關</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div class="alert alert-light border-start border-danger border-4">
-                                    <i class="fas fa-info-circle text-danger me-2"></i>
-                                    <strong>您的每一份關懷，都將直接送達需要幫助的個案手中。</strong>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">稍後再說</button>
-                                <button type="button" class="btn btn-danger btn-lg px-4">
-                                    <i class="fas fa-heart me-2"></i>確認幫助
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-</div>
-
-<!-- 🟢 下半部：常規捐贈包 - 組合包概念 -->
-<div class="regular-area py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="text-success fw-bold mb-3">
-                <i class="fas fa-gift me-2"></i>愛心組合包
-            </h2>
-            <p class="lead text-muted">精心搭配的物資組合，讓您的愛心發揮最大效用</p>
-            <div class="bg-success" style="height: 3px; width: 60px; margin: 0 auto;"></div>
-        </div>
-        
-        <!-- 預設組合包 -->
-        <div class="row g-4 mb-5">
-            <div class="col-lg-4 col-md-6">
-                <div class="card border-0 shadow-sm regular-card h-100" style="--header-color-1: #28a745; --header-color-2: #20c997;">
-                    <div class="position-relative">
-                        <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=200&fit=crop" 
-                             class="card-img-top" alt="醫療照護包" style="height: 200px; object-fit: cover;">
-                        <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-                             style="background: linear-gradient(135deg, rgba(40,167,69,0.8), rgba(32,201,151,0.8));">
-                            <div class="text-center text-white">
-                                <i class="fas fa-medkit fa-3x mb-2"></i>
-                                <h5 class="mb-0">醫療照護包</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="package-items mb-3">
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>成人紙尿褲 x 1包</span>
-                            </div>
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>醫療口罩 x 1盒</span>
-                            </div>
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>酒精消毒液 x 1瓶</span>
-                            </div>
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>體溫計 x 1支</span>
-                            </div>
-                        </div>
-                        <div class="text-center mb-3">
-                            <span class="badge bg-success-subtle text-success fs-6 px-3 py-2">
-                                建議捐款：NT$ 800
-                            </span>
-                        </div>
-                        <p class="text-muted small text-center">適合行動不便的長者或慢性病患者</p>
-                    </div>
-                    <div class="card-footer bg-white border-0 p-4">
-                        <button type="button" class="btn btn-success w-100 btn-lg" 
-                                data-bs-toggle="modal" 
-                                data-bs-target="#medicalPackModal">
-                            <i class="fas fa-heart me-2"></i>我要捐贈
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6">
-                <div class="card border-0 shadow-sm regular-card h-100" style="--header-color-1: #ffc107; --header-color-2: #fd7e14;">
-                    <div class="position-relative">
-                        <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&h=200&fit=crop" 
-                             class="card-img-top" alt="營養食物包" style="height: 200px; object-fit: cover;">
-                        <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-                             style="background: linear-gradient(135deg, rgba(255,193,7,0.8), rgba(253,126,20,0.8));">
-                            <div class="text-center text-white">
-                                <i class="fas fa-utensils fa-3x mb-2"></i>
-                                <h5 class="mb-0">營養食物包</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="package-items mb-3">
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="fas fa-check-circle text-warning me-2"></i>
-                                <span>白米 x 2公斤</span>
-                            </div>
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="fas fa-check-circle text-warning me-2"></i>
-                                <span>罐頭食品 x 5罐</span>
-                            </div>
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="fas fa-check-circle text-warning me-2"></i>
-                                <span>即食麵條 x 1箱</span>
-                            </div>
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="fas fa-check-circle text-warning me-2"></i>
-                                <span>營養奶粉 x 1罐</span>
-                            </div>
-                        </div>
-                        <div class="text-center mb-3">
-                            <span class="badge bg-warning-subtle text-warning fs-6 px-3 py-2">
-                                建議捐款：NT$ 600
-                            </span>
-                        </div>
-                        <p class="text-muted small text-center">幫助家庭度過經濟困難時期</p>
-                    </div>
-                    <div class="card-footer bg-white border-0 p-4">
-                        <button type="button" class="btn btn-warning w-100 btn-lg" 
-                                data-bs-toggle="modal" 
-                                data-bs-target="#foodPackModal">
-                            <i class="fas fa-heart me-2"></i>我要捐贈
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6">
-                <div class="card border-0 shadow-sm regular-card h-100" style="--header-color-1: #17a2b8; --header-color-2: #6610f2;">
-                    <div class="position-relative">
-                        <img src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=400&h=200&fit=crop" 
-                             class="card-img-top" alt="日用清潔包" style="height: 200px; object-fit: cover;">
-                        <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-                             style="background: linear-gradient(135deg, rgba(23,162,184,0.8), rgba(102,16,242,0.8));">
-                            <div class="text-center text-white">
-                                <i class="fas fa-tshirt fa-3x mb-2"></i>
-                                <h5 class="mb-0">日用清潔包</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="package-items mb-3">
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="fas fa-check-circle text-info me-2"></i>
-                                <span>洗衣精 x 1瓶</span>
-                            </div>
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="fas fa-check-circle text-info me-2"></i>
-                                <span>沐浴乳 x 1瓶</span>
-                            </div>
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="fas fa-check-circle text-info me-2"></i>
-                                <span>洗髮精 x 1瓶</span>
-                            </div>
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="fas fa-check-circle text-info me-2"></i>
-                                <span>毛巾組 x 1套</span>
-                            </div>
-                        </div>
-                        <div class="text-center mb-3">
-                            <span class="badge bg-info-subtle text-info fs-6 px-3 py-2">
-                                建議捐款：NT$ 400
-                            </span>
-                        </div>
-                        <p class="text-muted small text-center">維持基本生活清潔需求</p>
-                    </div>
-                    <div class="card-footer bg-white border-0 p-4">
-                        <button type="button" class="btn btn-info w-100 btn-lg" 
-                                data-bs-toggle="modal" 
-                                data-bs-target="#dailyPackModal">
-                            <i class="fas fa-heart me-2"></i>我要捐贈
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 資料庫中的單項物資 -->
-        <div class="row g-4">
-            <div class="col-12">
-                <h4 class="text-center mb-4 text-muted">
-                    <i class="fas fa-box me-2"></i>其他單項物資
-                </h4>
-            </div>
-            @foreach (var item in ViewBag.RegularSupplies)
-            {
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                    <div class="card border-0 shadow-sm regular-card h-100">
-                        <img src="@item.ImageUrl" class="card-img-top" alt="@item.SupplyName" style="height: 180px; object-fit: cover;">
-                        <div class="card-body d-flex flex-column p-3">
-                            <h6 class="card-title text-success">@item.SupplyName</h6>
-                            <p class="text-muted small">@item.SupplyDescription</p>
-                            <div class="mt-auto">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="text-success fw-bold">NT$ @item.SupplyPrice</span>
-                                    <span class="badge bg-light text-dark">@item.SupplyQuantity 份</span>
-                                </div>
-                                <button type="button" class="btn btn-outline-success btn-sm w-100" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#regularModal@(item.SupplyId)">
-                                    <i class="fas fa-plus me-1"></i>加入捐贈
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 單項物資 Modal -->
-                <div class="modal fade" id="regularModal@(item.SupplyId)" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content border-0">
-                            <div class="modal-header bg-success text-white">
-                                <h5 class="modal-title">
-                                    <i class="fas fa-gift me-2"></i>捐贈 @item.SupplyName
-                                </h5>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body p-4">
-                                <div class="text-center mb-4">
-                                    <img src="@item.ImageUrl" class="img-fluid rounded mb-3" alt="@item.SupplyName" style="max-height: 200px;">
-                                    <h6 class="text-success">@item.SupplyName</h6>
-                                    <p class="text-muted">@item.SupplyDescription</p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="regularQuantity@(item.SupplyId)" class="form-label fw-bold">捐贈數量：</label>
-                                    <select class="form-select form-select-lg" id="regularQuantity@(item.SupplyId)">
-                                        <option value="1">1 份 - NT$ @item.SupplyPrice</option>
-                                        <option value="2">2 份 - NT$ @(item.SupplyPrice * 2)</option>
-                                        <option value="5">5 份 - NT$ @(item.SupplyPrice * 5)</option>
-                                        <option value="10">10 份 - NT$ @(item.SupplyPrice * 10)</option>
-                                    </select>
-                                </div>
-                                <div class="alert alert-light border-start border-success border-4">
-                                    <i class="fas fa-info-circle text-success me-2"></i>
-                                    <strong>您的捐贈將會直接幫助到需要的個案家庭。</strong>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
-                                <button type="button" class="btn btn-success btn-lg px-4">
-                                    <i class="fas fa-heart me-2"></i>加入捐贈清單
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-</div>
-
-<!-- 組合包 Modals -->
-<div class="modal fade" id="medicalPackModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content border-0">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title">
-                    <i class="fas fa-medkit me-2"></i>醫療照護包
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6 class="text-success mb-3">包含物資：</h6>
-                        <ul class="list-unstyled">
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>成人紙尿褲 x 1包</li>
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>醫療口罩 x 1盒</li>
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>酒精消毒液 x 1瓶</li>
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>體溫計 x 1支</li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <h6 class="text-success mb-3">選擇數量：</h6>
-                        <select class="form-select form-select-lg mb-3">
-                            <option value="1">1 包 - NT$ 800</option>
-                            <option value="2">2 包 - NT$ 1600</option>
-                            <option value="3">3 包 - NT$ 2400</option>
-                            <option value="5">5 包 - NT$ 4000</option>
-                        </select>
-                        <div class="alert alert-success">
-                            <i class="fas fa-heart me-2"></i>
-                            <strong>特別適合需要長期照護的長者或病患</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-success btn-lg px-4">
-                    <i class="fas fa-heart me-2"></i>立即捐贈
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="foodPackModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content border-0">
-            <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title">
-                    <i class="fas fa-utensils me-2"></i>營養食物包
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6 class="text-warning mb-3">包含物資：</h6>
-                        <ul class="list-unstyled">
-                            <li class="mb-2"><i class="fas fa-check text-warning me-2"></i>白米 x 2公斤</li>
-                            <li class="mb-2"><i class="fas fa-check text-warning me-2"></i>罐頭食品 x 5罐</li>
-                            <li class="mb-2"><i class="fas fa-check text-warning me-2"></i>即食麵條 x 1箱</li>
-                            <li class="mb-2"><i class="fas fa-check text-warning me-2"></i>營養奶粉 x 1罐</li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <h6 class="text-warning mb-3">選擇數量：</h6>
-                        <select class="form-select form-select-lg mb-3">
-                            <option value="1">1 包 - NT$ 600</option>
-                            <option value="2">2 包 - NT$ 1200</option>
-                            <option value="3">3 包 - NT$ 1800</option>
-                            <option value="5">5 包 - NT$ 3000</option>
-                        </select>
-                        <div class="alert alert-warning">
-                            <i class="fas fa-heart me-2"></i>
-                            <strong>可提供一個家庭一周的基本營養需求</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-warning btn-lg px-4">
-                    <i class="fas fa-heart me-2"></i>立即捐贈
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="dailyPackModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content border-0">
-            <div class="modal-header bg-info text-white">
-                <h5 class="modal-title">
-                    <i class="fas fa-tshirt me-2"></i>日用清潔包
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6 class="text-info mb-3">包含物資：</h6>
-                        <ul class="list-unstyled">
-                            <li class="mb-2"><i class="fas fa-check text-info me-2"></i>洗衣精 x 1瓶</li>
-                            <li class="mb-2"><i class="fas fa-check text-info me-2"></i>沐浴乳 x 1瓶</li>
-                            <li class="mb-2"><i class="fas fa-check text-info me-2"></i>洗髮精 x 1瓶</li>
-                            <li class="mb-2"><i class="fas fa-check text-info me-2"></i>毛巾組 x 1套</li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <h6 class="text-info mb-3">選擇數量：</h6>
-                        <select class="form-select form-select-lg mb-3">
-                            <option value="1">1 包 - NT$ 400</option>
-                            <option value="2">2 包 - NT$ 800</option>
-                            <option value="3">3 包 - NT$ 1200</option>
-                            <option value="5">5 包 - NT$ 2000</option>
-                        </select>
-                        <div class="alert alert-info">
-                            <i class="fas fa-heart me-2"></i>
-                            <strong>幫助維持基本的生活清潔需求</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-info btn-lg px-4">
-                    <i class="fas fa-heart me-2"></i>立即捐贈
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
+</section>
 
 @section Scripts {
     <script>
         $(document).ready(function() {
-            $('.urgent-card, .regular-card').on('click', function() {
-                var modalId = $(this).find('button').data('bs-target');
-                $(modalId).modal('show');
+            // 統計數字動畫
+            $('.purchase-page .stat-number').each(function() {
+                const $this = $(this);
+                const target = parseInt($this.text().replace(/,/g, ''));
+                if (!isNaN(target)) {
+                    let current = 0;
+                    const increment = target / 60;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            current = target;
+                            clearInterval(timer);
+                        }
+                        $this.text(Math.floor(current).toLocaleString());
+                    }, 16);
+                }
             });
             
-            $('select[id^="regularQuantity"]').on('change', function() {
-                var quantity = $(this).val();
-                var modalId = $(this).closest('.modal').attr('id');
-                var supplyId = modalId.replace('regularModal', '');
-                console.log('選擇數量:', quantity, '物資ID:', supplyId);
+            // 進度條動畫
+            $('.purchase-page .progress-fill').each(function() {
+                const width = $(this).css('width');
+                $(this).css('width', '0').animate({ width: width }, 1000);
             });
             
-            $('.btn-danger, .btn-success').filter(':contains("確認認領"), :contains("加入捐贈清單")').on('click', function() {
-                var buttonText = $(this).text();
-                var modalTitle = $(this).closest('.modal').find('.modal-title').text();
-                alert('感謝您的愛心！' + modalTitle + ' 已' + (buttonText.includes('認領') ? '認領' : '加入捐贈清單'));
-                $(this).closest('.modal').modal('hide');
+            // 成功提示
+            $('.purchase-page .purchase-btn.emergency, .purchase-page .purchase-btn.primary').on('click', function() {
+                if ($(this).text().includes('確認') || $(this).text().includes('加入')) {
+                    const toast = $(`
+                        <div class="success-toast">
+                            <div class="toast-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="toast-content">
+                                <div class="toast-title">捐贈成功</div>
+                                <div class="toast-message">感謝您的愛心捐贈！</div>
+                            </div>
+                            <button class="toast-close"><i class="fas fa-times"></i></button>
+                        </div>
+                    `);
+                    
+                    $('body').append(toast);
+                    setTimeout(() => toast.addClass('show'), 100);
+                    setTimeout(() => {
+                        toast.removeClass('show');
+                        setTimeout(() => toast.remove(), 300);
+                    }, 4000);
+                    
+                    toast.find('.toast-close').on('click', function() {
+                        toast.removeClass('show');
+                        setTimeout(() => toast.remove(), 300);
+                    });
+                    
+                    $(this).closest('.modal').modal('hide');
+                }
             });
         });
     </script>
 }
+</div>

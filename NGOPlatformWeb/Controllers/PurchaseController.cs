@@ -56,7 +56,7 @@ namespace NGOPlatformWeb.Controllers
                     regularSupplies = _context.Supplies
                         .Include(s => s.SupplyCategory)
                         .Where(s => s.SupplyType == "regular")
-                        .Take(6)
+                        .Take(30) //30樣物資匯入
                         .ToList<object>();
                 }
                 catch (Exception ex)
