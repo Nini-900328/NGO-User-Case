@@ -124,7 +124,7 @@ namespace NGOPlatformWeb.Controllers
                 Phone = cas.Phone,
                 IdentityNumber = cas.IdentityNumber,
                 Birthday = cas.Birthday,
-                Address = cas.Address
+                Address = cas.FullAddress
             };
 
             return View(vm);

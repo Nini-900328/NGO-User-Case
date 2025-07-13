@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NGOPlatformWeb.Models.Entity;
 using NGOPlatformWeb.Models.ViewModels;
 using System.Security.Claims;
@@ -93,9 +94,9 @@ namespace NGOPlatformWeb.Controllers
             await HttpContext.SignOutAsync(); // 清除舊的 Cookie
             await AuthController.SignInAsync(HttpContext,
                 id: user.UserId.ToString(),
-                name: user.Name,
+                name: user.Name ?? "使用者",
                 role: "User",
-                email: user.Email);
+                email: user.Email ?? "");
 
             return RedirectToAction("UserProfile");
         }
@@ -109,6 +110,57 @@ namespace NGOPlatformWeb.Controllers
         public IActionResult CasePurchaseList()
         {
             return View();
+        }
+
+        // 使用者認購紀錄頁面
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> PurchaseRecords()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // 取得當前使用者
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // 取得該使用者的所有認購紀錄
+            var orders = await _context.UserOrders
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Supply)
+                .Where(o => o.UserId == user.UserId)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
+
+            // 轉換為 ViewModel
+            var viewModel = new UserPurchaseRecordsViewModel
+            {
+                UserName = user.Name ?? "訪客",
+                Orders = orders.Select(o => new OrderRecordViewModel
+                {
+                    OrderId = o.UserOrderId,
+                    OrderNumber = o.OrderNumber,
+                    OrderDate = o.OrderDate,
+                    TotalPrice = o.TotalPrice,
+                    PaymentStatus = o.PaymentStatus,
+                    Items = o.OrderDetails.Select(od => new OrderItemViewModel
+                    {
+                        SupplyName = od.Supply?.SupplyName ?? "未知物資",
+                        Quantity = od.Quantity,
+                        UnitPrice = od.UnitPrice,
+                        TotalPrice = od.UnitPrice * od.Quantity,
+                        ImageUrl = od.Supply?.ImageUrl ?? "/images/default-supply.png",
+                        IsEmergency = od.Supply?.SupplyType == "emergency"
+                    }).ToList()
+                }).ToList()
+            };
+
+            return View(viewModel);
         }
     }
 }

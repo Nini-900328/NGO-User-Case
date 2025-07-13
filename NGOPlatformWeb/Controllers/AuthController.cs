@@ -44,9 +44,9 @@ namespace NGOPlatformWeb.Controllers
             {
                 await SignInAsync(
                     httpContext: HttpContext,
-                    email: user.Email,
+                    email: user.Email ?? "",
                     id: user.UserId.ToString(),
-                    name: user.Name,
+                    name: user.Name ?? "使用者",
                     role: "User"
                 );
 
@@ -65,7 +65,7 @@ namespace NGOPlatformWeb.Controllers
 
                 await SignInAsync(
                     httpContext: HttpContext,
-                    email: caseLogin.Email,
+                    email: caseLogin.Email ?? "",
                     id: caseLogin.CaseId.ToString(),
                     name: caseName,
                     role: "Case"
@@ -235,7 +235,7 @@ namespace NGOPlatformWeb.Controllers
                 TempData["EmailSent"] = true;
                 return View(model);
             }
-            catch (Exception ex)
+            catch 
             {
                 // Log error but do not reveal to user
                 ModelState.AddModelError(string.Empty, "An error occurred while sending the password reset email. Please try again");
@@ -335,7 +335,7 @@ namespace NGOPlatformWeb.Controllers
                 TempData["SuccessMessage"] = "Password reset successfully, please login with your new password.";
                 return RedirectToAction("Login");
             }
-            catch (Exception ex)
+            catch 
             {
                 ModelState.AddModelError(string.Empty, "An error occurred while resetting password, please try again later");
                 return View(model);

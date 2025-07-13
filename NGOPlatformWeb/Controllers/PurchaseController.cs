@@ -107,7 +107,7 @@ namespace NGOPlatformWeb.Controllers
                     SupplyName = supply.SupplyName ?? "未知物資",
                     Quantity = quantity,
                     TotalPrice = (supply.SupplyPrice ?? 0) * quantity,
-                    SupplyType = supply.SupplyType,
+                    SupplyType = emergencyNeedId.HasValue ? "emergency" : supply.SupplyType,
                     EmergencyNeedId = emergencyNeedId,
                     IsLoggedIn = User.Identity?.IsAuthenticated ?? false
                 };
@@ -319,7 +319,7 @@ namespace NGOPlatformWeb.Controllers
                             OrderNumber = orderNumber, // 加入遺漏的OrderNumber
                             OrderDate = DateTime.Now,
                             TotalPrice = model.TotalPrice,
-                            PaymentStatus = "已完成"
+                            PaymentStatus = "已付款"
                         };
                         _context.UserOrders.Add(order);
                         await _context.SaveChangesAsync(); // 先保存訂單以取得OrderId
@@ -422,7 +422,7 @@ namespace NGOPlatformWeb.Controllers
                                     OrderNumber = orderNumber, // 加入遺漏的OrderNumber
                                     OrderDate = DateTime.Now,
                                     TotalPrice = model.TotalPrice,
-                                    PaymentStatus = "已完成"
+                                    PaymentStatus = "已付款"
                                 };
 
                                 _context.UserOrders.Add(order);
@@ -439,7 +439,7 @@ namespace NGOPlatformWeb.Controllers
                                 _context.UserOrderDetails.Add(orderDetail);
                             }
                         }
-                        catch (Exception orderEx)
+                        catch (Exception)
                         {
                             // 不拋出異常，讓付款流程繼續
                         }
