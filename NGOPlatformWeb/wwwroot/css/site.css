@@ -47,6 +47,12 @@ marquee {
     text-align: center;
 }
 
+/* 導航欄層級設定 */
+.navbar {
+    z-index: 1050 !important; /* 確保導航欄在最前面 */
+    position: relative;
+}
+
 .navbar-light .nav-link {
     color: #5e4632; /* 深咖啡色 */
     transition: color 0.2s ease;
