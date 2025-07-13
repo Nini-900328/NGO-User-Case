@@ -1,0 +1,336 @@
+@model PaymentViewModel
+@{
+    ViewData["Title"] = "確認付款";
+}
+
+<link rel="stylesheet" href="~/css/payment.css" asp-append-version="true" />
+
+<div class="payment-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                
+                <!-- 付款進度條 -->
+                <div class="payment-progress">
+                    <div class="progress-step completed">
+                        <div class="step-icon"><i class="fas fa-shopping-cart"></i></div>
+                        <div class="step-label">選擇物資</div>
+                    </div>
+                    <div class="progress-step active">
+                        <div class="step-icon"><i class="fas fa-credit-card"></i></div>
+                        <div class="step-label">確認付款</div>
+                    </div>
+                    <div class="progress-step">
+                        <div class="step-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="step-label">完成捐贈</div>
+                    </div>
+                </div>
+
+                <!-- 錯誤訊息 -->
+                @if (ViewData.ModelState.ErrorCount > 0)
+                {
+                    <div class="alert alert-danger">
+                        <div asp-validation-summary="All"></div>
+                    </div>
+                }
+
+
+                <form asp-action="ProcessPayment" method="post" class="payment-form">
+                    
+                    <!-- 隱藏欄位 -->
+                    <input type="hidden" asp-for="SupplyId" />
+                    <input type="hidden" asp-for="SupplyName" />
+                    <input type="hidden" asp-for="Quantity" id="hiddenQuantity" />
+                    <input type="hidden" asp-for="TotalPrice" id="hiddenTotalPrice" />
+                    <input type="hidden" asp-for="SupplyType" />
+                    <input type="hidden" asp-for="EmergencyNeedId" />
+                    <input type="hidden" asp-for="CaseId" />
+                    <input type="hidden" asp-for="IsLoggedIn" />
+                    <input type="hidden" asp-for="UserId" />
+
+                    <div class="row">
+                        <!-- 訂單摘要 -->
+                        <div class="col-lg-5">
+                            <div class="order-summary">
+                                <h4><i class="fas fa-receipt me-2"></i>訂單摘要</h4>
+                                
+                                <div class="order-item">
+                                    <div class="item-info">
+                                        <h5>@Model.SupplyName</h5>
+                                        @if (Model.SupplyType == "emergency")
+                                        {
+                                            <div class="emergency-badge"><i class="fas fa-exclamation-triangle"></i> 緊急需求</div>
+                                        }
+                                        @if (Model.SupplyType == "package")
+                                        {
+                                            <div class="package-badge"><i class="fas fa-gift"></i> 援助套組</div>
+                                            <!-- 套組明細 -->
+                                            <div class="package-details mt-2">
+                                                @{
+                                                    var packageItems = new Dictionary<string, string[]>();
+                                                    packageItems.Add("醫療照護套組", new[] { "口罩 x 2盒", "酒精 x 2瓶", "體溫計 x 2支", "紗布繃帶 x 5組" });
+                                                    packageItems.Add("營養食物套組", new[] { "糙米 x 3包", "玉米罐頭 x 4罐", "蘋果麵包 x 6個", "豆奶 x 12瓶" });
+                                                    packageItems.Add("清潔護理套組", new[] { "洗髮精 x 1瓶", "沐浴乳 x 1瓶", "肥皂 x 4塊", "濕紙巾 x 5包" });
+                                                }
+                                                @if (packageItems.ContainsKey(Model.SupplyName))
+                                                {
+                                                    <small class="text-muted"><strong>包含物品：</strong></small>
+                                                    @foreach (var item in packageItems[Model.SupplyName])
+                                                    {
+                                                        <small class="d-block text-muted">• @item</small>
+                                                    }
+                                                }
+                                            </div>
+                                        }
+                                        @if (Model.CaseId.HasValue)
+                                        {
+                                            <div class="case-info">個案 #@Model.CaseId</div>
+                                        }
+                                        @if (Model.SupplyType == "emergency" && Model.MaxQuantity.HasValue)
+                                        {
+                                            <div class="quantity-selector mb-2">
+                                                <label class="form-label">援助數量:</label>
+                                                <select id="quantitySelect" class="form-select form-select-sm d-inline-block" style="width: auto;">
+                                                    @for (int i = 1; i <= Model.MaxQuantity.Value; i++)
+                                                    {
+                                                        <option value="@i" selected="@(i == Model.Quantity)">@i 份</option>
+                                                    }
+                                                </select>
+                                                <small class="text-muted ms-2">個案剩餘需求: @Model.MaxQuantity 份</small>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="quantity">數量: @Model.Quantity 份</div>
+                                        }
+                                    </div>
+                                </div>
+                                
+                                <div class="order-total">
+                                    <div class="total-row">
+                                        <span>小計</span>
+                                        <span id="subtotal">NT$ @Model.TotalPrice.ToString("N0")</span>
+                                    </div>
+                                    <div class="total-row">
+                                        <span>手續費</span>
+                                        <span>免費</span>
+                                    </div>
+                                    <div class="total-row final">
+                                        <span>總計</span>
+                                        <span id="totalPrice">NT$ @Model.TotalPrice.ToString("N0")</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="trust-note">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>您的愛心捐贈將受到完整保障</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 付款資訊 -->
+                        <div class="col-lg-7">
+                            <div class="payment-form-section">
+                                
+                                <!-- 捐贈者資訊 -->
+                                <div class="form-section">
+                                    <h4><i class="fas fa-user me-2"></i>捐贈者資訊</h4>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="DonorName">姓名 *</label>
+                                                <input asp-for="DonorName" class="form-control" placeholder="請輸入您的姓名" />
+                                                <span asp-validation-for="DonorName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="DonorPhone">手機號碼 *</label>
+                                                <input asp-for="DonorPhone" class="form-control" placeholder="09xx-xxx-xxx" />
+                                                <span asp-validation-for="DonorPhone" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label asp-for="DonorEmail">電子信箱 *</label>
+                                        <input asp-for="DonorEmail" class="form-control" placeholder="example@email.com" />
+                                        <span asp-validation-for="DonorEmail" class="text-danger"></span>
+                                        <small class="form-text">我們將透過電子信箱寄送捐贈收據</small>
+                                    </div>
+                                </div>
+
+                                <!-- 付款方式 -->
+                                <div class="form-section">
+                                    <h4><i class="fas fa-credit-card me-2"></i>付款方式</h4>
+                                    
+                                    <div class="payment-methods">
+                                        <div class="payment-method active" data-method="credit_card">
+                                            <input type="radio" asp-for="PaymentMethod" value="credit_card" checked />
+                                            <label>
+                                                <i class="fas fa-credit-card"></i>
+                                                <span>信用卡付款</span>
+                                                <small>支援 Visa、Mastercard、JCB</small>
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="payment-method" data-method="atm">
+                                            <input type="radio" asp-for="PaymentMethod" value="atm" />
+                                            <label>
+                                                <i class="fas fa-university"></i>
+                                                <span>ATM 轉帳</span>
+                                                <small>虛擬帳號，24小時內完成</small>
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="payment-method" data-method="linepay">
+                                            <input type="radio" asp-for="PaymentMethod" value="linepay" />
+                                            <label>
+                                                <i class="fab fa-line"></i>
+                                                <span>LINE Pay</span>
+                                                <small>使用 LINE Pay 快速付款</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 模擬信用卡資訊 -->
+                                <div class="form-section credit-card-section">
+                                    <h5>信用卡資訊 (模擬)</h5>
+                                    <div class="card-demo-note">
+                                        <i class="fas fa-info-circle"></i>
+                                        此為模擬付款，請使用測試卡號
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>卡號</label>
+                                        <input type="text" class="form-control" placeholder="4111 1111 1111 1111" maxlength="19" readonly />
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label>有效期限</label>
+                                                <input type="text" class="form-control" placeholder="12/25" readonly />
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label>安全碼</label>
+                                                <input type="text" class="form-control" placeholder="123" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 確認條款 -->
+                                <div class="form-section">
+                                    <div class="terms-section">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="agreeTerms" required />
+                                            <label class="form-check-label" for="agreeTerms">
+                                                我已閱讀並同意 <a href="#" class="terms-link">服務條款</a> 和 <a href="#" class="privacy-link">隱私政策</a>
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="agreeNewsletter" />
+                                            <label class="form-check-label" for="agreeNewsletter">
+                                                我願意收到NGO組織的最新活動訊息
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 提交按鈕 -->
+                                <div class="form-actions">
+                                    <a href="@Url.Action("Index")" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left me-2"></i>返回選擇
+                                    </a>
+                                    <button type="submit" class="btn btn-primary" id="paymentBtn">
+                                        <span class="btn-text">
+                                            <i class="fas fa-credit-card me-2"></i>確認捐贈 <span id="btnPrice">NT$ @Model.TotalPrice.ToString("N0")</span>
+                                        </span>
+                                        <span class="btn-loading" style="display: none;">
+                                            <i class="fas fa-spinner fa-spin me-2"></i>處理中...
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // 數量變更處理
+            $('#quantitySelect').on('change', function() {
+                const quantity = parseInt($(this).val());
+                const originalPrice = @(Model.TotalPrice / Model.Quantity); // 單價
+                const newTotal = originalPrice * quantity;
+                
+                // 更新隱藏欄位
+                $('#hiddenQuantity').val(quantity);
+                $('#hiddenTotalPrice').val(newTotal);
+                
+                // 更新顯示價格
+                const formattedPrice = 'NT$ ' + newTotal.toLocaleString('zh-TW');
+                $('#subtotal').text(formattedPrice);
+                $('#totalPrice').text(formattedPrice);
+                $('#btnPrice').text(formattedPrice);
+            });
+            
+            // 付款方式選擇
+            $('.payment-method').on('click', function() {
+                $('.payment-method').removeClass('active');
+                $(this).addClass('active');
+                $(this).find('input[type="radio"]').prop('checked', true);
+                
+                const method = $(this).data('method');
+                if (method === 'credit_card') {
+                    $('.credit-card-section').show();
+                } else {
+                    $('.credit-card-section').hide();
+                }
+            });
+            
+            // 表單提交處理
+            $('.payment-form').on('submit', function(e) {
+                e.preventDefault();
+                
+                // 檢查條款同意
+                if (!$('#agreeTerms').is(':checked')) {
+                    alert('請先同意服務條款和隱私政策');
+                    return;
+                }
+                
+                const $btn = $('#paymentBtn');
+                const $btnText = $btn.find('.btn-text');
+                const $btnLoading = $btn.find('.btn-loading');
+                
+                // 顯示載入狀態
+                $btn.prop('disabled', true);
+                $btnText.hide();
+                $btnLoading.show();
+                
+                // 模擬付款處理時間
+                setTimeout(() => {
+                    this.submit();
+                }, 2000);
+            });
+            
+            // 卡號格式化
+            $('input[placeholder="4111 1111 1111 1111"]').on('input', function() {
+                let value = $(this).val().replace(/\s/g, '');
+                let formattedValue = value.replace(/(.{4})/g, '$1 ').trim();
+                $(this).val(formattedValue);
+            });
+        });
+    </script>
+}

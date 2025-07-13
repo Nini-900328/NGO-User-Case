@@ -58,8 +58,10 @@ namespace NGOPlatformWeb.Controllers
                 .FirstOrDefaultAsync(c => c.Email == vm.Email && c.Password == vm.Password);
             if (caseLogin != null)
             {
-                var cas = await _context.Cases.FindAsync(caseLogin.CaseId);
-                var caseName = cas?.Name ?? "個案";
+                var caseName = await _context.Cases
+                    .Where(c => c.CaseId == caseLogin.CaseId)
+                    .Select(c => c.Name)
+                    .FirstOrDefaultAsync() ?? "個案";
 
                 await SignInAsync(
                     httpContext: HttpContext,

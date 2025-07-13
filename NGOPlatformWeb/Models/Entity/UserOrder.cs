@@ -11,6 +11,10 @@ namespace NGOPlatformWeb.Models.Entity
 
         public int UserId { get; set; }
 
+        [Required]
+        [StringLength(50)]
+        public string OrderNumber { get; set; } = "";
+
         public DateTime OrderDate { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]

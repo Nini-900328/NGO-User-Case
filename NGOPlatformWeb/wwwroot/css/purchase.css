@@ -1,4 +1,4 @@
-/* 認購頁面專用 CSS - 完全隔離設計 */
+/* 認購頁面專用 CSS - 溫馨公益設計 */
 
 /* CSS 變數定義 */
 .purchase-page {
@@ -33,7 +33,7 @@
     --transition: 0.3s ease;
 }
 
-/* 基本設定 - 僅影響 purchase-page 內的元素 */
+/* 基本設定 - 確保所有 purchase-page 元素正確 */
 .purchase-page {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     line-height: 1.6;
@@ -59,15 +59,6 @@
     }
 }
 
-@keyframes floatParticles {
-    from {
-        transform: translate(0, 0);
-    }
-
-    to {
-        transform: translate(-50px, -50px);
-    }
-}
 
 @keyframes pulse {
     0%, 100% {
@@ -91,12 +82,14 @@
     }
 }
 
-/* 通用樣式 */
+/* 漸層樣式 */
 .purchase-page .gradient-text {
-    background: linear-gradient(135deg, var(--primary), var(--success));
+    background: linear-gradient(135deg, #1e40af, #059669);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Hero 區域 */
@@ -109,13 +102,6 @@
     overflow: hidden;
 }
 
-.purchase-page .hero-particles {
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 2px, transparent 2px), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 3px, transparent 3px);
-    background-size: 200px 200px, 300px 300px;
-    animation: floatParticles 30s linear infinite;
-}
 
 .purchase-page .hero-content {
     position: relative;
@@ -176,12 +162,6 @@
     transform: scale(1.05);
 }
 
-.purchase-page .hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-    backdrop-filter: blur(5px);
-}
 
 /* 統計數據 */
 .purchase-page .stats-container {
@@ -298,60 +278,67 @@
 
 .purchase-page .emergency-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
-    gap: var(--space-xl);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: var(--space-lg);
     position: relative;
     z-index: 2;
     max-width: 1200px;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: start;
+}
+
+.purchase-page .emergency-grid .emergency-card {
+    max-width: 350px;
+    width: 100%;
     margin: 0 auto;
 }
 
 .purchase-page .emergency-card {
     background: white;
-    border-radius: var(--radius-2xl);
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    box-shadow: var(--shadow-lg);
-    transition: all var(--transition);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all var(--transition), transform 0.3s ease;
     position: relative;
-    max-width: 500px;
-    margin: 0 auto;
+    border: 1px solid rgba(239, 68, 68, 0.08);
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
 }
 
     .purchase-page .emergency-card:hover {
-        transform: translateY(-8px);
-        box-shadow: var(--shadow-2xl);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(239, 68, 68, 0.15);
+        border-color: rgba(239, 68, 68, 0.2);
     }
+
+/* 卡片依次出現動畫 */
+.purchase-page .emergency-card:nth-child(1) { animation-delay: 0.1s; }
+.purchase-page .emergency-card:nth-child(2) { animation-delay: 0.2s; }
+.purchase-page .emergency-card:nth-child(3) { animation-delay: 0.3s; }
+.purchase-page .emergency-card:nth-child(4) { animation-delay: 0.4s; }
+.purchase-page .emergency-card:nth-child(5) { animation-delay: 0.5s; }
+.purchase-page .emergency-card:nth-child(6) { animation-delay: 0.6s; }
 
 .purchase-page .emergency-indicator {
     position: absolute;
-    top: var(--space-lg);
-    right: var(--space-lg);
+    top: var(--space-md);
+    right: var(--space-md);
     z-index: 3;
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-}
-
-.purchase-page .urgent-pulse {
-    width: 12px;
-    height: 12px;
-    background: var(--emergency);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-}
-
-.purchase-page .urgent-label {
     background: var(--emergency);
     color: white;
-    padding: var(--space-sm) var(--space-md);
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
 }
 
 .purchase-page .card-img {
     position: relative;
-    height: 200px;
+    height: 160px;
     overflow: hidden;
 }
 
@@ -359,11 +346,11 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.5s;
+        transition: transform 0.4s ease;
     }
 
 .purchase-page .emergency-card:hover .card-img img {
-    transform: scale(1.1);
+    transform: scale(1.02);
 }
 
 .purchase-page .card-overlay {
@@ -371,32 +358,34 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(transparent, rgba(0,0,0,0.7));
-    padding: var(--space-lg);
+    background: linear-gradient(transparent, rgba(0,0,0,0.5));
+    padding: var(--space-md) var(--space-lg);
 }
 
 .purchase-page .case-badge {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     color: var(--gray-700);
-    padding: var(--space-sm) var(--space-md);
-    border-radius: 20px;
-    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 0.7rem;
     font-weight: 600;
+    backdrop-filter: blur(8px);
 }
 
 .purchase-page .card-body {
-    padding: var(--space-xl);
+    padding: var(--space-lg);
 }
 
 .purchase-page .card-title {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--gray-900);
-    margin: 0 0 var(--space-lg);
+    margin: 0 0 var(--space-md);
+    line-height: 1.3;
 }
 
 .purchase-page .progress-section {
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--space-lg);
 }
 
 .purchase-page .progress-info {
@@ -407,19 +396,22 @@
 }
 
     .purchase-page .progress-info span:first-child {
-        font-size: 0.875rem;
+        font-size: 0.8rem;
         color: var(--gray-600);
         font-weight: 500;
     }
 
     .purchase-page .progress-info span:last-child {
-        font-size: 0.875rem;
-        font-weight: 600;
+        font-size: 0.85rem;
+        font-weight: 700;
         color: var(--emergency);
+        background: rgba(239, 68, 68, 0.1);
+        padding: 2px 6px;
+        border-radius: 6px;
     }
 
 .purchase-page .progress-bar {
-    height: 8px;
+    height: 6px;
     background: var(--gray-200);
     border-radius: 10px;
     overflow: hidden;
@@ -446,29 +438,38 @@
     }
 
 .purchase-page .remaining {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     color: var(--emergency);
     font-weight: 600;
+    text-align: center;
 }
 
 .purchase-page .emergency-btn {
-    background: linear-gradient(135deg, var(--emergency), #f87171);
+    background: var(--emergency);
     color: white;
     border: none;
-    padding: var(--space-lg);
-    border-radius: var(--radius-xl);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md);
     font-weight: 600;
+    font-size: 0.9rem;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    gap: var(--space-sm);
     transition: all var(--transition);
     cursor: pointer;
     width: 100%;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
 }
 
     .purchase-page .emergency-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+        background: #dc2626;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .purchase-page .emergency-btn:active {
+        transform: translateY(0);
     }
 
 .purchase-page .no-emergency {
@@ -492,6 +493,248 @@
     color: var(--gray-600);
 }
 
+/* 影響力展示區 */
+.purchase-page .impact-section {
+    padding: var(--space-3xl) 0;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.purchase-page .impact-badge {
+    background: linear-gradient(135deg, var(--primary), #3b82f6);
+}
+
+.purchase-page .impact-stats {
+    margin-bottom: var(--space-3xl);
+}
+
+.purchase-page .impact-stat-card {
+    background: white;
+    padding: var(--space-xl);
+    border-radius: var(--radius-xl);
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition);
+    border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.purchase-page .impact-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.purchase-page .impact-stat-card .stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: var(--space-sm);
+}
+
+.purchase-page .impact-stat-card .stat-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: var(--space-sm);
+}
+
+.purchase-page .impact-stat-card .stat-desc {
+    font-size: 0.9rem;
+    color: var(--gray-600);
+}
+
+/* 捐贈計算器 */
+.purchase-page .donation-calculator {
+    background: white;
+    border-radius: var(--radius-2xl);
+    padding: var(--space-3xl);
+    box-shadow: var(--shadow-xl);
+    margin-bottom: var(--space-3xl);
+}
+
+.purchase-page .calculator-content h3 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-md);
+}
+
+.purchase-page .amount-options {
+    display: flex;
+    gap: var(--space-md);
+    margin: var(--space-xl) 0;
+    flex-wrap: wrap;
+}
+
+.purchase-page .amount-btn {
+    padding: var(--space-md) var(--space-lg);
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    background: white;
+    color: var(--gray-700);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.purchase-page .amount-btn:hover,
+.purchase-page .amount-btn.active {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.purchase-page .impact-result {
+    margin-top: var(--space-xl);
+}
+
+.purchase-page .impact-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-md);
+    font-size: 1.1rem;
+}
+
+.purchase-page .impact-item i {
+    margin-right: var(--space-md);
+    width: 24px;
+    font-size: 1.25rem;
+}
+
+.purchase-page .progress-ring {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.purchase-page .progress-circle {
+    transform: rotate(-90deg);
+    transition: stroke-dashoffset 0.5s ease;
+}
+
+.purchase-page .progress-content {
+    position: absolute;
+    text-align: center;
+}
+
+.purchase-page .progress-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.purchase-page .progress-label {
+    font-size: 0.9rem;
+    color: var(--gray-600);
+}
+
+/* 捐贈方式說明 */
+.purchase-page .donation-methods {
+    padding: var(--space-3xl) 0;
+    background: white;
+}
+
+.purchase-page .info-badge {
+    background: linear-gradient(135deg, var(--info), #22d3ee);
+}
+
+.purchase-page .method-card {
+    background: white;
+    padding: var(--space-xl);
+    border-radius: var(--radius-xl);
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition);
+    border: 1px solid var(--gray-200);
+    height: 100%;
+}
+
+.purchase-page .method-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--info);
+}
+
+.purchase-page .method-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--info), #22d3ee);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-lg);
+    color: white;
+    font-size: 2rem;
+}
+
+.purchase-page .method-card h4 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-md);
+}
+
+.purchase-page .method-card p {
+    color: var(--gray-600);
+    margin-bottom: var(--space-lg);
+}
+
+.purchase-page .method-features {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.purchase-page .feature-tag {
+    background: var(--gray-100);
+    color: var(--gray-700);
+    padding: 4px 8px;
+    border-radius: var(--radius-md);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.purchase-page .tax-info {
+    margin-top: var(--space-3xl);
+}
+
+.purchase-page .tax-info-card {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+.purchase-page .tax-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--warning);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.purchase-page .tax-content h4 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-sm);
+}
+
+.purchase-page .tax-content p {
+    color: var(--gray-700);
+    margin: 0;
+}
+
 /* 愛心組合包 */
 .purchase-page .packages-section {
     padding: var(--space-3xl) 0;
@@ -510,6 +753,52 @@
     overflow: hidden;
     box-shadow: var(--shadow-lg);
     transition: all var(--transition);
+    position: relative;
+}
+
+/* 套組背景圖片 - 顯示在header區域 */
+.purchase-page .package-header.medical::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://images.unsplash.com/photo-1605176173609-a0067079b419?q=80&w=1744&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover;
+    opacity: 0.5;
+    border-radius: 1.5rem 1.5rem 0 0;
+    z-index: 1;
+}
+
+.purchase-page .package-header.food::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600&h=300&fit=crop') center/cover;
+    opacity: 0.5;
+    border-radius: 1.5rem 1.5rem 0 0;
+    z-index: 1;
+}
+
+.purchase-page .package-header.hygiene::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://images.unsplash.com/photo-1663465803384-77c2df8ab422?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover;
+    opacity: 0.5;
+    border-radius: 1.5rem 1.5rem 0 0;
+    z-index: 1;
+}
+
+.purchase-page .package-card > * {
+    position: relative;
+    z-index: 2;
 }
 
     .purchase-page .package-card:hover {
@@ -520,6 +809,8 @@
 .purchase-page .package-header {
     padding: var(--space-xl);
     text-align: center;
+    position: relative;
+    overflow: hidden;
 }
 
     .purchase-page .package-header.medical {
@@ -545,6 +836,8 @@
     margin: 0 auto var(--space-lg);
     font-size: 1.5rem;
     color: white;
+    position: relative;
+    z-index: 2;
 }
 
 .purchase-page .package-header h4 {
@@ -552,6 +845,8 @@
     font-weight: 700;
     color: white;
     margin: 0 0 var(--space-md);
+    position: relative;
+    z-index: 2;
 }
 
 .purchase-page .package-price {
@@ -559,6 +854,8 @@
     font-weight: 800;
     color: white;
     margin: 0;
+    position: relative;
+    z-index: 2;
 }
 
 .purchase-page .package-body {
@@ -620,233 +917,7 @@
         background: linear-gradient(135deg, var(--info), #22d3ee);
     }
 
-/* 單項物資 */
-.purchase-page .supplies-section {
-    padding: var(--space-3xl) 0;
-    background: white;
-}
 
-.purchase-page .category-section {
-    margin-bottom: var(--space-2xl);
-}
-
-.purchase-page .category-header {
-    display: flex;
-    align-items: center;
-    gap: var(--space-lg);
-    margin-bottom: var(--space-xl);
-    padding: var(--space-xl);
-    background: var(--gray-50);
-    border-radius: var(--radius-2xl);
-}
-
-.purchase-page .category-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: white;
-    flex-shrink: 0;
-}
-
-    .purchase-page .category-icon.food {
-        background: linear-gradient(135deg, var(--warning), #fbbf24);
-    }
-
-    .purchase-page .category-icon.clothing {
-        background: linear-gradient(135deg, var(--purple), #a78bfa);
-    }
-
-    .purchase-page .category-icon.medical {
-        background: linear-gradient(135deg, var(--emergency), #f87171);
-    }
-
-    .purchase-page .category-icon.hygiene {
-        background: linear-gradient(135deg, var(--info), #22d3ee);
-    }
-
-    .purchase-page .category-icon.stationery {
-        background: linear-gradient(135deg, var(--lime), #a3e635);
-    }
-
-.purchase-page .category-header h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--gray-900);
-    margin: 0;
-}
-
-.purchase-page .category-desc {
-    font-size: 0.875rem;
-    color: var(--gray-600);
-    margin-top: var(--space-sm);
-}
-
-.purchase-page .supplies-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: var(--space-lg);
-}
-
-.purchase-page .supply-card {
-    background: white;
-    border-radius: var(--radius-2xl);
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
-    transition: all var(--transition);
-    border: 2px solid transparent;
-}
-
-    .purchase-page .supply-card:hover {
-        transform: translateY(-4px);
-    }
-
-    .purchase-page .supply-card.food:hover {
-        border-color: var(--warning);
-    }
-
-    .purchase-page .supply-card.clothing:hover {
-        border-color: var(--purple);
-    }
-
-    .purchase-page .supply-card.medical:hover {
-        border-color: var(--emergency);
-    }
-
-    .purchase-page .supply-card.hygiene:hover {
-        border-color: var(--info);
-    }
-
-    .purchase-page .supply-card.stationery:hover {
-        border-color: var(--lime);
-    }
-
-.purchase-page .supply-img {
-    position: relative;
-    height: 180px;
-    overflow: hidden;
-}
-
-    .purchase-page .supply-img img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s;
-    }
-
-.purchase-page .supply-card:hover .supply-img img {
-    transform: scale(1.1);
-}
-
-.purchase-page .high-demand-badge,
-.purchase-page .medium-demand-badge,
-.purchase-page .low-demand-badge {
-    position: absolute;
-    top: var(--space-md);
-    right: var(--space-md);
-    padding: var(--space-sm) var(--space-md);
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: white;
-}
-
-.purchase-page .high-demand-badge {
-    background: var(--emergency);
-    animation: pulse 2s infinite;
-}
-
-.purchase-page .medium-demand-badge {
-    background: var(--warning);
-}
-
-.purchase-page .low-demand-badge {
-    background: var(--gray-400);
-}
-
-.purchase-page .supply-body {
-    padding: var(--space-xl);
-}
-
-.purchase-page .supply-card h5 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--gray-900);
-    margin: 0 0 var(--space-sm);
-}
-
-.purchase-page .supply-card p {
-    font-size: 0.875rem;
-    color: var(--gray-600);
-    line-height: 1.4;
-    margin: 0 0 var(--space-lg);
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.purchase-page .supply-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.purchase-page .price {
-    font-weight: 600;
-}
-
-.purchase-page .price-amount {
-    color: var(--gray-900);
-    font-size: 1.1rem;
-}
-
-.purchase-page .price-free {
-    color: var(--success);
-    font-size: 0.9rem;
-}
-
-.purchase-page .supply-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    padding: 0;
-    border: none;
-    cursor: pointer;
-    transition: all var(--transition);
-}
-
-    .purchase-page .supply-btn.food {
-        background: var(--warning);
-    }
-
-    .purchase-page .supply-btn.clothing {
-        background: var(--purple);
-    }
-
-    .purchase-page .supply-btn.medical {
-        background: var(--emergency);
-    }
-
-    .purchase-page .supply-btn.hygiene {
-        background: var(--info);
-    }
-
-    .purchase-page .supply-btn.stationery {
-        background: var(--lime);
-    }
-
-    .purchase-page .supply-btn:hover {
-        transform: scale(1.1);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
 
 /* 信任區域 */
 .purchase-page .trust-section {
@@ -913,55 +984,6 @@
     gap: var(--space-xl);
 }
 
-.purchase-page .trust-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-lg);
-}
-
-.purchase-page .trust-stat {
-    background: white;
-    padding: var(--space-lg);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-md);
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-    transition: all var(--transition);
-}
-
-    .purchase-page .trust-stat:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-lg);
-    }
-
-    .purchase-page .trust-stat .stat-icon {
-        width: 50px;
-        height: 50px;
-        background: linear-gradient(135deg, var(--primary), #3b82f6);
-        border-radius: var(--radius-lg);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 1.25rem;
-        flex-shrink: 0;
-        position: static;
-        opacity: 1;
-    }
-
-    .purchase-page .trust-stat .stat-number {
-        font-size: 1.5rem;
-        font-weight: 800;
-        color: var(--gray-900);
-        line-height: 1;
-    }
-
-    .purchase-page .trust-stat .stat-desc {
-        font-size: 0.875rem;
-        color: var(--gray-600);
-        margin-top: 0.25rem;
-    }
 
 .purchase-page .cert-badges {
     display: flex;
@@ -1008,9 +1030,6 @@
     background: linear-gradient(135deg, var(--emergency), #f87171);
 }
 
-.purchase-page .supply-header {
-    background: linear-gradient(135deg, var(--primary), #3b82f6);
-}
 
 .purchase-page .modal-header h5 {
     font-size: 1.25rem;
@@ -1159,61 +1178,6 @@
             transform: translateY(-2px);
         }
 
-/* Toast 通知 */
-.success-toast {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #28a745, #20c997);
-    color: white;
-    padding: var(--space-md) var(--space-lg);
-    border-radius: var(--radius-xl);
-    box-shadow: 0 8px 32px rgba(40, 167, 69, 0.3);
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-    transform: translateX(400px);
-    transition: all 0.3s ease;
-    z-index: 10000;
-    max-width: 400px;
-}
-
-    .success-toast.show {
-        transform: translateX(0);
-    }
-
-    .success-toast .toast-icon {
-        font-size: 1.5rem;
-        opacity: 0.9;
-    }
-
-    .success-toast .toast-content {
-        flex: 1;
-    }
-
-    .success-toast .toast-title {
-        font-weight: 600;
-        margin-bottom: 0.25rem;
-    }
-
-    .success-toast .toast-message {
-        font-size: 0.9rem;
-        opacity: 0.9;
-    }
-
-    .success-toast .toast-close {
-        background: none;
-        border: none;
-        color: white;
-        cursor: pointer;
-        padding: 0.25rem;
-        opacity: 0.7;
-        transition: opacity 0.2s;
-    }
-
-        .success-toast .toast-close:hover {
-            opacity: 1;
-        }
 
 /* 響應式設計 */
 @media (max-width: 768px) {
@@ -1236,6 +1200,7 @@
 
     .purchase-page .emergency-grid {
         grid-template-columns: 1fr;
+        gap: var(--space-md);
     }
 
     .purchase-page .emergency-card {
@@ -1246,24 +1211,11 @@
         grid-template-columns: 1fr;
     }
 
-    .purchase-page .supplies-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    }
-
-    .purchase-page .category-header {
-        flex-direction: column;
-        text-align: center;
-        gap: var(--space-md);
-    }
 
     .purchase-page .trust-content {
         margin-bottom: var(--space-xl);
     }
 
-    .purchase-page .trust-stats {
-        grid-template-columns: 1fr;
-        gap: var(--space-md);
-    }
 
     .purchase-page .cert-badges {
         justify-content: flex-start;
@@ -1309,12 +1261,9 @@
         padding: var(--space-sm) var(--space-md);
     }
 
-    .purchase-page .supplies-grid {
-        grid-template-columns: 1fr;
-    }
 
     .purchase-page .emergency-grid {
         grid-template-columns: 1fr;
-        gap: var(--space-lg);
+        gap: var(--space-md);
     }
 }
