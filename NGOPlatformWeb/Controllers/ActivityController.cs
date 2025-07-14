@@ -2,6 +2,7 @@
 using NGOPlatformWeb.Models.Entity;
 using NGOPlatformWeb.Models.ViewModels;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 public class ActivityController : Controller
@@ -71,23 +72,27 @@ public class ActivityController : Controller
             return BadRequest("資料不完整");
         }
 
-        if (!ModelState.IsValid)
+        // ➜ 這裡假設已經處理好 CaseId、驗證、NotMapped 等邏輯
+        vm.Registration.RegisterTime = DateTime.Now;
+
+        try
         {
-            foreach (var key in ModelState.Keys)
-            {
-                var errors = ModelState[key].Errors;
-                foreach (var error in errors)
-                {
-                    Console.WriteLine($"[Model Error] {key}: {error.ErrorMessage}");
-                }
-            }
-            vm.Activity = _context.Activities.FirstOrDefault(a => a.ActivityId == vm.Registration.ActivityId);
+            _context.CaseActivityRegistrations.Add(vm.Registration);
+            await _context.SaveChangesAsync();
+
+            // ⭐ 寫入成功後，設定 TempData 旗標
+            TempData["SignupSuccess"] = true;
+
+            // ⭐ 導回活動總覽頁
+            return RedirectToAction("CaseActivityIndex");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("[❌ 寫入失敗] " + ex.Message);
+            vm.Activity = _context.Activities!
+                .FirstOrDefault(a => a.ActivityId == vm.Registration.ActivityId);
+            ViewBag.Error = ex.Message;
             return View(vm);
         }
-
-        _context.CaseActivityRegistrations.Add(vm.Registration);
-        await _context.SaveChangesAsync();
-        Console.WriteLine("[Debug] ✅ 成功寫入！");
-        return RedirectToAction("SignupSuccess");
     }
 }

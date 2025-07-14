@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NGOPlatformWeb.Models.Entity
 {
@@ -10,9 +11,18 @@ namespace NGOPlatformWeb.Models.Entity
         public int ActivityId { get; set; }
         public string Status { get; set; } = "registered";
 
-        public string ContactName { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public int ParticipantCount { get; set; }
+        [NotMapped]
+        public string? ContactName { get; set; }
+
+        [NotMapped]
+        public string? Email { get; set; }
+
+        [NotMapped]
+        public string? Phone { get; set; }
+
+        [NotMapped]
+        public int? ParticipantCount { get; set; }
+
+        public DateTime RegisterTime { get; set; } = DateTime.Now;
     }
 }

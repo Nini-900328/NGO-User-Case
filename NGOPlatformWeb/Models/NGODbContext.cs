@@ -6,13 +6,13 @@ namespace NGOPlatformWeb.Models.Entity
     {
         public NGODbContext(DbContextOptions<NGODbContext> options) : base(options) { }
 
-        public DbSet<Activity> Activities { get; set; }
+        public DbSet<Activity> Activities { get; set; } = default!;
         public DbSet<Supply> Supplies { get; set; }
         public DbSet<SupplyCategory> SupplyCategories { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Case> Cases { get; set; }
         public DbSet<CaseLogin> CaseLogins { get; set; }
-        public DbSet<CaseActivityRegistration> CaseActivityRegistrations { get; set; } 
+        public DbSet<CaseActivityRegistration> CaseActivityRegistrations { get; set; } = default!;
         public DbSet<RegularSupplyNeeds> RegularSuppliesNeeds { get; set; }
         public DbSet<EmergencySupplyNeeds> EmergencySupplyNeeds { get; set; }
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
