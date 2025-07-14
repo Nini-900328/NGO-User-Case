@@ -20,8 +20,19 @@ namespace NGOPlatformWeb.Controllers
 
         public IActionResult ShoppingIndex(string category)
         {
+            // 如果是已登入的個案，直接跳轉到物資申請頁面
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                var role = User.FindFirstValue(ClaimTypes.Role);
+                if (role == "Case")
+                {
+                    return RedirectToAction("CaseMaterialApplication");
+                }
+            }
+
+            // 未登入或一般使用者：顯示認購頁面
             var query = _context.Supplies
-                .Include(s => s.SupplyCategory) // 確保類別有被載入
+                .Include(s => s.SupplyCategory)
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(category))
@@ -30,6 +41,11 @@ namespace NGOPlatformWeb.Controllers
             }
 
             var supplies = query.ToList();
+            
+            // 傳遞使用者身份資訊給 View
+            ViewBag.IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
+            ViewBag.UserRole = User.FindFirstValue(ClaimTypes.Role);
+            
             return View(supplies);
         }
         public IActionResult CasePurchaseList(string category)
@@ -108,7 +124,7 @@ namespace NGOPlatformWeb.Controllers
                 Phone = cas.Phone,
                 IdentityNumber = cas.IdentityNumber,
                 Birthday = cas.Birthday,
-                Address = cas.Address
+                Address = cas.FullAddress
             };
 
             return View(vm);

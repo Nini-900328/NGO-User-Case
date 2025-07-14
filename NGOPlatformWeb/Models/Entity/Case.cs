@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NGOPlatformWeb.Models.Entity
 {
@@ -14,7 +15,7 @@ namespace NGOPlatformWeb.Models.Entity
         public string? IdentityNumber { get; set; }
         public DateTime? Birthday { get; set; }
 
-        public string? Address { get; set; }    // 舊欄保留
+        // public string? Address { get; set; }    // 舊欄已移除，改用 City + District + DetailAddress
         public int? WorkerId { get; set; }     
         public string? Description { get; set; }
         public DateTime? CreatedAt { get; set; }
@@ -27,6 +28,10 @@ namespace NGOPlatformWeb.Models.Entity
         public string? City { get; set; }
         public string? District { get; set; }
         public string? DetailAddress { get; set; }
+
+        // 計算屬性 - 完整地址
+        [NotMapped]
+        public string FullAddress => $"{City} {District} {DetailAddress}".Trim();
 
         // 導航屬性
         public virtual CaseLogin? CaseLogin { get; set; }
