@@ -12,10 +12,12 @@ namespace NGOPlatformWeb.Models.Entity
         public DbSet<User> Users { get; set; }
         public DbSet<Case> Cases { get; set; }
         public DbSet<CaseLogin> CaseLogins { get; set; }
-        public DbSet<CaseActivityRegistrations> CaseActivityRegistrations { get; set; } 
+        public DbSet<CaseActivityRegistration> CaseActivityRegistrations { get; set; } 
         public DbSet<RegularSupplyNeeds> RegularSuppliesNeeds { get; set; }
         public DbSet<EmergencySupplyNeeds> EmergencySupplyNeeds { get; set; }
-
-
+        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
+        // 捐贈訂單系統 - 支援組合包分解為單項物資
+        public DbSet<UserOrder> UserOrders { get; set; }
+        public DbSet<UserOrderDetail> UserOrderDetails { get; set; }
     }
 }
