@@ -31,18 +31,18 @@
                         <h5 class="card-title">@item.ActivityName</h5>
                         <p class="card-text text-muted">@item.Description</p>
                         <p class="card-text text-muted">地點 : @item.Location</p>
-                        <p class="text-muted small">開始時間 : @item.StartDate.ToShortDateString()</p>
-                        <p class="text-muted small">結束時間 : @item.EndDate.ToShortDateString()</p>
+                        <p class="text-muted small">開始時間 : @item.StartDate.ToString("yyyy/MM/dd HH:mm")</p>
+                        <p class="text-muted small">結束時間 : @item.EndDate.ToString("yyyy/MM/dd HH:mm")</p>
                         <div class="mt-auto">
                             <p class="text-muted small">參與人數 : @item.CurrentParticipants / @item.MaxParticipants</p>
-                            <p class="text-muted small">進度條</p>
-                            <p class="text-muted small">參與條件(討論)</p>
-                            <p class="text-muted small">報名截止時間(討論)</p>
-                            <button type="button"
-                                    class="btn btn-success btn-sm"
-                                    style="background-color: #F28C45; color: white; border: none;">
+
+                            <a class="btn btn-success btn-sm"
+                               style="background-color: #F28C45; color: white; border: none;"
+                               asp-controller="Activity"
+                               asp-action="CaseSignup"
+                               asp-route-id="@item.ActivityId">
                                 立即參與
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -77,3 +77,14 @@
     </script>
 }
 
+@if (TempData["SignupSuccess"] != null && (bool)TempData["SignupSuccess"])
+{
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '報名成功！',
+            text: '感謝您的參與，期待您的到來！',
+            confirmButtonText: '確定'
+        });
+    </script>
+}

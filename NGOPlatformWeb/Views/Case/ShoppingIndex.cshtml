@@ -8,23 +8,19 @@
     </div>
 </div>
 
-<div class="container">
-    <div class="mb-4">
-        <div class="d-flex flex-wrap justify-content-center align-items-center gap-2">
-            <input type="text" class="form-control search-box" placeholder="搜尋物資名稱…" />
+<div class="container mb-4">
+    <div class="d-flex flex-wrap justify-content-center align-items-center gap-2">
+        <input type="text" class="form-control search-box" placeholder="搜尋物資名稱…" style="max-width:300px;" />
 
-            <a asp-action="ShoppingIndex" class="btn btn-outline-success">全部</a>
-            <a asp-action="ShoppingIndex" asp-route-category="食品" class="btn btn-outline-success">食品</a>
-            <a asp-action="ShoppingIndex" asp-route-category="衣物" class="btn btn-outline-secondary">衣物</a>
-            <a asp-action="ShoppingIndex" asp-route-category="醫療" class="btn btn-outline-secondary">醫療</a>
-            <a asp-action="ShoppingIndex" asp-route-category="清潔" class="btn btn-outline-secondary">清潔</a>
-            <a asp-action="ShoppingIndex" asp-route-category="文具" class="btn btn-outline-secondary">文具</a>
-        </div>
+        <a asp-action="ShoppingIndex" class="btn btn-outline-success">全部</a>
+        <a asp-action="ShoppingIndex" asp-route-category="食品" class="btn btn-outline-success">食品</a>
+        <a asp-action="ShoppingIndex" asp-route-category="衣物" class="btn btn-outline-secondary">衣物</a>
+        <a asp-action="ShoppingIndex" asp-route-category="醫療" class="btn btn-outline-secondary">醫療</a>
+        <a asp-action="ShoppingIndex" asp-route-category="清潔" class="btn btn-outline-secondary">清潔</a>
+        <a asp-action="ShoppingIndex" asp-route-category="文具" class="btn btn-outline-secondary">文具</a>
     </div>
 </div>
 
-<!-- 商品卡片 -->
-<!--0701更新卡片置中-->
 <div class="row justify-content-center">
     @foreach (var item in Model)
     {
@@ -35,41 +31,45 @@
                     <h5 class="card-title">@item.SupplyName</h5>
                     <p class="card-text text-muted">@item.SupplyDescription</p>
                     <p class="text-muted small">分類：@item.SupplyCategory?.SupplyCategoryName</p>
-                    <p class="text-muted small">類型：@item.SupplyType</p>
                     <p class="text-muted small">剩餘數量：@item.SupplyQuantity 份</p>
                     <div class="mt-auto">
                         <button type="button"
-                                class="btn btn-success btn-sm"
+                                class="btn btn-success btn-sm w-100"
                                 data-bs-toggle="modal"
-                                data-bs-target="@($"#infoModal{item.SupplyId}")">
-                            領取物資
+                                data-bs-target="#infoModal@(item.SupplyId)">
+                            <i class="fas fa-hand-holding-heart me-1"></i>領取物資
                         </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Modal 彈窗 -->
+        <!-- ✅ Modal 彈窗 (每個 item 一個表單) -->
         <div class="modal fade" id="infoModal@(item.SupplyId)" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">@item.SupplyName</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        確定要領取 <strong>@item.SupplyName</strong> 嗎？
-                        <button type="button" class="text-bg-success rounded mt-2" data-bs-dismiss="modal">
-                            確認
-                        </button>
-                    </div>
+                    <form asp-controller="Case" asp-action="ApplySupply" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title">@item.SupplyName</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="supplyId" value="@item.SupplyId" />
+                            <label class="form-label">申請數量</label>
+                            <input type="number" name="quantity" value="1" min="1" max="@item.SupplyQuantity" class="form-control mb-2" />
+                            <p class="mt-2">確定要領取 <strong>@item.SupplyName</strong> 嗎？</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">確認</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     }
 </div>
 
-<!--搜尋功能加上filter-->
 @section Scripts {
     <script>
         $(document).ready(function () {

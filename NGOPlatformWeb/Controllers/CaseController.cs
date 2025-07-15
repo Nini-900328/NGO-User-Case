@@ -20,17 +20,6 @@ namespace NGOPlatformWeb.Controllers
 
         public IActionResult ShoppingIndex(string category)
         {
-            // 如果是已登入的個案，直接跳轉到物資申請頁面
-            if (User.Identity?.IsAuthenticated == true)
-            {
-                var role = User.FindFirstValue(ClaimTypes.Role);
-                if (role == "Case")
-                {
-                    return RedirectToAction("CaseMaterialApplication");
-                }
-            }
-
-            // 未登入或一般使用者：顯示認購頁面
             var query = _context.Supplies
                 .Include(s => s.SupplyCategory)
                 .AsQueryable();
@@ -48,9 +37,30 @@ namespace NGOPlatformWeb.Controllers
             
             return View(supplies);
         }
+        
+        [HttpPost]
+        public IActionResult ApplySupply(int supplyId, int quantity)
+        {
+            int caseId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var need = new RegularSupplyNeeds
+            {
+                CaseId = caseId,
+                SupplyId = supplyId,
+                Quantity = quantity,
+                ApplyDate = DateTime.Now,
+                Status = "未領取"
+            };
+
+            _context.RegularSuppliesNeeds.Add(need);
+            _context.SaveChanges();
+
+            return RedirectToAction("CasePurchaseList");
+        }
+
         public IActionResult CasePurchaseList(string category)
         {
-            int caseId = 1; // 假資料，之後可從 Claims or Session 取代
+            int caseId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value);
 
             var viewModel = new SupplyRecordViewModel
             {
@@ -103,7 +113,39 @@ namespace NGOPlatformWeb.Controllers
     .ToList()
 
             };
-            return View("~/Views/User/CasePurchaseList.cshtml", viewModel);
+            return View( viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult CaseActivityList() //目前還未完成 無法顯示正確筆數
+        {
+            // 從登入者資訊取得 CaseId
+            var caseIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (caseIdClaim == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            int currentCaseId = int.Parse(caseIdClaim.Value);
+            Console.WriteLine("✅ 目前登入者的 CaseId：" + currentCaseId);
+
+            // 撈取對應報名紀錄
+            var result = (from reg in _context.CaseActivityRegistrations
+                          join act in _context.Activities
+                          on reg.ActivityId equals act.ActivityId
+                          where reg.CaseId == currentCaseId && reg.Status == "registered"
+                          select new CaseActivityListItemViewModel
+                          {
+                              ActivityId = act.ActivityId,
+                              ActivityName = act.ActivityName,
+                              Location = act.Location,
+                              StartDate = act.StartDate,
+                              EndDate = act.EndDate
+                          }).ToList();
+
+            Console.WriteLine("✅ 撈出筆數：" + result.Count);
+
+            return View(result);
         }
 
         //for case edit page

@@ -30,7 +30,7 @@
                 <li class="nav-item">
                     @if (User.FindFirstValue(ClaimTypes.Role) == "Case")
                     {
-                        <a asp-controller="Case" asp-action="CasePurchaseList"
+                        <a asp-controller="Case" asp-action="ShoppingIndex"
                            class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Case" && ViewContext.RouteData.Values["action"]?.ToString() == "CasePurchaseList" ? "active" : "")">
                             <i class="fas fa-cogs"></i><span class="ms-1">物資申請</span>
                         </a>
@@ -83,7 +83,7 @@
                             <li>
                                 <a class="dropdown-item d-flex align-items-center"
                                    asp-controller="@(role == "User" ? "User" : "Case")"
-                                   asp-action="Registrations">
+                                   asp-action="@(role == "User" ? "Registrations" : "CaseActivityList")">
                                     <i class="fas fa-calendar-check fixed-icon"></i>
                                     <span class="ms-2">報名的活動</span>
                                 </a>
@@ -98,7 +98,7 @@
                                 }
                                 else
                                 {
-                                    <a class="dropdown-item d-flex align-items-center" asp-controller="Case" asp-action="ApplicationRecords">
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="Case" asp-action="CasePurchaseList">
                                         <i class="fas fa-receipt fixed-icon"></i>
                                         <span class="ms-2">申請紀錄</span>
                                     </a>
