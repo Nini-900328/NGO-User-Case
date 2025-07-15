@@ -3,7 +3,12 @@
     ViewData["Title"] = "個案個人資料";
 }
 
-<div class="container py-5">
+@section Styles {
+    <link rel="stylesheet" href="~/css/profile-shared.css" />
+    <link rel="stylesheet" href="~/css/profile-components.css" />
+}
+
+<div class="container py-5 case-page">
     <div class="row g-4">
         <!-- 側邊資訊區 -->
         <div class="col-md-4">
@@ -115,216 +120,90 @@
                     </form>
                 </div>
             </div>
+            
+            <!-- 活動與物資申請總覽區 -->
+            <div class="row g-4 mt-2">
+                <!-- 活動紀錄總覽 -->
+                <div class="col-md-6">
+                    <div class="overview-card case-activity-overview">
+                        <div class="overview-header">
+                            <h5><i class="fas fa-calendar-check me-2"></i>活動紀錄</h5>
+                            <a asp-action="Registrations" class="view-all-btn">查看全部</a>
+                        </div>
+                        
+                        <div class="overview-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">@Model.TotalActivitiesRegistered</div>
+                                <div class="stat-label">總參與次數</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">@Model.ActiveRegistrations</div>
+                                <div class="stat-label">進行中活動</div>
+                            </div>
+                        </div>
+                        
+                        <div class="recent-items">
+                            @if (Model.RecentActivities.Any())
+                            {
+                                @foreach (var activity in Model.RecentActivities)
+                                {
+                                    <div class="case-activity-item">
+                                        <img src="@activity.ImageUrl" alt="@activity.ActivityName" class="activity-thumb" />
+                                        <div class="activity-info">
+                                            <div class="activity-name">@activity.ActivityName</div>
+                                            <div class="activity-date">@activity.StartDate.ToString("yyyy/MM/dd")</div>
+                                            <span class="activity-status @(activity.Status == "registered" ? "status-active" : "status-cancelled")">
+                                                @(activity.Status == "registered" ? "已報名" : "已取消")
+                                            </span>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="no-data">
+                                    <i class="fas fa-calendar-times"></i>
+                                    <p>尚未參加任何活動</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 物資申請總覽 -->
+                <div class="col-md-6">
+                    <div class="overview-card case-application-overview">
+                        <div class="overview-header">
+                            <h5><i class="fas fa-boxes me-2"></i>物資申請</h5>
+                            <a asp-action="ApplicationRecords" class="view-all-btn">查看全部</a>
+                        </div>
+                        
+                        <div class="overview-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">@Model.TotalApplications</div>
+                                <div class="stat-label">申請次數</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">@Model.PendingApplications</div>
+                                <div class="stat-label">待處理</div>
+                            </div>
+                        </div>
+                        
+                        <div class="recent-items">
+                            <!-- 物資申請功能由其他組員實作，目前顯示空狀態 -->
+                            <div class="coming-soon">
+                                <i class="fas fa-tools"></i>
+                                <h6>功能開發中</h6>
+                                <p>物資申請功能正在開發中<br/>敬請期待！</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<style>
-.profile-sidebar {
-    background: linear-gradient(145deg, #fff 0%, #f8f9fa 100%);
-    border-radius: 20px;
-    padding: 2rem;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    text-align: center;
-    transition: transform 0.3s ease;
-}
-
-.profile-sidebar:hover { transform: translateY(-5px); }
-
-.profile-avatar {
-    position: relative;
-    display: inline-block;
-    margin-bottom: 1.5rem;
-}
-
-.profile-avatar img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid #fff;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-}
-
-.avatar-overlay {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    background: #007bff;
-    color: white;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.case-avatar { background: linear-gradient(135deg, #17a2b8, #138496); }
-
-.profile-avatar:hover .avatar-overlay { opacity: 1; }
-
-.profile-info h5 {
-    margin: 0 0 0.5rem 0;
-    color: #2c3e50;
-    font-weight: 600;
-}
-
-.profile-info p {
-    margin: 0 0 1rem 0;
-    color: #6c757d;
-    font-size: 0.9rem;
-}
-
-.case-badge {
-    background: linear-gradient(135deg, #17a2b8, #138496);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-.profile-nav {
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.profile-nav .nav-item {
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    border-radius: 12px;
-    text-decoration: none;
-    color: #6c757d;
-    transition: all 0.3s ease;
-    border: 1px solid transparent;
-}
-
-.profile-nav .nav-item:hover, 
-.profile-nav .nav-item.active {
-    background: linear-gradient(135deg, #17a2b8, #138496);
-    color: white;
-    transform: translateX(5px);
-    box-shadow: 0 5px 15px rgba(23,162,184,0.3);
-}
-
-.profile-nav .nav-item i { margin-right: 0.75rem; width: 16px; }
-
-.profile-content {
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    overflow: hidden;
-}
-
-.content-header {
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    padding: 2rem;
-    border-bottom: 1px solid #dee2e6;
-}
-
-.content-header h4 {
-    margin: 0;
-    color: #2c3e50;
-    font-weight: 600;
-}
-
-.profile-fields { padding: 2rem; }
-
-.field-row {
-    display: flex;
-    align-items: center;
-    padding: 1rem 0;
-    border-bottom: 1px solid #f1f3f4;
-    transition: background-color 0.3s ease;
-}
-
-.field-row:hover { background-color: #f8f9fa; }
-.field-row:last-child { border-bottom: none; }
-
-.field-label {
-    flex: 0 0 140px;
-    font-weight: 600;
-    color: #495057;
-    display: flex;
-    align-items: center;
-}
-
-.field-value {
-    flex: 1;
-    color: #2c3e50;
-    padding-left: 1rem;
-}
-
-.success-alert {
-    background: linear-gradient(135deg, #d4edda, #c3e6cb);
-    color: #155724;
-    padding: 1rem;
-    border-radius: 12px;
-    margin-bottom: 2rem;
-    display: flex;
-    align-items: center;
-}
-
-.password-form .form-group {
-    margin-bottom: 1.5rem;
-}
-
-.password-form .form-label {
-    display: flex;
-    align-items: center;
-    font-weight: 600;
-    color: #495057;
-    margin-bottom: 0.5rem;
-}
-
-.password-form .form-control {
-    border-radius: 12px;
-    border: 2px solid #e9ecef;
-    padding: 0.75rem 1rem;
-    transition: all 0.3s ease;
-}
-
-.password-form .form-control:focus {
-    border-color: #17a2b8;
-    box-shadow: 0 0 0 0.2rem rgba(23,162,184,0.25);
-}
-
-.form-actions {
-    text-align: right;
-    margin-top: 2rem;
-}
-
-.update-btn {
-    background: linear-gradient(135deg, #17a2b8, #138496);
-    color: white;
-    padding: 0.75rem 2rem;
-    border: none;
-    border-radius: 12px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    box-shadow: 0 4px 15px rgba(23,162,184,0.3);
-}
-
-.update-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(23,162,184,0.4);
-}
-
-@@media (max-width: 768px) {
-    .profile-sidebar { margin-bottom: 2rem; }
-    .field-row { flex-direction: column; align-items: flex-start; }
-    .field-label { margin-bottom: 0.5rem; }
-    .field-value { padding-left: 0; }
-}
-</style>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

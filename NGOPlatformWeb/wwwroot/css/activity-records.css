@@ -1,0 +1,457 @@
+/* ================================
+   NGO Platform - Activity Records
+   活動紀錄頁面專用樣式
+   ================================ */
+
+/* 活動卡片網格 */
+.activities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+.activity-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.activity-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* 活動圖片區域 */
+.activity-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.activity-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.activity-card:hover .activity-image img {
+    transform: scale(1.05);
+}
+
+.activity-status-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+}
+
+/* 活動內容區域 */
+.activity-content {
+    padding: 1.5rem;
+}
+
+.activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.activity-name {
+    color: #2c3e50;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+    line-height: 1.3;
+}
+
+.activity-category {
+    background: #e9ecef;
+    color: #495057;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-left: 1rem;
+    white-space: nowrap;
+}
+
+.activity-description {
+    color: #6c757d;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 活動詳細信息 */
+.activity-details {
+    margin-bottom: 1.5rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.detail-item i {
+    width: 16px;
+    color: #007bff;
+    flex-shrink: 0;
+}
+
+/* Case主題的詳細項目 */
+.case-theme .detail-item i {
+    color: #20c997;
+}
+
+/* 活動底部 */
+.activity-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid #f1f3f4;
+}
+
+.activity-time-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.upcoming-badge {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.completed-badge {
+    background: #d4edda;
+    color: #155724;
+}
+
+.cancelled-badge {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.view-detail-btn {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.view-detail-btn:hover {
+    color: #0056b3;
+}
+
+/* Case主題的查看詳情按鈕 */
+.case-theme .view-detail-btn {
+    color: #20c997;
+}
+
+.case-theme .view-detail-btn:hover {
+    color: #17a2b8;
+}
+
+/* 篩選相關 */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.section-header h4 {
+    color: #2c3e50;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* 篩選動畫 */
+.activity-card {
+    transition: all 0.3s ease, opacity 0.5s ease, transform 0.5s ease;
+}
+
+.activity-card.hidden {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+}
+
+/* 特殊活動類型標識 */
+.activity-card.case-exclusive {
+    border-left: 4px solid #20c997;
+}
+
+.activity-card.case-exclusive::after {
+    content: "個案專屬";
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: rgba(32, 201, 151, 0.9);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .activities-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .activity-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .activity-category {
+        margin-left: 0;
+    }
+    
+    .activity-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .activity-description {
+        -webkit-line-clamp: 3;
+    }
+}
+
+@media (max-width: 576px) {
+    .activities-grid {
+        gap: 1rem;
+    }
+    
+    .activity-content {
+        padding: 1rem;
+    }
+    
+    .activity-image {
+        height: 150px;
+    }
+    
+    .detail-item {
+        font-size: 0.8rem;
+    }
+    
+    .activity-time-badge {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.75rem;
+    }
+    
+    .view-detail-btn {
+        font-size: 0.9rem;
+    }
+}
+
+/* 加載動畫 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.activity-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.activity-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.activity-card:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.activity-card:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+/* Case專用樣式覆蓋 */
+.case-page .page-header {
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+}
+
+.case-page .page-title {
+    color: #0d47a1;
+}
+
+.case-page .page-subtitle {
+    color: #37474f;
+}
+
+/* Case專用統計卡片顏色 */
+.case-page .total-registrations-case .stat-icon {
+    background: linear-gradient(135deg, #17a2b8, #138496);
+}
+
+.case-page .active-registrations-case .stat-icon {
+    background: linear-gradient(135deg, #20c997, #17a2b8);
+}
+
+.case-page .upcoming-activities-case .stat-icon {
+    background: linear-gradient(135deg, #ffc107, #17a2b8);
+}
+
+.case-page .completed-activities-case .stat-icon {
+    background: linear-gradient(135deg, #6f42c1, #17a2b8);
+}
+
+.case-page .stat-number {
+    color: #0d47a1;
+}
+
+.case-page .stat-label {
+    color: #37474f;
+}
+
+/* Case專用篩選按鈕 */
+.case-page .filter-btn {
+    background: #e0f7fa;
+    border-color: #b2ebf2;
+    color: #0d47a1;
+}
+
+.case-page .filter-btn:hover,
+.case-page .filter-btn.active {
+    background: #17a2b8;
+    border-color: #17a2b8;
+    color: white;
+}
+
+/* Case專用活動卡片 */
+.case-page .activity-card {
+    border-left: 4px solid #17a2b8;
+}
+
+.case-page .activity-card:hover {
+    border-left-color: #138496;
+}
+
+.case-page .status-active {
+    background: rgba(23, 162, 184, 0.9);
+    color: white;
+}
+
+.case-page .activity-category {
+    background: #e0f7fa;
+    color: #0d47a1;
+}
+
+.case-page .detail-item i {
+    color: #17a2b8;
+}
+
+.case-page .view-detail-btn {
+    color: #17a2b8;
+}
+
+.case-page .view-detail-btn:hover {
+    color: #138496;
+}
+
+/* Case專用時間徽章 */
+.case-page .upcoming-badge {
+    background: #fff8e1;
+    color: #e65100;
+}
+
+.case-page .completed-badge {
+    background: #e0f2f1;
+    color: #00695c;
+}
+
+.case-page .cancelled-badge {
+    background: #ffebee;
+    color: #c62828;
+}
+
+/* Case專用空狀態 */
+.case-page .empty-state {
+    background: linear-gradient(145deg, #e0f7fa, #b2ebf2);
+    border: 2px dashed #17a2b8;
+}
+
+.case-page .empty-state .empty-icon {
+    color: #17a2b8;
+}
+
+.case-page .empty-state h4 {
+    color: #0d47a1;
+}
+
+/* Case專用個案徽章 */
+.case-page .activity-card.case-exclusive::after {
+    content: "個案專屬";
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: rgba(111, 66, 193, 0.9);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* 印刷樣式 */
+@media print {
+    .activity-card {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #dee2e6;
+    }
+    
+    .activity-image {
+        height: 150px;
+    }
+    
+    .view-detail-btn {
+        display: none;
+    }
+}
