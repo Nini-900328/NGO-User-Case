@@ -52,7 +52,7 @@ public class ActivityController : Controller
         var viewModel = new CaseSignupViewModel
         {
             Activity = activity,
-            Registration = new CaseActivityRegistration
+            Registration = new CaseActivityRegistrations
             {
                 ActivityId = activity.ActivityId,
                 CaseId = fakeCaseId,

@@ -1,12 +1,13 @@
 ﻿@model List<NGOPlatformWeb.Models.Entity.Supply>
 
 <!-- 滿版背景 -->
-<div class="bg-success bg-opacity-25 py-4 mb-4">
-    <div class="container text-center">
-        <h3 class="text-success fw-bold">物資選購</h3>
-        <p class="text-secondary">數量有限，登記時以 1 份為單位。</p>
+<div class="caseshopping-hero mb-4">
+    <div class="hero-content">
+        <h1>物資選購</h1>
+        <p>數量有限，登記時以 1 份為單位。</p>
     </div>
 </div>
+<link rel="stylesheet" href="~/css/caseshopping.css" />
 
 <div class="container mb-4">
     <div class="d-flex flex-wrap justify-content-center align-items-center gap-2">
@@ -21,10 +22,12 @@
     </div>
 </div>
 
-<div class="row justify-content-center">
+<div class="container">
+      <div class="row g-4">
+
     @foreach (var item in Model)
     {
-        <div class="mb-4 mx-2 search-card" style="width: 18rem;">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
             <div class="card h-100 shadow-sm search-card">
                 <img src="@item.ImageUrl" class="card-img-top" alt="@item.SupplyName" />
                 <div class="card-body d-flex flex-column">
@@ -44,9 +47,9 @@
             </div>
         </div>
 
-        <!-- ✅ Modal 彈窗 (每個 item 一個表單) -->
+        <!-- Modal 彈窗 -->
         <div class="modal fade" id="infoModal@(item.SupplyId)" tabindex="-1">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <form asp-controller="Case" asp-action="ApplySupply" method="post">
                         <div class="modal-header">
@@ -56,7 +59,7 @@
                         <div class="modal-body">
                             <input type="hidden" name="supplyId" value="@item.SupplyId" />
                             <label class="form-label">申請數量</label>
-                            <input type="number" name="quantity" value="1" min="1" max="@item.SupplyQuantity" class="form-control mb-2" />
+                            <input type="number" name="quantity" value="1" min="1" max="@item.SupplyQuantity" class="form-control mb-3" />
                             <p class="mt-2">確定要領取 <strong>@item.SupplyName</strong> 嗎？</p>
                         </div>
                         <div class="modal-footer">
@@ -69,6 +72,7 @@
         </div>
     }
 </div>
+
 
 @section Scripts {
     <script>
