@@ -42,5 +42,25 @@ namespace NGOPlatformWeb.Models.ViewModels
         [Display(Name = "確認新密碼")]
         [Compare("NewPassword", ErrorMessage = "新密碼與確認密碼不一致")]
         public string? ConfirmPassword { get; set; }
+        
+        // 活動報名總覽
+        public int TotalActivitiesRegistered { get; set; }
+        public int ActiveRegistrations { get; set; }
+        public List<CaseActivitySummary> RecentActivities { get; set; } = new List<CaseActivitySummary>();
+        
+        // 物資申請總覽（預留空間給其他組員）
+        public int TotalApplications { get; set; }
+        public int PendingApplications { get; set; }
+        // 物資申請的詳細資料將由其他組員實作
+    }
+    
+    public class CaseActivitySummary
+    {
+        public int ActivityId { get; set; }
+        public string ActivityName { get; set; } = string.Empty;
+        public DateTime StartDate { get; set; }
+        public string Status { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
     }
 }

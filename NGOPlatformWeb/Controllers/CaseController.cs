@@ -150,14 +150,30 @@ namespace NGOPlatformWeb.Controllers
 
         //for case edit page
         [Authorize(Roles = "Case")]
-        public IActionResult CaseProfile()
+        public async Task<IActionResult> CaseProfile()
         {
             var email = User.FindFirstValue(ClaimTypes.Email);
             if (string.IsNullOrEmpty(email)) return RedirectToAction("Login", "Auth");
 
-            var caseLogin = _context.CaseLogins.FirstOrDefault(c => c.Email == email);
-            var cas = _context.Cases.FirstOrDefault(c => c.CaseId == caseLogin.CaseId);
+            var caseLogin = await _context.CaseLogins.FirstOrDefaultAsync(c => c.Email == email);
+            var cas = await _context.Cases.FirstOrDefaultAsync(c => c.CaseId == caseLogin.CaseId);
             if (cas == null) return NotFound();
+
+            // 取得活動報名統計
+            var activityRegistrations = await _context.CaseActivityRegistrations
+                .Include(r => r.Activity)
+                .Where(r => r.CaseId == cas.CaseId)
+                .OrderByDescending(r => r.RegisterTime)
+                .Take(5)
+                .ToListAsync();
+
+            var totalActivities = await _context.CaseActivityRegistrations
+                .Where(r => r.CaseId == cas.CaseId)
+                .CountAsync();
+
+            var activeRegistrations = await _context.CaseActivityRegistrations
+                .Where(r => r.CaseId == cas.CaseId && r.Status == "registered")
+                .CountAsync();
 
             var vm = new CaseProfileViewModel
             {
@@ -166,7 +182,24 @@ namespace NGOPlatformWeb.Controllers
                 Phone = cas.Phone,
                 IdentityNumber = cas.IdentityNumber,
                 Birthday = cas.Birthday,
-                Address = cas.FullAddress
+                Address = cas.FullAddress,
+                
+                // 活動統計
+                TotalActivitiesRegistered = totalActivities,
+                ActiveRegistrations = activeRegistrations,
+                RecentActivities = activityRegistrations.Select(r => new CaseActivitySummary
+                {
+                    ActivityId = r.ActivityId,
+                    ActivityName = r.Activity?.ActivityName ?? "未知活動",
+                    StartDate = r.Activity?.StartDate ?? DateTime.MinValue,
+                    Status = r.Status,
+                    ImageUrl = r.Activity?.ImageUrl ?? "/images/activity-default.png",
+                    Category = r.Activity?.Category ?? ""
+                }).ToList(),
+                
+                // 物資申請統計（預留給其他組員）
+                TotalApplications = 0, // 待實作
+                PendingApplications = 0 // 待實作
             };
 
             return View(vm);
@@ -191,6 +224,57 @@ namespace NGOPlatformWeb.Controllers
 
             ViewBag.SuccessMessage = "密碼修改成功";
             return View(vm);
+        }
+
+        // 個案活動報名紀錄頁面
+        [Authorize(Roles = "Case")]
+        public async Task<IActionResult> Registrations()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // 取得當前個案
+            var caseLogin = await _context.CaseLogins.FirstOrDefaultAsync(c => c.Email == email);
+            var cas = await _context.Cases.FirstOrDefaultAsync(c => c.CaseId == caseLogin.CaseId);
+            if (cas == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // 取得該個案的所有活動報名紀錄
+            var registrations = await _context.CaseActivityRegistrations
+                .Include(r => r.Activity)
+                .Where(r => r.CaseId == cas.CaseId)
+                .OrderByDescending(r => r.RegisterTime)
+                .ToListAsync();
+
+            // 創建ViewModel
+            var viewModel = new CaseActivityRegistrationsViewModel
+            {
+                CaseName = cas.Name ?? "個案",
+                TotalRegistrations = registrations.Count,
+                ActiveRegistrations = registrations.Count(r => r.Status == "registered"),
+                Registrations = registrations.Select(r => new CaseActivityRegistrationItem
+                {
+                    RegistrationId = r.RegistrationId,
+                    ActivityId = r.ActivityId,
+                    ActivityName = r.Activity?.ActivityName ?? "未知活動",
+                    ActivityDescription = r.Activity?.Description ?? "",
+                    Location = r.Activity?.Location ?? "",
+                    StartDate = r.Activity?.StartDate ?? DateTime.MinValue,
+                    EndDate = r.Activity?.EndDate ?? DateTime.MinValue,
+                    RegisterTime = r.RegisterTime,
+                    Status = r.Status,
+                    ImageUrl = r.Activity?.ImageUrl ?? "/images/activity-default.png",
+                    Category = r.Activity?.Category ?? "",
+                    TargetAudience = r.Activity?.TargetAudience ?? ""
+                }).ToList()
+            };
+
+            return View(viewModel);
         }
 
     }

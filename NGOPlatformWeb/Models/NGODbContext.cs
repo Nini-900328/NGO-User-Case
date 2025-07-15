@@ -19,5 +19,9 @@ namespace NGOPlatformWeb.Models.Entity
         // 捐贈訂單系統 - 支援組合包分解為單項物資
         public DbSet<UserOrder> UserOrders { get; set; }
         public DbSet<UserOrderDetail> UserOrderDetails { get; set; }
+        
+        // 活動報名系統
+        public DbSet<UserActivityRegistration> UserActivityRegistrations { get; set; }
+        public DbSet<CaseActivityRegistration> CaseActivityRegistrations { get; set; }
     }
 }
