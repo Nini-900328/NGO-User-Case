@@ -1,4 +1,5 @@
-﻿@model NGOPlatformWeb.Models.ViewModels.UserProfileViewModel
+﻿<!-- 一般使用者個人資料頁面 - 顯示基本資料、活動統計、認購統計 -->
+@model NGOPlatformWeb.Models.ViewModels.UserProfileViewModel
 @{
     ViewData["Title"] = "個人資料";
 }
@@ -10,9 +11,10 @@
 
 <div class="container py-5">
     <div class="row g-4">
-        <!-- 側邊資訊區 -->
+        <!-- 左側邊欄 - 顯示頭像、基本資訊、導航選單 -->
         <div class="col-md-4">
             <div class="profile-sidebar">
+                <!-- 使用者頭像區域 -->
                 <div class="profile-avatar">
                     <img src="/images/user-default.png" alt="頭像" />
                     <div class="avatar-overlay">
@@ -20,11 +22,13 @@
                     </div>
                 </div>
                 
+                <!-- 基本資訊顯示 -->
                 <div class="profile-info">
                     <h5>@Model.Name</h5>
                     <p>@Model.Email</p>
                 </div>
 
+                <!-- 導航選單 -->
                 <nav class="profile-nav">
                     <a href="#" class="nav-item active">
                         <i class="fas fa-user"></i>個人資料
@@ -39,13 +43,15 @@
             </div>
         </div>
 
-        <!-- 主要內容區 -->
+        <!-- 右側主要內容區 -->
         <div class="col-md-8">
+            <!-- 基本資料卡片 -->
             <div class="profile-content">
                 <div class="content-header">
                     <h4><i class="fas fa-id-card me-2"></i>基本資料</h4>
                 </div>
 
+                <!-- 資料欄位顯示區 -->
                 <div class="profile-fields">
                     <div class="field-row">
                         <div class="field-label"><i class="fas fa-user me-2"></i>姓名</div>
@@ -75,6 +81,7 @@
                     </div>
                 </div>
 
+                <!-- 編輯按鈕 -->
                 <div class="content-footer">
                     <a asp-action="EditProfile" class="edit-btn">
                         <i class="fas fa-edit me-2"></i>編輯資料
@@ -84,7 +91,7 @@
             
             <!-- 活動與認購總覽區 -->
             <div class="row g-4 mt-2">
-                <!-- 活動報名總覽 -->
+                <!-- 活動報名總覽卡片 -->
                 <div class="col-md-6">
                     <div class="overview-card activity-overview">
                         <div class="overview-header">
@@ -92,6 +99,7 @@
                             <a asp-action="Registrations" class="view-all-btn">查看全部</a>
                         </div>
                         
+                        <!-- 活動統計數據 -->
                         <div class="overview-stats">
                             <div class="stat-item">
                                 <div class="stat-number">@Model.TotalActivitiesRegistered</div>
@@ -103,6 +111,7 @@
                             </div>
                         </div>
                         
+                        <!-- 最近活動清單 -->
                         <div class="recent-items">
                             @if (Model.RecentActivities.Any())
                             {
@@ -122,6 +131,7 @@
                             }
                             else
                             {
+                                <!-- 無活動時顯示 -->
                                 <div class="no-data">
                                     <i class="fas fa-calendar-times"></i>
                                     <p>尚未參加任何活動</p>
@@ -131,7 +141,7 @@
                     </div>
                 </div>
                 
-                <!-- 認購總覽 -->
+                <!-- 認購總覽卡片 -->
                 <div class="col-md-6">
                     <div class="overview-card purchase-overview">
                         <div class="overview-header">
@@ -139,6 +149,7 @@
                             <a asp-action="PurchaseRecords" class="view-all-btn">查看全部</a>
                         </div>
                         
+                        <!-- 認購統計數據 -->
                         <div class="overview-stats">
                             <div class="stat-item">
                                 <div class="stat-number">@Model.TotalPurchaseOrders</div>
@@ -150,6 +161,7 @@
                             </div>
                         </div>
                         
+                        <!-- 最近認購清單 -->
                         <div class="recent-items">
                             @if (Model.RecentPurchases.Any())
                             {

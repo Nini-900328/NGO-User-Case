@@ -1,4 +1,5 @@
-﻿@model PaymentViewModel
+﻿<!-- 付款確認頁面 - 顯示付款資訊並處理付款流程 -->
+@model PaymentViewModel
 @{
     ViewData["Title"] = "確認付款";
 }
@@ -10,7 +11,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 
-                <!-- 付款進度條 -->
+                <!-- 付款流程進度條 -->
                 <div class="payment-progress">
                     <div class="progress-step completed">
                         <div class="step-icon"><i class="fas fa-shopping-cart"></i></div>
@@ -26,7 +27,7 @@
                     </div>
                 </div>
 
-                <!-- 錯誤訊息 -->
+                <!-- 表單驗證錯誤訊息 -->
                 @if (ViewData.ModelState.ErrorCount > 0)
                 {
                     <div class="alert alert-danger">
