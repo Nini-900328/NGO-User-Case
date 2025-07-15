@@ -1,0 +1,567 @@
+/* ================================
+   NGO Platform - Purchase Records
+   認購紀錄頁面專用樣式
+   ================================ */
+
+/* 認購紀錄列表 */
+.purchase-records {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.purchase-record-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    border-left: 4px solid #007bff;
+}
+
+.purchase-record-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.purchase-record-card.emergency-order {
+    border-left-color: #dc3545;
+}
+
+.purchase-record-card.regular-order {
+    border-left-color: #28a745;
+}
+
+/* 訂單標題區 */
+.record-header {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.order-info {
+    flex: 1;
+    min-width: 200px;
+}
+
+.order-number {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.order-date {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.emergency-badge {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+}
+
+.order-summary {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+.total-amount {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #28a745;
+}
+
+.payment-status {
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.payment-status.paid {
+    background: #d4edda;
+    color: #155724;
+}
+
+.payment-status.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-paid {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-emergency {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* 訂單內容區 */
+.record-content {
+    padding: 1.5rem;
+}
+
+.record-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.meta-item i {
+    width: 16px;
+    color: #007bff;
+    flex-shrink: 0;
+}
+
+.meta-label {
+    font-weight: 500;
+    color: #495057;
+    margin-right: 0.5rem;
+}
+
+.meta-value {
+    color: #2c3e50;
+}
+
+/* 物資網格 */
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+}
+
+.item-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.item-card:hover {
+    background: #f8f9fa;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.item-image {
+    position: relative;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.item-image img {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.emergency-indicator {
+    position: absolute;
+    top: -5px;
+    right: calc(50% - 45px);
+    background: #dc3545;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+}
+
+.item-details {
+    text-align: center;
+}
+
+.item-name {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.item-quantity {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.item-total {
+    color: #28a745;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.case-info {
+    color: #dc3545;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+/* 訂單底部 */
+.record-footer {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.impact-message {
+    color: #495057;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.impact-message i {
+    color: #dc3545;
+    margin-right: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.record-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    background: transparent;
+    border: 2px solid #007bff;
+    color: #007bff;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.action-btn:hover {
+    background: #007bff;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.action-btn:active {
+    transform: translateY(0);
+}
+
+/* 緊急訂單特殊樣式 */
+.emergency-order .record-header {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+}
+
+.emergency-order .order-amount {
+    color: #dc3545;
+}
+
+.emergency-order .meta-item i {
+    color: #dc3545;
+}
+
+/* 統計卡片特殊顏色 */
+.donation-count .stat-icon {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+}
+
+.donation-amount .stat-icon {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+}
+
+.donation-items .stat-icon {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.donation-families .stat-icon {
+    background: linear-gradient(135deg, #ffc107, #fd7e14);
+}
+
+/* 篩選動畫 */
+.purchase-record-card {
+    transition: all 0.3s ease, opacity 0.5s ease, transform 0.5s ease;
+}
+
+.purchase-record-card.hidden {
+    opacity: 0;
+    transform: translateX(-30px);
+    pointer-events: none;
+    margin-bottom: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .record-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .order-summary {
+        align-items: flex-start;
+        text-align: left;
+    }
+    
+    .items-grid {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+    
+    .record-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .record-actions {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .gratitude-content {
+        padding-right: 0;
+        margin-bottom: 2rem;
+    }
+    
+    .impact-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .purchase-records {
+        gap: 1rem;
+    }
+    
+    .record-header,
+    .record-content,
+    .record-footer {
+        padding: 1rem;
+    }
+    
+    .record-meta {
+        padding: 0.75rem;
+    }
+    
+    .item-row {
+        padding: 0.5rem;
+    }
+    
+    .action-btn {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+    }
+}
+
+/* 感謝區塊樣式 */
+.gratitude-section {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.gratitude-content {
+    padding-right: 2rem;
+}
+
+.gratitude-icon {
+    font-size: 3rem;
+    color: #007bff;
+    margin-bottom: 1.5rem;
+}
+
+.gratitude-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.gratitude-message {
+    color: #495057;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.contact-info {
+    color: #6c757d;
+}
+
+.contact-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.contact-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.impact-stats {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.impact-item {
+    padding: 1rem;
+}
+
+.impact-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #007bff;
+    margin-bottom: 0.5rem;
+}
+
+.impact-label {
+    color: #6c757d;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+/* 印刷樣式 */
+@media print {
+    .purchase-record-card {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #dee2e6;
+    }
+    
+    .record-actions {
+        display: none;
+    }
+    
+    .filter-options {
+        display: none;
+    }
+    
+    .gratitude-section {
+        display: none;
+    }
+}
+
+/* 無記錄狀態 */
+.no-records {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.no-records-icon {
+    font-size: 4rem;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
+}
+
+.no-records h4 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.no-records p {
+    color: #6c757d;
+    margin-bottom: 2rem;
+}
+
+/* 加載動畫 */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.purchase-record-card {
+    animation: slideInLeft 0.6s ease-out;
+}
+
+.purchase-record-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.purchase-record-card:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.purchase-record-card:nth-child(4) {
+    animation-delay: 0.3s;
+}
