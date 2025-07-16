@@ -159,18 +159,20 @@ namespace NGOPlatformWeb.Controllers
             var cas = await _context.Cases.FirstOrDefaultAsync(c => c.CaseId == caseLogin.CaseId);
             if (cas == null) return NotFound();
 
-            // 取得活動報名統計
+            // 取得活動報名統計資料
             var activityRegistrations = await _context.CaseActivityRegistrations
                 .Include(r => r.Activity)
                 .Where(r => r.CaseId == cas.CaseId)
                 .OrderByDescending(r => r.RegisterTime)
-                .Take(5)
+                .Take(5) // 取最近5筆活動紀錄
                 .ToListAsync();
 
+            // 計算總活動參與次數
             var totalActivities = await _context.CaseActivityRegistrations
                 .Where(r => r.CaseId == cas.CaseId)
                 .CountAsync();
 
+            // 計算進行中的活動報名數
             var activeRegistrations = await _context.CaseActivityRegistrations
                 .Where(r => r.CaseId == cas.CaseId && r.Status == "registered")
                 .CountAsync();
@@ -226,17 +228,18 @@ namespace NGOPlatformWeb.Controllers
             return View(vm);
         }
 
-        // 個案活動報名紀錄頁面
+        // 個案活動報名紀錄頁面 - 顯示個案所有活動參與歷史
         [Authorize(Roles = "Case")]
         public async Task<IActionResult> Registrations()
         {
+            // 取得當前登入個案的 Email
             var email = User.FindFirstValue(ClaimTypes.Email);
             if (string.IsNullOrEmpty(email))
             {
                 return RedirectToAction("Login", "Auth");
             }
 
-            // 取得當前個案
+            // 透過 Email 找到個案的登入資料和基本資料
             var caseLogin = await _context.CaseLogins.FirstOrDefaultAsync(c => c.Email == email);
             var cas = await _context.Cases.FirstOrDefaultAsync(c => c.CaseId == caseLogin.CaseId);
             if (cas == null)
@@ -244,14 +247,14 @@ namespace NGOPlatformWeb.Controllers
                 return RedirectToAction("Login", "Auth");
             }
 
-            // 取得該個案的所有活動報名紀錄
+            // 取得該個案的所有活動報名紀錄（包含活動詳情）
             var registrations = await _context.CaseActivityRegistrations
                 .Include(r => r.Activity)
                 .Where(r => r.CaseId == cas.CaseId)
                 .OrderByDescending(r => r.RegisterTime)
                 .ToListAsync();
 
-            // 創建ViewModel
+            // 建立個案活動報名紀錄的 ViewModel
             var viewModel = new CaseActivityRegistrationsViewModel
             {
                 CaseName = cas.Name ?? "個案",

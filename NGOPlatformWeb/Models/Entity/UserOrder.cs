@@ -22,6 +22,14 @@ namespace NGOPlatformWeb.Models.Entity
 
         public string PaymentStatus { get; set; } = "已付款"; // 跳過付款流程，直接確認為已付款
 
+        [StringLength(50)]
+        public string PaymentMethod { get; set; } = "credit_card"; // 付款方式：credit_card, atm, ecpay
+
+        [StringLength(50)]
+        public string OrderSource { get; set; } = "regular"; // 訂單來源：package, emergency, regular
+
+        public int? EmergencyNeedId { get; set; } // 緊急需求ID
+
         // 導覽屬性
         public virtual User? User { get; set; }
         public virtual ICollection<UserOrderDetail> OrderDetails { get; set; } = new List<UserOrderDetail>();

@@ -1,4 +1,5 @@
-﻿@model PaymentViewModel
+﻿<!-- 付款確認頁面 - 顯示付款資訊並處理付款流程 -->
+@model PaymentViewModel
 @{
     ViewData["Title"] = "確認付款";
 }
@@ -10,7 +11,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 
-                <!-- 付款進度條 -->
+                <!-- 付款流程進度條 -->
                 <div class="payment-progress">
                     <div class="progress-step completed">
                         <div class="step-icon"><i class="fas fa-shopping-cart"></i></div>
@@ -26,7 +27,7 @@
                     </div>
                 </div>
 
-                <!-- 錯誤訊息 -->
+                <!-- 表單驗證錯誤訊息 -->
                 @if (ViewData.ModelState.ErrorCount > 0)
                 {
                     <div class="alert alert-danger">
@@ -184,12 +185,12 @@
                                             </label>
                                         </div>
                                         
-                                        <div class="payment-method" data-method="linepay">
-                                            <input type="radio" asp-for="PaymentMethod" value="linepay" />
+                                        <div class="payment-method" data-method="ecpay">
+                                            <input type="radio" asp-for="PaymentMethod" value="ecpay" />
                                             <label>
-                                                <i class="fab fa-line"></i>
-                                                <span>LINE Pay</span>
-                                                <small>使用 LINE Pay 快速付款</small>
+                                                <i class="fas fa-credit-card"></i>
+                                                <span>綠界 ECPay</span>
+                                                <small>支援信用卡、LINE Pay、Apple Pay</small>
                                             </label>
                                         </div>
                                     </div>

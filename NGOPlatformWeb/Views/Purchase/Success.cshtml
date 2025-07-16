@@ -69,6 +69,28 @@
                                 </div>
                                 
                                 <div class="detail-item">
+                                    <label>付款方式</label>
+                                    <div class="detail-value">
+                                        @if (Model.PaymentMethod == "credit_card")
+                                        {
+                                            <text><i class="fas fa-credit-card"></i> 信用卡</text>
+                                        }
+                                        else if (Model.PaymentMethod == "atm")
+                                        {
+                                            <text><i class="fas fa-university"></i> ATM轉帳</text>
+                                        }
+                                        else if (Model.PaymentMethod == "ecpay")
+                                        {
+                                            <text><i class="fas fa-credit-card text-success"></i> 綠界 ECPay</text>
+                                        }
+                                        else
+                                        {
+                                            <text><i class="fas fa-credit-card"></i> @Model.PaymentMethod</text>
+                                        }
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-item">
                                     <label>付款狀態</label>
                                     <div class="detail-value status success">
                                         <i class="fas fa-check-circle"></i> @Model.PaymentStatus

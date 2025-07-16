@@ -72,6 +72,7 @@ namespace NGOPlatformWeb.Models.ViewModels
         public decimal TotalPrice { get; set; }
         public string DonorName { get; set; } = string.Empty;
         public string PaymentStatus { get; set; } = string.Empty;
+        public string PaymentMethod { get; set; } = string.Empty;
         public bool IsEmergency { get; set; }
         public int? CaseId { get; set; }
     }
