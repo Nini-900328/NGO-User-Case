@@ -1,9 +1,11 @@
-﻿namespace NGOPlatformWeb.Models.Entity
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace NGOPlatformWeb.Models.Entity
 {
     public class RegularSupplyNeeds
     {
-
-        public int Id { get; set; }
+        [ Key ]
+        public int RegularNeedId { get; set; }
 
         public int CaseId { get; set; }  // ✅ ← 必須有這個欄位才能用 r.CaseId 篩選
 
@@ -15,8 +17,8 @@
 
         public DateTime? PickupDate { get; set; }
 
-        public string Status { get; set; }
+        public string ?Status { get; set; }
 
-        public virtual Supply Supply { get; set; }  // ✅ 導覽屬性
+        public virtual Supply ?Supply { get; set; }  // ✅ 導覽屬性
     }
 }

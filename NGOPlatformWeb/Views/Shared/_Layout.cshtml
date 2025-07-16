@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,9 +8,10 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @await RenderSectionAsync("Styles", required: false)
-    
+
     <style>
         /* 保護導航按鈕樣式，避免被頁面CSS覆蓋 */
         nav.navbar .btn.btn-outline-dark:hover {
@@ -17,6 +19,7 @@
             border-color: #212529 !important;
             color: #fff !important;
         }
+
         nav.navbar .dropdown-toggle:hover {
             background-color: #212529 !important;
             border-color: #212529 !important;
@@ -24,6 +27,7 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         @await Html.PartialAsync("_Navigation")
@@ -41,4 +45,5 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>

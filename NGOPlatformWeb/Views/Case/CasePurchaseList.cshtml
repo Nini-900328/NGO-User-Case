@@ -3,9 +3,7 @@
 
 
 <h2 class="section-title">物資申請紀錄</h2>
-@* <p class="record-summary">
-    未領取：1 項 ｜ 已領取：1 項 ｜ 訪談物資：1 項
-</p> *@
+
 <p class="record-summary">
     未領取：@Model.UnreceivedSupplies.Count 項 ｜
     已領取：@Model.ReceivedSupplies.Count(s => s.Status == "已領取") 項 ｜
