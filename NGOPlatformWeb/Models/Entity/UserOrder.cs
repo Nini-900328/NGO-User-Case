@@ -13,20 +13,20 @@ namespace NGOPlatformWeb.Models.Entity
 
         [Required]
         [StringLength(50)]
-        public string OrderNumber { get; set; } = "";
+        public string? OrderNumber { get; set; } = "";
 
         public DateTime OrderDate { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalPrice { get; set; }
 
-        public string PaymentStatus { get; set; } = "已付款"; // 跳過付款流程，直接確認為已付款
+        public string? PaymentStatus { get; set; } = "已付款"; // 跳過付款流程，直接確認為已付款
 
         [StringLength(50)]
-        public string PaymentMethod { get; set; } = "credit_card"; // 付款方式：credit_card, atm, ecpay
+        public string? PaymentMethod { get; set; } = "credit_card"; // 付款方式：credit_card, atm, ecpay
 
         [StringLength(50)]
-        public string OrderSource { get; set; } = "regular"; // 訂單來源：package, emergency, regular
+        public string? OrderSource { get; set; } = "regular"; // 訂單來源：package, emergency, regular
 
         public int? EmergencyNeedId { get; set; } // 緊急需求ID
 
