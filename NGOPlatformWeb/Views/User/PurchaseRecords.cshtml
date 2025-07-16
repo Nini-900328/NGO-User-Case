@@ -88,6 +88,7 @@
             <div class="filter-options">
                 <button class="filter-btn active" data-filter="all">全部</button>
                 <button class="filter-btn" data-filter="emergency">緊急援助</button>
+                <button class="filter-btn" data-filter="package">組合包</button>
                 <button class="filter-btn" data-filter="regular">一般認購</button>
             </div>
         </div>
@@ -97,8 +98,8 @@
             <div class="purchase-records">
                 @foreach (var order in Model.Orders)
                 {
-                    <div class="purchase-record-card @(order.IsEmergencyOrder ? "emergency-order" : "regular-order")" 
-                         data-type="@(order.IsEmergencyOrder ? "emergency" : "regular")">
+                    <div class="purchase-record-card @(order.OrderSource switch { "emergency" => "emergency-order", "package" => "package-order", _ => "regular-order" })" 
+                         data-type="@order.OrderSource">
                         
                         <!-- 訂單標題區 -->
                         <div class="record-header">
@@ -111,18 +112,61 @@
                                     <i class="fas fa-calendar me-1"></i>
                                     @order.FormattedOrderDate
                                 </div>
-                                @if (order.IsEmergencyOrder)
-                                {
-                                    <div class="emergency-badge">
-                                        <i class="fas fa-exclamation-triangle me-1"></i>緊急援助
-                                    </div>
-                                }
+                                <div class="order-type-badge @order.OrderTypeBadgeClass">
+                                    @if (order.OrderSource == "package")
+                                    {
+                                        <i class="fas fa-box me-1"></i>@order.OrderTypeLabel
+                                    }
+                                    else if (order.OrderSource == "emergency")
+                                    {
+                                        <i class="fas fa-exclamation-triangle me-1"></i>@order.OrderTypeLabel
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-heart me-1"></i>@order.OrderTypeLabel
+                                    }
+                                </div>
                             </div>
                             <div class="order-summary">
-                                <div class="total-amount">@order.FormattedTotalPrice</div>
-                                <div class="payment-status @(order.PaymentStatus == "已付款" ? "paid" : "pending")">
-                                    <i class="fas @(order.PaymentStatus == "已付款" ? "fa-check-circle" : "fa-clock") me-1"></i>
-                                    @order.PaymentStatus
+                                <div class="summary-top">
+                                    <div class="amount-display">
+                                        <div class="amount-label">捐贈金額</div>
+                                        <div class="amount-value">@order.FormattedTotalPrice</div>
+                                    </div>
+                                    <div class="status-badge @(order.PaymentStatus == "已付款" ? "status-success" : "status-pending")">
+                                        <i class="fas @(order.PaymentStatus == "已付款" ? "fa-check-circle" : "fa-clock")"></i>
+                                        <span>@order.PaymentStatus</span>
+                                    </div>
+                                </div>
+                                <div class="summary-bottom">
+                                    <div class="payment-method-info">
+                                        <i class="fas fa-credit-card method-icon"></i>
+                                        <span class="method-text">
+                                            @if (!string.IsNullOrEmpty(order.PaymentMethod))
+                                            {
+                                                @if (order.PaymentMethod == "credit_card")
+                                                {
+                                                    <text>信用卡付款</text>
+                                                }
+                                                else if (order.PaymentMethod == "atm")
+                                                {
+                                                    <text>ATM轉帳</text>
+                                                }
+                                                else if (order.PaymentMethod == "ecpay")
+                                                {
+                                                    <text>綠界 ECPay</text>
+                                                }
+                                                else
+                                                {
+                                                    <text>@order.PaymentMethod</text>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <text>未知付款方式</text>
+                                            }
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -136,23 +180,11 @@
                                         <img src="@item.ImageUrl" 
                                              alt="@item.SupplyName"
                                              onerror="this.src='/images/default-supply.png'">
-                                        @if (item.IsEmergency)
-                                        {
-                                            <div class="emergency-indicator">
-                                                <i class="fas fa-bolt"></i>
-                                            </div>
-                                        }
                                     </div>
                                     <div class="item-details">
                                         <h6 class="item-name">@item.SupplyName</h6>
                                         <div class="item-quantity">@item.QuantityText × @item.FormattedUnitPrice</div>
                                         <div class="item-total">@item.FormattedTotalPrice</div>
-                                        @if (item.IsEmergency && item.CaseId.HasValue)
-                                        {
-                                            <div class="case-info">
-                                                <i class="fas fa-user me-1"></i>個案 #@item.CaseId
-                                            </div>
-                                        }
                                     </div>
                                 </div>
                             }

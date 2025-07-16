@@ -18,6 +18,11 @@ namespace NGOPlatformWeb.Models.Entity
         [Column(TypeName = "decimal(18,2)")]
         public decimal UnitPrice { get; set; }
 
+        [StringLength(50)]
+        public string OrderSource { get; set; } = "regular"; // 明細來源：package, emergency, regular
+
+        public int? EmergencyNeedId { get; set; } // 對應的緊急需求ID
+
         // 關聯屬性 - 訂單和物資的關聯
         public virtual UserOrder? UserOrder { get; set; }
         public virtual Supply? Supply { get; set; }

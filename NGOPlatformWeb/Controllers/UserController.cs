@@ -265,6 +265,9 @@ namespace NGOPlatformWeb.Controllers
                     OrderDate = o.OrderDate,
                     TotalPrice = o.TotalPrice,
                     PaymentStatus = o.PaymentStatus,
+                    PaymentMethod = o.PaymentMethod,
+                    OrderSource = o.OrderSource,
+                    EmergencyNeedId = o.EmergencyNeedId,
                     Items = o.OrderDetails.Select(od => new OrderItemViewModel
                     {
                         SupplyName = od.Supply?.SupplyName ?? "未知物資",
@@ -272,7 +275,8 @@ namespace NGOPlatformWeb.Controllers
                         UnitPrice = od.UnitPrice,
                         TotalPrice = od.UnitPrice * od.Quantity,
                         ImageUrl = od.Supply?.ImageUrl ?? "/images/default-supply.png",
-                        IsEmergency = od.Supply?.SupplyType == "emergency"
+                        IsEmergency = od.Supply?.SupplyType == "emergency",
+                        OrderSource = od.OrderSource
                     }).ToList()
                 }).ToList()
             };

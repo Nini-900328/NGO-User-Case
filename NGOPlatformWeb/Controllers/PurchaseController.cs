@@ -328,7 +328,9 @@ namespace NGOPlatformWeb.Controllers
                             OrderNumber = orderNumber,
                             OrderDate = DateTime.Now,
                             TotalPrice = model.TotalPrice,
-                            PaymentStatus = "已付款"
+                            PaymentStatus = "已付款",
+                            PaymentMethod = model.PaymentMethod,
+                            OrderSource = "package"
                         };
                         _context.UserOrders.Add(order);
                         await _context.SaveChangesAsync(); // 先保存訂單以取得OrderId
@@ -351,7 +353,8 @@ namespace NGOPlatformWeb.Controllers
                                     UserOrderId = order.UserOrderId,
                                     SupplyId = supplyId,
                                     Quantity = quantity,
-                                    UnitPrice = supply.SupplyPrice ?? 0 // 使用實際物資價格
+                                    UnitPrice = supply.SupplyPrice ?? 0, // 使用實際物資價格
+                                    OrderSource = "package"
                                 };
                                 _context.UserOrderDetails.Add(orderDetail);
                                 successCount++;
@@ -433,7 +436,10 @@ namespace NGOPlatformWeb.Controllers
                                     OrderNumber = orderNumber,
                                     OrderDate = DateTime.Now,
                                     TotalPrice = model.TotalPrice,
-                                    PaymentStatus = "已付款"
+                                    PaymentStatus = "已付款",
+                                    PaymentMethod = model.PaymentMethod,
+                                    OrderSource = model.EmergencyNeedId.HasValue ? "emergency" : "regular",
+                                    EmergencyNeedId = model.EmergencyNeedId
                                 };
 
                                 _context.UserOrders.Add(order);
@@ -445,7 +451,9 @@ namespace NGOPlatformWeb.Controllers
                                     UserOrderId = order.UserOrderId,
                                     SupplyId = model.SupplyId,
                                     Quantity = model.Quantity,
-                                    UnitPrice = model.TotalPrice / model.Quantity
+                                    UnitPrice = model.TotalPrice / model.Quantity,
+                                    OrderSource = model.EmergencyNeedId.HasValue ? "emergency" : "regular",
+                                    EmergencyNeedId = model.EmergencyNeedId
                                 };
 
                                 _context.UserOrderDetails.Add(orderDetail);
@@ -475,6 +483,7 @@ namespace NGOPlatformWeb.Controllers
                     TotalPrice = model.TotalPrice,
                     DonorName = model.DonorName ?? "匿名捐贈者",
                     PaymentStatus = "付款成功",
+                    PaymentMethod = model.PaymentMethod,
                     IsEmergency = model.SupplyType == "emergency",
                     CaseId = model.CaseId
                 };
