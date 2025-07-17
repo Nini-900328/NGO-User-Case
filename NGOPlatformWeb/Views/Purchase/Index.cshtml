@@ -6,10 +6,36 @@
 
 <link rel="stylesheet" href="~/css/purchase.css" asp-append-version="true" />
 
+
 @if (ViewBag.Error != null)
 {
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <i class="fas fa-exclamation-triangle me-2"></i>@ViewBag.Error
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        @if (ViewBag.ErrorDetail != null)
+        {
+            <div class="mt-2">
+                <strong>詳細錯誤：</strong>
+                <pre style="font-size: 12px; white-space: pre-wrap;">@ViewBag.ErrorDetail</pre>
+            </div>
+        }
+    </div>
+}
+
+<!-- 除錯資訊 -->
+@if (ViewBag.DebugInfo != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <i class="fas fa-info-circle me-2"></i>除錯資訊: @ViewBag.DebugInfo
+        <br>狀態分布: @ViewBag.StatusInfo
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (ViewBag.EmergencyError != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>@ViewBag.EmergencyError
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 }
@@ -72,7 +98,10 @@
                 @foreach (var item in ViewBag.EmergencyNeeds)
                 {
                     <div class="emergency-card">
-                        <div class="emergency-indicator">急需</div>
+                        <!-- 優先級標籤 -->
+                        <div class="emergency-indicator @(item.Priority == "Urgent" ? "urgent" : item.Priority == "High" ? "high" : item.Priority == "Low" ? "low" : "normal")">
+                            @(item.Priority == "Urgent" ? "極緊急" : item.Priority == "High" ? "高優先" : item.Priority == "Low" ? "低優先" : "一般")
+                        </div>
                         
                         <div class="card-img">
                             <img src="@item.ImageUrl" alt="@item.SupplyName" 
@@ -84,6 +113,13 @@
                         
                         <div class="card-body">
                             <h4 class="card-title">@item.SupplyName</h4>
+                            
+                            <!-- 描述 -->
+                            @if (!string.IsNullOrEmpty(item.Description))
+                            {
+                                <p class="card-description">@item.Description</p>
+                            }
+                            
                             <div class="progress-section">
                                 <div class="progress-info">
                                     <span>募集進度</span>
@@ -95,7 +131,7 @@
                                 <div class="remaining">還需要 <strong>@item.RemainingQuantity 份</strong></div>
                             </div>
                             
-                            <button class="emergency-btn" onclick="directPurchase(@item.SupplyId, 1, @item.Id, 'emergency')">
+                            <button class="emergency-btn" onclick="directPurchase(null, 1, @item.Id, 'emergency')">
                                 <span>立即援助</span><i class="fas fa-arrow-right"></i>
                             </button>
                         </div>
