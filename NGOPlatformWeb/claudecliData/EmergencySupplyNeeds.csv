@@ -1,7 +1,0 @@
-"EmergencyNeedId","CaseId","WorkerId","SupplyName","Quantity","CollectedQuantity","Description","Priority","Status","CreatedDate","UpdatedDate","ImageUrl"
-1,1,1,胰島素,50,10,提供受災戶緊急飲用水,High,Fundraising,2025-07-17 06:50:43.010,2025-07-17 06:50:43.010,
-2,2,2,醫療急救包,20,5,支援臨時醫療救護需求,Urgent,Fundraising,2025-07-17 06:50:43.010,2025-07-17 06:50:43.010,
-3,3,3,成人紙尿褲,30,0,長輩和臥床者緊急需求,Normal,Fundraising,2025-07-17 06:50:43.010,2025-07-17 06:50:43.010,
-4,1,1,即食罐頭,100,30,應對受災地區糧食短缺,High,Reviewing,2025-07-17 06:50:43.010,2025-07-17 06:50:43.010,
-5,4,4,睡袋,25,25,提供臨時安置中心使用,Low,Completed,2025-07-17 06:50:43.010,2025-07-17 06:50:43.010,
-6,31,1,馬英九簽名照,1,0,拜託,Normal,Fundraising,2025-07-17 15:10:32.778,2025-07-17 07:58:05.856,https://ngoimages.blob.core.windows.net/ngo/emergency_supply_photos/b7e160a7-2bf0-4cce-92bd-5d1f9d0ed9b0.jpg
