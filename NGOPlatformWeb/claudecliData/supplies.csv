@@ -1,0 +1,30 @@
+﻿1,牙刷組,35.00,4,100,/images/brush.png,基本清潔用品,regular
+2,泡麵包裝,120.00,1,50,/images/noodle.png,快速熱食選項,emergency
+3,糙米,45.00,1,100,/images/rice.png,富含纖維與維生素，可作為主食長期儲備。,regular
+4,玉米罐頭,35.00,1,100,/images/corn.png,即開即食，富含澱粉與甜味，方便調理。,regular
+5,蘋果麵包,25.00,1,100,/images/applebread.png,香甜可口，適合當作早餐或點心。,regular
+6,蘇打餅乾,30.00,1,100,/images/sodacookie.jpg,口感酥脆、易於保存，適合充飢。,regular
+7,豆奶,15.00,1,100,/images/soymilk.png,含植物性蛋白與鈣質，適合乳糖不耐者及素食者。,regular
+8,雞蛋,40.00,1,100,/images/eggs.png,優質蛋白質來源，適合煎煮炒各類料理。,regular
+9,花椰菜,20.00,1,100,/images/vegetable.png,富含膳食纖維與維生素 C，有助於提升免疫力。,regular
+10,兒童上衣,150.00,2,100,/images/whiteshort.png,舒適透氣材質，適合日常活動與戶外穿著。,regular
+11,兒童鞋子,280.00,2,100,/images/shoes.jpg,輕便耐穿，提供良好腳部支撐，適合外出與運動。,regular
+12,兒童睡衣,120.00,2,100,/images/sleepchlothes.png,柔軟親膚，幫助兒童安心入睡並保持溫暖。,regular
+13,兒童襪子,25.00,2,100,/images/socks.png,彈性良好，吸汗透氣，適合四季穿著。,regular
+14,成人口罩,80.00,3,300,/images/mask.jpg,三層防護設計，有效阻隔飛沫與粉塵，外出必備。,emergency
+15,酒精,60.00,3,300,/images/alcohol.jpg,可用於手部與物品消毒，維持衛生與防疫需求。,emergency
+16,鉛筆盒,50.00,5,100,/images/pencilbox.jpg,多格設計，方便收納文具與個人小物，便於攜帶。,regular
+17,色鉛筆,65.00,5,100,/images/colorpencil.jpg,12 色繽紛組合，適合繪畫與創意手作使用。,regular
+18,體溫計,150.00,3,200,/images/thermometer.png,可快速測量體溫，方便掌握健康狀況。,emergency
+19,紗布繃帶,25.00,3,200,/images/bandage.png,用於止血、保護傷口，為居家常備急救用品。,regular
+20,傷口棉墊,45.00,3,200,/images/woundpad.png,含酒精成分，可用於清潔皮膚與物品表面。,emergency
+21,棉棒,30.00,3,200,/images/cottonswab.jpg,適用於傷口清潔、藥膏塗抹與日常衛生，必備居家醫療小物。,regular
+22,長褲,200.00,2,100,/images/pants.png,彈性舒適的長褲，適合戶外活動與日常穿搭。,regular
+23,短褲,120.00,2,100,/images/shorts.png,輕便透氣的短褲，適合夏季或運動時穿著。,regular
+24,外套,350.00,2,100,/images/coat.png,輕薄防風外套，適合早晚溫差或戶外使用。,regular
+25,洗髮精,85.00,4,100,/images/shampoo.jpg,溫和潔淨配方，適用各種髮質。,regular
+26,沐浴乳,75.00,4,100,/images/bodywash.jpg,滋潤配方，溫和潔膚，適合日常清潔使用。,regular
+27,肥皂,20.00,4,100,/images/soap.jpg,適合日常清潔使用，有效去除污垢與細菌。,regular
+28,濕紙巾,35.00,4,100,/images/wipes.jpg,方便隨身清潔手部與物品表面，適合外出使用。,regular
+29,筆記本,25.00,5,200,/images/notebook.jpg,適合上課、筆記或繪圖使用，紙質滑順不透墨。,regular
+30,原子筆,15.00,5,200,/images/pen.jpg,基本書寫用原子筆，書寫流暢、握感舒適。,regular

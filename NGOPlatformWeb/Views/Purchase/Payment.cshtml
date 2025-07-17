@@ -97,7 +97,12 @@
                                                         <option value="@i" selected="@(i == Model.Quantity)">@i 份</option>
                                                     }
                                                 </select>
-                                                <small class="text-muted ms-2">個案剩餘需求: @Model.MaxQuantity 份</small>
+                                                <div class="remaining-info mt-2">
+                                                    <small class="text-muted">
+                                                        個案剩餘需求: @Model.MaxQuantity 份<br>
+                                                        認購後剩餘: <span id="remainingQuantity">@(Model.MaxQuantity.Value - Model.Quantity)</span> 份
+                                                    </small>
+                                                </div>
                                             </div>
                                         }
                                         else
@@ -285,6 +290,16 @@
                 $('#subtotal').text(formattedPrice);
                 $('#totalPrice').text(formattedPrice);
                 $('#btnPrice').text(formattedPrice);
+                
+                // 更新剩餘數量（緊急物資專用）
+                @if (Model.SupplyType == "emergency" && Model.MaxQuantity.HasValue)
+                {
+                    <text>
+                    const maxQuantity = @Model.MaxQuantity.Value;
+                    const remainingAfterPurchase = maxQuantity - quantity;
+                    $('#remainingQuantity').text(remainingAfterPurchase);
+                    </text>
+                }
             });
             
             // 付款方式選擇

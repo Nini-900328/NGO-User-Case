@@ -94,22 +94,23 @@ namespace NGOPlatformWeb.Controllers
             Status = r.Status,
             ImageUrl = r.Supply.ImageUrl
         })
-    .Union(
-        _context.EmergencySupplyNeeds
-            .Include(e => e.Supply)
-            .ThenInclude(s => s.SupplyCategory)
-            .Where(e => e.CaseId == caseId && e.Status == "已領取")
-            .Select(e => new SupplyRecordItem
-            {
-                Name = e.Supply.SupplyName,
-                Category = e.Supply.SupplyCategory.SupplyCategoryName,
-                Quantity = e.Quantity,
-                ApplyDate = e.VisitDate,
-                PickupDate = e.PickupDate,
-                Status = "訪談物資", // 強制標示為訪談物資
-                ImageUrl = e.Supply.ImageUrl
-            })
-    )
+    // 暫時移除 EmergencySupplyNeeds 查詢，因為資料庫結構不匹配
+    // .Union(
+    //     _context.EmergencySupplyNeeds
+    //         .Include(e => e.Supply)
+    //         .ThenInclude(s => s.SupplyCategory)
+    //         .Where(e => e.CaseId == caseId && e.Status == "已領取")
+    //         .Select(e => new SupplyRecordItem
+    //         {
+    //             Name = e.Supply.SupplyName,
+    //             Category = e.Supply.SupplyCategory.SupplyCategoryName,
+    //             Quantity = e.Quantity,
+    //             ApplyDate = e.VisitDate ?? DateTime.Now,
+    //             PickupDate = e.PickupDate,
+    //             Status = "訪談物資", // 強制標示為訪談物資
+    //             ImageUrl = e.Supply.ImageUrl
+    //         })
+    // )
     .ToList()
 
             };

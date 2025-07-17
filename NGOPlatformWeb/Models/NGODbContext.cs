@@ -6,6 +6,7 @@ namespace NGOPlatformWeb.Models.Entity
     {
         public NGODbContext(DbContextOptions<NGODbContext> options) : base(options) { }
 
+
         public DbSet<Activity> Activities { get; set; } = default!;
         public DbSet<Supply> Supplies { get; set; }
         public DbSet<SupplyCategory> SupplyCategories { get; set; }
@@ -22,5 +23,8 @@ namespace NGOPlatformWeb.Models.Entity
         // 活動報名系統
         public DbSet<UserActivityRegistration> UserActivityRegistrations { get; set; }
         public DbSet<CaseActivityRegistrations> CaseActivityRegistrations { get; set; }
+        
+        // 緊急物資認購記錄系統
+        public DbSet<EmergencyPurchaseRecord> EmergencyPurchaseRecords { get; set; }
     }
 }

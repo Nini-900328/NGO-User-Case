@@ -1,0 +1,8 @@
+﻿CaseId,Email,Password,LastLogin
+1,case01@example.com,case123,NULL
+2,case02@example.com,case456,NULL
+3,case03@example.com,case789,NULL
+4,case04@example.com,case321,NULL
+5,case05@example.com,case567,NULL
+6,case06@example.com,case678,NULL
+7,case07@example.com,case890,NULL
