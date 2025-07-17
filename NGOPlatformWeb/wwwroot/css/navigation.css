@@ -247,16 +247,18 @@
         color: white !important;
     }
     
-    .modern-navbar .d-flex {
-        flex-direction: column;
-        gap: 12px;
+    /* 修復右側按鈕區域的垂直排版問題 */
+    .modern-navbar .d-flex.align-items-center.ms-lg-3 {
+        flex-direction: row !important;
+        gap: 8px;
         margin-top: 16px;
+        justify-content: space-between;
     }
     
     .modern-navbar .btn-outline-light-modern {
         color: #2d3748;
         border-color: rgba(45, 55, 72, 0.2);
-        width: 100%;
+        flex: 1;
     }
     
     .modern-navbar .btn-outline-light-modern:hover {
@@ -271,11 +273,11 @@
     }
     
     .register-btn {
-        width: 100%;
+        flex: 1;
     }
     
     .user-welcome-btn {
-        width: 100%;
+        flex: 1;
         background: linear-gradient(135deg, #4b5563, #6b7280);
         color: white;
     }
