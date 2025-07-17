@@ -77,10 +77,6 @@
 
             <!-- 右側：購物與使用者 -->
             <div class="d-flex align-items-center ms-lg-3 gap-2">
-                <a href="@Url.Action("Register", "Auth")" class="btn register-btn">
-                    <i class="fas fa-user-plus me-1"></i>註冊
-                </a>
-
                 @if (User.Identity?.IsAuthenticated ?? false)
                 {
                     var name = User.FindFirstValue(ClaimTypes.Name) ?? "訪客";
@@ -138,6 +134,9 @@
                 }
                 else
                 {
+                    <a href="@Url.Action("Register", "Auth")" class="btn register-btn">
+                        <i class="fas fa-user-plus me-1"></i>註冊
+                    </a>
                     <a href="@Url.Action("Login", "Auth")" class="btn btn-outline-light-modern">
                         <i class="fas fa-sign-in-alt me-1"></i>登入
                     </a>

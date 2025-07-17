@@ -252,7 +252,7 @@
         flex-direction: row !important;
         gap: 8px;
         margin-top: 16px;
-        justify-content: space-between;
+        justify-content: center;
     }
     
     .modern-navbar .btn-outline-light-modern {

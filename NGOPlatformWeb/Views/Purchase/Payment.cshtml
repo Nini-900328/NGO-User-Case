@@ -11,6 +11,13 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 
+                <!-- 返回按鈕和付款流程進度條 -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>返回選擇
+                    </a>
+                </div>
+                
                 <!-- 付款流程進度條 -->
                 <div class="payment-progress">
                     <div class="progress-step completed">
@@ -250,11 +257,8 @@
                                 </div>
 
                                 <!-- 提交按鈕 -->
-                                <div class="form-actions">
-                                    <a href="@Url.Action("Index")" class="btn btn-secondary">
-                                        <i class="fas fa-arrow-left me-2"></i>返回選擇
-                                    </a>
-                                    <button type="submit" class="btn btn-primary" id="paymentBtn">
+                                <div class="form-actions d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary btn-lg" id="paymentBtn">
                                         <span class="btn-text">
                                             <i class="fas fa-credit-card me-2"></i>確認捐贈 <span id="btnPrice">NT$ @Model.TotalPrice.ToString("N0")</span>
                                         </span>
