@@ -56,10 +56,20 @@
                     }
                 </li>
                 <li class="nav-item">
-                    <a asp-controller="Activity" asp-action="CaseActivityIndex"
-                       class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Activity" && ViewContext.RouteData.Values["action"]?.ToString() == "CaseActivityIndex" ? "active" : "")">
-                        <i class="fas fa-calendar-alt"></i>活動報名
-                    </a>
+                    @if (User.FindFirstValue(ClaimTypes.Role) == "Case")
+                    {
+                        <a asp-controller="Activity" asp-action="CaseActivityIndex"
+                           class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Activity" && ViewContext.RouteData.Values["action"]?.ToString() == "CaseActivityIndex" ? "active" : "")">
+                            <i class="fas fa-calendar-alt"></i>活動報名
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Event" asp-action="Index"
+                           class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Event" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
+                            <i class="fas fa-calendar-alt"></i>活動報名
+                        </a>
+                    }
                 </li>
                 <li class="nav-item">
                     <a asp-controller="Home" asp-action="Organization"

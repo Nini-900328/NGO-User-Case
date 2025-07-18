@@ -41,7 +41,13 @@ namespace NGOPlatformWeb.Controllers
         [HttpPost]
         public IActionResult ApplySupply(int supplyId, int quantity)
         {
-            int caseId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var caseIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(caseIdClaim))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            int caseId = int.Parse(caseIdClaim);
 
             var need = new RegularSupplyNeeds
             {
@@ -60,7 +66,13 @@ namespace NGOPlatformWeb.Controllers
 
         public IActionResult CasePurchaseList(string category)
         {
-            int caseId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value);
+            var caseIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (caseIdClaim == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            int caseId = int.Parse(caseIdClaim.Value);
 
             var viewModel = new SupplyRecordViewModel
             {
