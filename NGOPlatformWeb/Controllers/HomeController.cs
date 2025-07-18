@@ -8,22 +8,35 @@ namespace NGOPlatformWeb.Controllers
     {
         public IActionResult Index()
         {
-            var model = new HomeViewModel
+            try
             {
-                // 輪播圖數據
-                CarouselItems = GetCarouselItems(),
+                var model = new HomeViewModel
+                {
+                    // 輪播圖數據
+                    CarouselItems = GetCarouselItems(),
 
-                // 功能卡片數據
-                FeatureCards = GetFeatureCards(),
+                    // 功能卡片數據
+                    FeatureCards = GetFeatureCards(),
 
-                // 新消息數據
-                NewsItems = GetNewsItems(),
+                    // 新消息數據
+                    NewsItems = GetNewsItems(),
 
-                // 活動權證數據
-                ActivityInfo = GetActivityInfo()
-            };
+                    // 活動權證數據
+                    ActivityInfo = GetActivityInfo()
+                };
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                // 記錄詳細錯誤信息
+                ViewBag.ErrorMessage = $"首頁載入發生錯誤: {ex.Message}";
+                ViewBag.ErrorDetail = ex.ToString();
+                
+                // 回傳一個空的模型，避免頁面完全無法顯示
+                var emptyModel = new HomeViewModel();
+                return View(emptyModel);
+            }
         }
 
         public IActionResult Contact()

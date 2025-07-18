@@ -11,6 +11,13 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 
+                <!-- 返回按鈕和付款流程進度條 -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>返回選擇
+                    </a>
+                </div>
+                
                 <!-- 付款流程進度條 -->
                 <div class="payment-progress">
                     <div class="progress-step completed">
@@ -97,7 +104,12 @@
                                                         <option value="@i" selected="@(i == Model.Quantity)">@i 份</option>
                                                     }
                                                 </select>
-                                                <small class="text-muted ms-2">個案剩餘需求: @Model.MaxQuantity 份</small>
+                                                <div class="remaining-info mt-2">
+                                                    <small class="text-muted">
+                                                        個案剩餘需求: @Model.MaxQuantity 份<br>
+                                                        認購後剩餘: <span id="remainingQuantity">@(Model.MaxQuantity.Value - Model.Quantity)</span> 份
+                                                    </small>
+                                                </div>
                                             </div>
                                         }
                                         else
@@ -245,11 +257,8 @@
                                 </div>
 
                                 <!-- 提交按鈕 -->
-                                <div class="form-actions">
-                                    <a href="@Url.Action("Index")" class="btn btn-secondary">
-                                        <i class="fas fa-arrow-left me-2"></i>返回選擇
-                                    </a>
-                                    <button type="submit" class="btn btn-primary" id="paymentBtn">
+                                <div class="form-actions d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary btn-lg" id="paymentBtn">
                                         <span class="btn-text">
                                             <i class="fas fa-credit-card me-2"></i>確認捐贈 <span id="btnPrice">NT$ @Model.TotalPrice.ToString("N0")</span>
                                         </span>
@@ -285,6 +294,16 @@
                 $('#subtotal').text(formattedPrice);
                 $('#totalPrice').text(formattedPrice);
                 $('#btnPrice').text(formattedPrice);
+                
+                // 更新剩餘數量（緊急物資專用）
+                @if (Model.SupplyType == "emergency" && Model.MaxQuantity.HasValue)
+                {
+                    <text>
+                    const maxQuantity = @Model.MaxQuantity.Value;
+                    const remainingAfterPurchase = maxQuantity - quantity;
+                    $('#remainingQuantity').text(remainingAfterPurchase);
+                    </text>
+                }
             });
             
             // 付款方式選擇

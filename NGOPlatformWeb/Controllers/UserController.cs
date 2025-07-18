@@ -246,13 +246,25 @@ namespace NGOPlatformWeb.Controllers
                 return RedirectToAction("Login", "Auth");
             }
 
-            // 取得該使用者的所有認購紀錄（包含訂單詳情和物資資訊）
+            // 取得該使用者的所有認購紀錄（包含訂單詳情、物資資訊和緊急物資認購記錄）
             var orders = await _context.UserOrders
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Supply)
                 .Where(o => o.UserId == user.UserId)
                 .OrderByDescending(o => o.OrderDate)
                 .ToListAsync();
+            
+            // 取得緊急物資認購記錄（包含緊急需求的圖片資訊）
+            var emergencyPurchases = await _context.EmergencyPurchaseRecords
+                .Where(ep => orders.Select(o => o.UserOrderId).Contains(ep.UserOrderId))
+                .ToListAsync();
+                
+            // 取得相關的緊急需求資料（用於取得圖片）
+            var emergencyNeedIds = emergencyPurchases.Select(ep => ep.EmergencyNeedId).Distinct().ToList();
+            var emergencyNeeds = emergencyNeedIds.Any() ? await _context.EmergencySupplyNeeds
+                .Where(en => emergencyNeedIds.Contains(en.EmergencyNeedId))
+                .ToListAsync() : new List<EmergencySupplyNeeds>();
+            
 
             // 建立認購紀錄的 ViewModel
             var viewModel = new UserPurchaseRecordsViewModel
@@ -268,20 +280,70 @@ namespace NGOPlatformWeb.Controllers
                     PaymentMethod = o.PaymentMethod,
                     OrderSource = o.OrderSource,
                     EmergencyNeedId = o.EmergencyNeedId,
-                    Items = o.OrderDetails.Select(od => new OrderItemViewModel
-                    {
-                        SupplyName = od.Supply?.SupplyName ?? "未知物資",
-                        Quantity = od.Quantity,
-                        UnitPrice = od.UnitPrice,
-                        TotalPrice = od.UnitPrice * od.Quantity,
-                        ImageUrl = od.Supply?.ImageUrl ?? "/images/default-supply.png",
-                        IsEmergency = od.Supply?.SupplyType == "emergency",
-                        OrderSource = od.OrderSource
-                    }).ToList()
+                    Items = o.OrderSource == "emergency" ? 
+                        // 緊急物資訂單 - 從緊急物資認購記錄取得資料
+                        emergencyPurchases.Where(ep => ep.UserOrderId == o.UserOrderId)
+                            .Select(ep => {
+                                var emergencyNeed = emergencyNeeds.FirstOrDefault(en => en.EmergencyNeedId == ep.EmergencyNeedId);
+                                var imageUrl = "/images/user-default.png"; // 預設圖片
+                                
+                                // 如果緊急需求有圖片且不為空，使用該圖片
+                                if (emergencyNeed != null && !string.IsNullOrEmpty(emergencyNeed.ImageUrl))
+                                {
+                                    imageUrl = emergencyNeed.ImageUrl;
+                                }
+                                else
+                                {
+                                    // 根據物資名稱智能匹配圖片
+                                    imageUrl = GetEmergencyImageByName(ep.SupplyName);
+                                }
+                                
+                                return new OrderItemViewModel
+                                {
+                                    SupplyName = ep.SupplyName,
+                                    Quantity = ep.Quantity,
+                                    UnitPrice = ep.UnitPrice,
+                                    TotalPrice = ep.UnitPrice * ep.Quantity,
+                                    ImageUrl = imageUrl,
+                                    IsEmergency = true,
+                                    OrderSource = "emergency"
+                                };
+                            }).ToList() :
+                        // 一般物資訂單 - 從訂單明細取得資料
+                        o.OrderDetails.Select(od => new OrderItemViewModel
+                        {
+                            SupplyName = od.Supply?.SupplyName ?? "未知物資",
+                            Quantity = od.Quantity,
+                            UnitPrice = od.UnitPrice,
+                            TotalPrice = od.UnitPrice * od.Quantity,
+                            ImageUrl = od.Supply?.ImageUrl ?? "/images/default-supply.png",
+                            IsEmergency = false,
+                            OrderSource = od.OrderSource
+                        }).ToList()
                 }).ToList()
             };
 
             return View(viewModel);
+        }
+
+        // 根據物資名稱智能匹配圖片
+        private static string GetEmergencyImageByName(string supplyName)
+        {
+            var name = supplyName?.ToLower() ?? "";
+            
+            // 根據已有的圖片資源匹配
+            if (name.Contains("胰島素") || name.Contains("藥") || name.Contains("醫療"))
+                return "/images/saline.jpg"; // 使用生理食鹽水圖片代表醫療用品
+            else if (name.Contains("急救包") || name.Contains("醫療急救"))
+                return "/images/bandage.png"; // 使用繃帶圖片代表急救包
+            else if (name.Contains("紙尿褲") || name.Contains("尿布"))
+                return "/images/wipes.jpg"; // 使用濕紙巾圖片代表個人護理用品
+            else if (name.Contains("罐頭") || name.Contains("食物"))
+                return "/images/corn.png"; // 使用玉米罐頭圖片代表食物
+            else if (name.Contains("睡袋") || name.Contains("衣"))
+                return "/images/coat.png"; // 使用外套圖片代表衣物
+            else
+                return "/images/user-default.png"; // 預設圖片
         }
     }
 }

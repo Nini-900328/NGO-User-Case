@@ -24,26 +24,26 @@ namespace NGOPlatformWeb.Controllers
                 var emergencyNeeds = new List<object>();
                 var regularSupplies = new List<object>();
 
-                // 取得緊急需求資料 - 個案特定物資（只顯示募資中的項目）
+                // 取得緊急需求資料
                 try
                 {
                     var rawEmergencyNeeds = _context.EmergencySupplyNeeds
-                        .Include(e => e.Supply)
-                        .Where(e => e.Status == "募資中")
+                        .Where(e => e.Status == "Fundraising" && e.CollectedQuantity < e.Quantity)
                         .Take(6) // 限制顯示6個緊急需求項目
                         .ToList();
 
-                    // 轉換為顯示格式，避免 EF LINQ 錯誤
+                    // 轉換為顯示格式，加入 null 值保護
                     emergencyNeeds = rawEmergencyNeeds.Select(e => new 
                         {
                             Id = e.EmergencyNeedId,
-                            SupplyId = e.SupplyId,
                             CaseId = e.CaseId,
-                            SupplyName = e.Supply?.SupplyName ?? "未知物資",
+                            SupplyName = e.SupplyName ?? "未知物資",
                             NeededQuantity = e.Quantity,
-                            RemainingQuantity = e.Quantity,
-                            ImageUrl = e.Supply?.ImageUrl ?? GetDefaultEmergencyImage(e.Supply?.SupplyName ?? ""),
-                            Status = e.Status
+                            RemainingQuantity = Math.Max(0, e.Quantity - e.CollectedQuantity),
+                            ImageUrl = !string.IsNullOrEmpty(e.ImageUrl) ? e.ImageUrl : GetDefaultEmergencyImage(e.SupplyName ?? ""),
+                            Status = e.Status ?? "未知狀態",
+                            Priority = e.Priority ?? "Normal",
+                            Description = e.Description ?? "無描述"
                         })
                         .ToList<object>();
                 }
@@ -78,6 +78,7 @@ namespace NGOPlatformWeb.Controllers
                 ViewBag.EmergencyNeeds = new List<object>();
                 ViewBag.RegularSupplies = new List<object>();
                 ViewBag.Error = "頁面載入發生錯誤: " + ex.Message;
+                ViewBag.ErrorDetail = ex.ToString();
                 return View();
             }
         }
@@ -85,12 +86,79 @@ namespace NGOPlatformWeb.Controllers
         // 直接購買單項物資 - 準備付款資料並跳轉到付款頁面
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DirectPurchase(int supplyId, int quantity = 1, int? emergencyNeedId = null)
+        public IActionResult DirectPurchase(int? supplyId = null, int quantity = 1, int? emergencyNeedId = null)
         {
             try
             {
-                // 查找指定的物資項目
-                var supply = _context.Supplies.FirstOrDefault(s => s.SupplyId == supplyId);
+                // 如果是緊急需求，處理緊急物資認購
+                if (emergencyNeedId.HasValue)
+                {
+                    var emergencyNeed = _context.EmergencySupplyNeeds
+                        .FirstOrDefault(e => e.EmergencyNeedId == emergencyNeedId.Value);
+                    if (emergencyNeed == null)
+                    {
+                        TempData["Error"] = "找不到指定的緊急需求項目";
+                        return RedirectToAction("Index");
+                    }
+
+                    // 檢查剩餘需求量
+                    var remainingQuantity = emergencyNeed.Quantity - emergencyNeed.CollectedQuantity;
+                    if (remainingQuantity <= 0)
+                    {
+                        TempData["Error"] = "此緊急需求已滿足，無需額外認購";
+                        return RedirectToAction("Index");
+                    }
+
+                    if (quantity > remainingQuantity)
+                    {
+                        TempData["Error"] = $"認購數量過多，目前還需要 {remainingQuantity} 份";
+                        return RedirectToAction("Index");
+                    }
+
+                    // 建立緊急物資付款資料模型（緊急物資預設單價為100元）
+                    var paymentModel = new PaymentViewModel
+                    {
+                        // 緊急物資不需要 SupplyId，完全獨立於物資總表
+                        SupplyName = emergencyNeed.SupplyName ?? "未知物資",
+                        Quantity = quantity,
+                        TotalPrice = 100 * quantity, // 緊急物資固定單價100元
+                        SupplyType = "emergency",
+                        EmergencyNeedId = emergencyNeedId,
+                        CaseId = emergencyNeed.CaseId,
+                        MaxQuantity = remainingQuantity,
+                        IsLoggedIn = User.Identity?.IsAuthenticated ?? false
+                    };
+
+                    // 預填已登入用戶資訊
+                    if (paymentModel.IsLoggedIn)
+                    {
+                        var userIdStr = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                        var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+                        
+                        if (userRole == "User" && int.TryParse(userIdStr, out int userId))
+                        {
+                            var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+                            if (user != null)
+                            {
+                                paymentModel.UserId = userId;
+                                paymentModel.DonorName = user.Name ?? "";
+                                paymentModel.DonorEmail = user.Email ?? "";
+                                paymentModel.DonorPhone = user.Phone ?? "";
+                            }
+                        }
+                    }
+
+                    return View("Payment", paymentModel);
+                }
+
+                // 處理一般物資認購
+                if (!supplyId.HasValue)
+                {
+                    TempData["Error"] = "缺少物資項目資訊";
+                    return RedirectToAction("Index");
+                }
+
+                var supply = _context.Supplies.FirstOrDefault(s => s.SupplyId == supplyId.Value);
                 if (supply == null)
                 {
                     TempData["Error"] = "找不到指定的物資項目";
@@ -105,31 +173,18 @@ namespace NGOPlatformWeb.Controllers
                 }
 
                 // 建立付款資料模型
-                var paymentModel = new PaymentViewModel
+                var regularPaymentModel = new PaymentViewModel
                 {
                     SupplyId = supply.SupplyId,
                     SupplyName = supply.SupplyName ?? "未知物資",
                     Quantity = quantity,
                     TotalPrice = (supply.SupplyPrice ?? 0) * quantity,
-                    SupplyType = emergencyNeedId.HasValue ? "emergency" : supply.SupplyType,
-                    EmergencyNeedId = emergencyNeedId,
+                    SupplyType = supply.SupplyType,
                     IsLoggedIn = User.Identity?.IsAuthenticated ?? false
                 };
 
-                // 如果是緊急需求，取得個案ID和剩餘數量
-                if (emergencyNeedId.HasValue)
-                {
-                    var emergencyNeed = _context.EmergencySupplyNeeds
-                        .FirstOrDefault(e => e.EmergencyNeedId == emergencyNeedId.Value);
-                    if (emergencyNeed != null)
-                    {
-                        paymentModel.CaseId = emergencyNeed.CaseId;
-                        paymentModel.MaxQuantity = emergencyNeed.Quantity; // 個案需求的剩餘數量
-                    }
-                }
-
                 // 如果已登入，預填用戶資訊
-                if (paymentModel.IsLoggedIn)
+                if (regularPaymentModel.IsLoggedIn)
                 {
                     var userIdStr = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
                     var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
@@ -140,15 +195,15 @@ namespace NGOPlatformWeb.Controllers
                         var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
                         if (user != null)
                         {
-                            paymentModel.UserId = userId;
-                            paymentModel.DonorName = user.Name ?? "";
-                            paymentModel.DonorEmail = user.Email ?? "";
-                            paymentModel.DonorPhone = user.Phone ?? "";
+                            regularPaymentModel.UserId = userId;
+                            regularPaymentModel.DonorName = user.Name ?? "";
+                            regularPaymentModel.DonorEmail = user.Email ?? "";
+                            regularPaymentModel.DonorPhone = user.Phone ?? "";
                         }
                     }
                 }
 
-                return View("Payment", paymentModel);
+                return View("Payment", regularPaymentModel);
             }
             catch (Exception ex)
             {
@@ -270,8 +325,8 @@ namespace NGOPlatformWeb.Controllers
                 // 產生訂單編號
                 var orderNumber = await GenerateOrderNumberAsync();
                 
-                // 檢查是否為組合包（SupplyId = -1 表示組合包）
-                bool isPackage = model.SupplyType == "package" && model.SupplyId == -1;
+                // 檢查是否為組合包
+                bool isPackage = model.SupplyType == "package";
                 
                 if (isPackage)
                 {
@@ -387,32 +442,42 @@ namespace NGOPlatformWeb.Controllers
                 }
                 else
                 {
-                    // 處理單項物資認購
-                    var supply = await _context.Supplies.FirstOrDefaultAsync(s => s.SupplyId == model.SupplyId);
-                    if (supply == null)
-                    {
-                        ModelState.AddModelError("", "找不到指定的物資項目");
-                        return View("Payment", model);
-                    }
-
-                    // 認購物資：增加物資庫存（民眾捐錢讓NGO採購物資）
-                    supply.SupplyQuantity += model.Quantity;
-
-                    // 如果是緊急需求，減少需求數量（因為有人認購了）
+                    // 如果是緊急需求，只處理緊急物資表，不涉及物資總表
                     if (model.EmergencyNeedId.HasValue)
                     {
+                        // 使用原始 SQL 更新以避免觸發器衝突
+                        var emergencyNeedId = model.EmergencyNeedId.Value;
+                        var quantity = model.Quantity;
+                        
+                        await _context.Database.ExecuteSqlRawAsync(
+                            "UPDATE EmergencySupplyNeeds SET CollectedQuantity = CollectedQuantity + {0}, UpdatedDate = {1} WHERE EmergencyNeedId = {2}",
+                            quantity, DateTime.Now, emergencyNeedId);
+                        
+                        // 檢查是否需要更新狀態
                         var emergencyNeed = await _context.EmergencySupplyNeeds
-                            .FirstOrDefaultAsync(e => e.EmergencyNeedId == model.EmergencyNeedId.Value);
-                        if (emergencyNeed != null)
+                            .FirstOrDefaultAsync(e => e.EmergencyNeedId == emergencyNeedId);
+                        
+                        if (emergencyNeed != null && emergencyNeed.CollectedQuantity >= emergencyNeed.Quantity && emergencyNeed.Status == "Fundraising")
                         {
-                            // 減少需求數量
-                            emergencyNeed.Quantity = Math.Max(0, emergencyNeed.Quantity - model.Quantity);
-                            
-                            // 如果需求已滿足，更新狀態為"代處理"
-                            if (emergencyNeed.Quantity == 0 && emergencyNeed.Status == "募資中")
+                            await _context.Database.ExecuteSqlRawAsync(
+                                "UPDATE EmergencySupplyNeeds SET Status = 'Reviewing' WHERE EmergencyNeedId = {0}",
+                                emergencyNeedId);
+                        }
+                    }
+                    else
+                    {
+                        // 處理一般物資認購（只有常規物資需要 SupplyId）
+                        if (model.SupplyId.HasValue)
+                        {
+                            var supply = await _context.Supplies.FirstOrDefaultAsync(s => s.SupplyId == model.SupplyId.Value);
+                            if (supply == null)
                             {
-                                emergencyNeed.Status = "代處理";
+                                ModelState.AddModelError("", "找不到指定的物資項目");
+                                return View("Payment", model);
                             }
+
+                            // 認購物資：增加物資庫存（民眾捐錢讓NGO採購物資）
+                            supply.SupplyQuantity += model.Quantity;
                         }
                     }
 
@@ -445,18 +510,40 @@ namespace NGOPlatformWeb.Controllers
                                 _context.UserOrders.Add(order);
                                 await _context.SaveChangesAsync();
 
-                                // 創建訂單明細
-                                var orderDetail = new UserOrderDetail
+                                // 根據訂單類型創建不同的訂單明細
+                                if (model.EmergencyNeedId.HasValue)
                                 {
-                                    UserOrderId = order.UserOrderId,
-                                    SupplyId = model.SupplyId,
-                                    Quantity = model.Quantity,
-                                    UnitPrice = model.TotalPrice / model.Quantity,
-                                    OrderSource = model.EmergencyNeedId.HasValue ? "emergency" : "regular",
-                                    EmergencyNeedId = model.EmergencyNeedId
-                                };
-
-                                _context.UserOrderDetails.Add(orderDetail);
+                                    // 緊急物資認購 - 創建緊急物資認購記錄
+                                    var emergencyRecord = new EmergencyPurchaseRecord
+                                    {
+                                        UserOrderId = order.UserOrderId,
+                                        EmergencyNeedId = model.EmergencyNeedId.Value,
+                                        SupplyName = model.SupplyName,
+                                        Quantity = model.Quantity,
+                                        UnitPrice = model.TotalPrice / model.Quantity,
+                                        PurchaseDate = DateTime.Now,
+                                        CaseId = model.CaseId ?? 0,
+                                        PaymentMethod = model.PaymentMethod
+                                    };
+                                    _context.EmergencyPurchaseRecords.Add(emergencyRecord);
+                                }
+                                else
+                                {
+                                    // 一般物資認購 - 創建訂單明細（只有常規物資需要 SupplyId）
+                                    if (model.SupplyId.HasValue)
+                                    {
+                                        var orderDetail = new UserOrderDetail
+                                        {
+                                            UserOrderId = order.UserOrderId,
+                                            SupplyId = model.SupplyId.Value,
+                                            Quantity = model.Quantity,
+                                            UnitPrice = model.TotalPrice / model.Quantity,
+                                            OrderSource = "regular",
+                                            EmergencyNeedId = null
+                                        };
+                                        _context.UserOrderDetails.Add(orderDetail);
+                                    }
+                                }
                             }
                         }
                         catch (Exception)
@@ -466,7 +553,7 @@ namespace NGOPlatformWeb.Controllers
                     }
                     else
                     {
-                        // 未登入用戶的匹名捐贈，只增加庫存
+                        // 未登入用戶的匿名捐贈，已在上面處理完成
                     }
                 }
 

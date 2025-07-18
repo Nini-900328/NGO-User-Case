@@ -366,6 +366,28 @@
     margin-top: 30px;
 }
 
+.form-actions.d-flex.justify-content-end {
+    margin-top: 30px;
+}
+
+/* 頂部返回按鈕樣式 */
+.btn-outline-secondary {
+    border: 1px solid #6c757d;
+    color: #6c757d;
+    background: transparent;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.btn-outline-secondary:hover {
+    background: #6c757d;
+    color: white;
+    border-color: #6c757d;
+    transform: translateY(-1px);
+}
+
 .btn {
     padding: 12px 30px;
     border-radius: 10px;

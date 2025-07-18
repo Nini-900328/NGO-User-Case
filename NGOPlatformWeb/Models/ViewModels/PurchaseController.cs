@@ -30,7 +30,7 @@ namespace NGOPlatformWeb.Models.ViewModels
     /// </summary>
     public class PaymentViewModel
     {
-        public int SupplyId { get; set; }
+        public int? SupplyId { get; set; }
         public string SupplyName { get; set; } = string.Empty;
         public int Quantity { get; set; }
         public decimal TotalPrice { get; set; }
