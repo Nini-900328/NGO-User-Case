@@ -6,7 +6,7 @@
 
 <p class="record-summary">
     未領取：@Model.UnreceivedSupplies.Count 項 ｜
-    已領取：@Model.ReceivedSupplies.Count(s => s.Status == "已領取") 項 ｜
+    已領取：@Model.ReceivedSupplies.Count(s => s.Status == "collected") 項 ｜
     訪談物資：@Model.ReceivedSupplies.Count(s => s.Status == "訪談物資") 項
 </p>
 

@@ -30,14 +30,14 @@ namespace NGOPlatformWeb.Controllers
             }
 
             var supplies = query.ToList();
-            
+
             // 傳遞使用者身份資訊給 View
             ViewBag.IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
             ViewBag.UserRole = User.FindFirstValue(ClaimTypes.Role);
-            
+
             return View(supplies);
         }
-        
+
         [HttpPost]
         public IActionResult ApplySupply(int supplyId, int quantity)
         {
@@ -79,23 +79,7 @@ namespace NGOPlatformWeb.Controllers
                 UnreceivedSupplies = _context.RegularSuppliesNeeds
         .Include(r => r.Supply)
             .ThenInclude(s => s.SupplyCategory)
-        .Where(r => r.CaseId == caseId && r.Status == "未領取")
-        .Select(r => new SupplyRecordItem
-        {
-            Name = r.Supply.SupplyName,
-            Category = r.Supply.SupplyCategory.SupplyCategoryName,
-            Quantity = r.Quantity,
-            ApplyDate = r.ApplyDate,
-            PickupDate = r.PickupDate,
-            Status = r.Status,
-            ImageUrl = r.Supply.ImageUrl
-        }).ToList(),
-
-                ReceivedSupplies =
-    _context.RegularSuppliesNeeds
-        .Include(r => r.Supply)
-        .ThenInclude(s => s.SupplyCategory)
-        .Where(r => r.CaseId == caseId && (r.Status == "已領取" || r.Status == "訪談物資"))
+        .Where(r => r.CaseId == caseId && r.Status == "pending")
         .Select(r => new SupplyRecordItem
         {
             Name = r.Supply.SupplyName,
@@ -106,27 +90,60 @@ namespace NGOPlatformWeb.Controllers
             Status = r.Status,
             ImageUrl = r.Supply.ImageUrl
         })
-    // 暫時移除 EmergencySupplyNeeds 查詢，因為資料庫結構不匹配
-    // .Union(
-    //     _context.EmergencySupplyNeeds
-    //         .Include(e => e.Supply)
-    //         .ThenInclude(s => s.SupplyCategory)
-    //         .Where(e => e.CaseId == caseId && e.Status == "已領取")
-    //         .Select(e => new SupplyRecordItem
-    //         {
-    //             Name = e.Supply.SupplyName,
-    //             Category = e.Supply.SupplyCategory.SupplyCategoryName,
-    //             Quantity = e.Quantity,
-    //             ApplyDate = e.VisitDate ?? DateTime.Now,
-    //             PickupDate = e.PickupDate,
-    //             Status = "訪談物資", // 強制標示為訪談物資
-    //             ImageUrl = e.Supply.ImageUrl
-    //         })
-    // )
-    .ToList()
+        .OrderByDescending(r => r.ApplyDate)
+        .ToList(),
+
+                ReceivedSupplies =
+    _context.RegularSuppliesNeeds
+        .Include(r => r.Supply)
+        .ThenInclude(s => s.SupplyCategory)
+        .Where(r => r.CaseId == caseId && (r.Status == "collected"))
+        .Select(r => new SupplyRecordItem
+        {
+            Name = r.Supply.SupplyName,
+            Category = r.Supply.SupplyCategory.SupplyCategoryName,
+            Quantity = r.Quantity,
+            ApplyDate = r.ApplyDate,
+            PickupDate = r.PickupDate,
+            Status = r.Status,
+            ImageUrl = r.Supply.ImageUrl
+        })
+.Union(
+    _context.EmergencySupplyNeeds
+        .Where(e => e.CaseId == caseId && e.Status == "Completed")
+        .Select(e => new SupplyRecordItem
+        {
+            Name = e.SupplyName,
+            Category = "緊急物資",
+            Quantity = e.Quantity,
+            ApplyDate = e.CreatedDate ?? DateTime.Now,
+            PickupDate = e.UpdatedDate ?? DateTime.Now,
+            Status = "訪談物資",  // ← 統一映射成訪談物資
+            ImageUrl = e.ImageUrl ?? "/images/emergency-default.png"
+        })
+)
+    .OrderByDescending(s => s.PickupDate) // ✅ 依領取時間排序
+            .ToList()
+                // 暫時移除 EmergencySupplyNeeds 查詢，因為資料庫結構不匹配
+                // .Union(
+                //     _context.EmergencySupplyNeeds
+                //         .Include(e => e.Supply)
+                //         .ThenInclude(s => s.SupplyCategory)
+                //         .Where(e => e.CaseId == caseId && e.Status == "已領取")
+                //         .Select(e => new SupplyRecordItem
+                //         {
+                //             Name = e.Supply.SupplyName,
+                //             Category = e.Supply.SupplyCategory.SupplyCategoryName,
+                //             Quantity = e.Quantity,
+                //             ApplyDate = e.VisitDate ?? DateTime.Now,
+                //             PickupDate = e.PickupDate,
+                //             Status = "訪談物資", // 強制標示為訪談物資
+                //             ImageUrl = e.Supply.ImageUrl
+                //         })
+                // )
 
             };
-            return View( viewModel);
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -198,7 +215,7 @@ namespace NGOPlatformWeb.Controllers
                 IdentityNumber = cas.IdentityNumber,
                 Birthday = cas.Birthday,
                 Address = cas.FullAddress,
-                
+
                 // 活動統計
                 TotalActivitiesRegistered = totalActivities,
                 ActiveRegistrations = activeRegistrations,
@@ -211,7 +228,7 @@ namespace NGOPlatformWeb.Controllers
                     ImageUrl = r.Activity?.ImageUrl ?? "/images/activity-default.png",
                     Category = r.Activity?.Category ?? ""
                 }).ToList(),
-                
+
                 // 物資申請統計（預留給其他組員）
                 TotalApplications = 0, // 待實作
                 PendingApplications = 0 // 待實作
