@@ -1,31 +1,22 @@
-# Get env image
-FROM mcr.microsoft.com/dotnet/sdk:8.0
+# 使用官方 .NET 8 SDK 作為 build 環境
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
 
-# Install additional packages for development
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    wget \
-    vim \
-    unzip \
-    && rm -rf /var/lib/apt/lists/*
+# 複製 sln 和 csproj
+COPY *.sln .
+COPY NGOPlatformWeb/*.csproj ./NGOPlatformWeb/
 
-# Set working directory
-WORKDIR /workspace
+# 還原相依
+RUN dotnet restore
 
-# Copy project files
-# COPY . .
+# 複製整個專案並建置
+COPY . .
+WORKDIR /src/NGOPlatformWeb
+RUN dotnet publish -c Release -o /app/out
 
-# Set common environment variables (others set in docker-compose)
-ENV NUGET_XMLDOC_MODE=skip
+# 使用 .NET 8 Runtime 執行
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app/out .
 
-# Create non-root user for security
-RUN useradd -m -s /bin/bash devuser && \
-    chown -R devuser:devuser /workspace
-USER devuser
-
-# Expose ports for HTTP and HTTPS
-EXPOSE 5000 5001
-
-# Keep container running for development
-CMD ["sleep", "infinity"]
+ENTRYPOINT ["dotnet", "NGOPlatformWeb.dll"]

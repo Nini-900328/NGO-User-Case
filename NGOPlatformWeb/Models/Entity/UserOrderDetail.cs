@@ -19,7 +19,7 @@ namespace NGOPlatformWeb.Models.Entity
         public decimal UnitPrice { get; set; }
 
         [StringLength(50)]
-        public string OrderSource { get; set; } = "regular"; // 明細來源：package, emergency, regular
+        public string? OrderSource { get; set; } = "regular"; // 明細來源：package, emergency, regular
 
         public int? EmergencyNeedId { get; set; } // 對應的緊急需求ID
 

@@ -103,7 +103,7 @@
                                    asp-controller="@(role == "User" ? "User" : "Case")"
                                    asp-action="@(role == "User" ? "Registrations" : "CaseActivityList")">
                                     <i class="fas fa-calendar-check fixed-icon"></i>
-                                    <span class="ms-2">報名的活動</span>
+                                    <span class="ms-2">活動紀錄</span>
                                 </a>
                             </li>
                             <li>
@@ -118,7 +118,7 @@
                                 {
                                     <a class="dropdown-item d-flex align-items-center" asp-controller="Case" asp-action="CasePurchaseList">
                                         <i class="fas fa-receipt fixed-icon"></i>
-                                        <span class="ms-2">申請紀錄</span>
+                                        <span class="ms-2">物資紀錄</span>
                                     </a>
                                 }
                             </li>
