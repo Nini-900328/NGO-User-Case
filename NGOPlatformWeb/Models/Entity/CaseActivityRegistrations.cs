@@ -12,17 +12,17 @@ namespace NGOPlatformWeb.Models.Entity
         [MaxLength(20)]
         public string Status { get; set; } = "registered"; // registered, cancelled
 
-        [NotMapped]
-        public string? ContactName { get; set; }
+        //[NotMapped]
+        //public string? ContactName { get; set; }
 
-        [NotMapped]
-        public string? Email { get; set; }
+        //[NotMapped]
+        //public string? Email { get; set; }
 
-        [NotMapped]
-        public string? Phone { get; set; }
+        //[NotMapped]
+        //public string? Phone { get; set; }
 
-        [NotMapped]
-        public int? ParticipantCount { get; set; }
+        //[NotMapped]
+        //public int? ParticipantCount { get; set; }
 
         public DateTime RegisterTime { get; set; } = DateTime.Now;
 

@@ -78,15 +78,3 @@
         });
     </script>
 }
-
-@if (TempData["SignupSuccess"] != null && (bool)TempData["SignupSuccess"])
-{
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: '報名成功！',
-            text: '感謝您的參與，期待您的到來！',
-            confirmButtonText: '確定'
-        });
-    </script>
-}
