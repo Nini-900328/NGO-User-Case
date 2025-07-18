@@ -6,7 +6,7 @@ namespace NGOPlatformWeb.Controllers
     {
         public IActionResult Index()
         {
-            ViewData["Title"] = "這裡是報名活動";
+            ViewData["Title"] = "民眾活動頁面展示";
             return View();
         }
     }
