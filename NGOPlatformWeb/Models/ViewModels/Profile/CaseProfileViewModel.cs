@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NGOPlatformWeb.Models.ViewModels
+namespace NGOPlatformWeb.Models.ViewModels.Profile
 {
     public class CaseProfileViewModel : BaseProfileViewModel
     {

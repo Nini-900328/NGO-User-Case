@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using NGOPlatformWeb.Models.Entity;
 using NGOPlatformWeb.Models.ViewModels;
+using NGOPlatformWeb.Models.ViewModels.Purchase;
 
 namespace NGOPlatformWeb.Controllers
 {

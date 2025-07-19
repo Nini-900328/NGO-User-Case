@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NGOPlatformWeb.Models.ViewModels
+namespace NGOPlatformWeb.Models.ViewModels.Auth
 {
     /// <summary>
     /// 登入頁面的ViewModel

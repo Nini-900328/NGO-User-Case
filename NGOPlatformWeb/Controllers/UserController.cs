@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NGOPlatformWeb.Models.Entity;
 using NGOPlatformWeb.Models.ViewModels;
+using NGOPlatformWeb.Models.ViewModels.Profile;
+using NGOPlatformWeb.Models.ViewModels.ActivityRegistrations;
+using NGOPlatformWeb.Models.ViewModels.Purchase;
 using NGOPlatformWeb.Services;
 using System.Security.Claims;
 // 一般民眾（使用者）相關功能，如註冊、登入、個資編輯等

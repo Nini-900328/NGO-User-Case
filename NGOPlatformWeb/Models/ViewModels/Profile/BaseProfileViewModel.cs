@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NGOPlatformWeb.Models.ViewModels
+namespace NGOPlatformWeb.Models.ViewModels.Profile
 {
     // Profile ViewModel 基類，包含用戶和個案的共同屬性
     public abstract class BaseProfileViewModel
@@ -74,5 +74,44 @@ namespace NGOPlatformWeb.Models.ViewModels
         public decimal TotalPrice { get; set; }
         public string Status { get; set; } = string.Empty;
         public string OrderNumber { get; set; } = string.Empty;
+    }
+    
+    // 活動報名項目 (User 和 Case 共用)
+    public class ActivityRegistrationItem
+    {
+        public int RegistrationId { get; set; }
+        public int ActivityId { get; set; }
+        public string ActivityName { get; set; } = string.Empty;
+        public string ActivityDescription { get; set; } = string.Empty;
+        public string Location { get; set; } = string.Empty;
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public DateTime RegisterTime { get; set; }
+        public string Status { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
+        public string TargetAudience { get; set; } = string.Empty;
+        
+        // 計算屬性
+        public bool IsUpcoming => StartDate > DateTime.Now;
+        public bool IsCompleted => EndDate < DateTime.Now;
+        public bool IsActive => Status == "registered";
+        public string StatusDisplay => Status == "registered" ? "已報名" : "已取消";
+        public string CategoryDisplay => Category switch
+        {
+            "生活" => "生活技能",
+            "心靈" => "心靈成長", 
+            "運動" => "運動健康",
+            _ => Category
+        };
+    }
+    
+    // 活動報名列表基類 (User 和 Case 共用)
+    public abstract class BaseActivityRegistrationsViewModel
+    {
+        public abstract string PersonName { get; set; }
+        public int TotalRegistrations { get; set; }
+        public int ActiveRegistrations { get; set; }
+        public List<ActivityRegistrationItem> Registrations { get; set; } = new List<ActivityRegistrationItem>();
     }
 }

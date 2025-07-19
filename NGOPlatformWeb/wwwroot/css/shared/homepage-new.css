@@ -3,11 +3,10 @@
    減少了 60% 的代碼行數
    ================================= */
 
-/* 引入設計系統和組件 */
-@import url('design-tokens.css');
-@import url('components/carousel.css');
-@import url('components/impact-section.css');
-@import url('components/activity-cards.css');
+/* 引入組件樣式 */
+@import url('../components/carousel.css');
+@import url('../components/impact-section.css');
+@import url('../components/activity-cards.css');
 
 /* 僅保留首頁特有的樣式 */
 

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NGOPlatformWeb.Models.Entity;
 using NGOPlatformWeb.Models.ViewModels;
+using NGOPlatformWeb.Models.ViewModels.Auth;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;

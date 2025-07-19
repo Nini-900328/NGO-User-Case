@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NGOPlatformWeb.Models.Entity;
 using NGOPlatformWeb.Models.ViewModels;
+using NGOPlatformWeb.Models.ViewModels.Profile;
+using NGOPlatformWeb.Models.ViewModels.ActivityRegistrations;
 using NGOPlatformWeb.Services;
 using System.Security.Claims;
 // 個案身份操作功能，例如查看適用活動或可領取物資
@@ -367,7 +369,7 @@ namespace NGOPlatformWeb.Controllers
                 CaseName = cas.Name ?? "個案",
                 TotalRegistrations = registrations.Count,
                 ActiveRegistrations = registrations.Count(r => r.Status == "registered"),
-                Registrations = registrations.Select(r => new CaseActivityRegistrationItem
+                Registrations = registrations.Select(r => new ActivityRegistrationItem
                 {
                     RegistrationId = r.RegistrationId,
                     ActivityId = r.ActivityId,
