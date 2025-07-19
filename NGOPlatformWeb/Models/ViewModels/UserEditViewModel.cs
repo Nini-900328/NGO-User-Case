@@ -29,5 +29,8 @@ namespace NGOPlatformWeb.Models.ViewModels
         [DataType(DataType.Password)]
         [Display(Name = "密碼")]
         public string? Password { get; set; }
+        
+        [Display(Name = "個人頭像")]
+        public string? ProfileImage { get; set; }
     }
 }

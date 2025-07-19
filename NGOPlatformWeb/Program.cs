@@ -11,16 +11,21 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 // Add Service Dependent Injection
 builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<PasswordService>();
+builder.Services.AddScoped<PasswordMigrationService>();
+builder.Services.AddScoped<ImageUploadService>();
 // Add Background Service
 builder.Services.AddHostedService<TokenCleanupService>();
 // DbContext
 builder.Services.AddDbContext<NGODbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("NGODb")));
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/Auth/Login";
-        options.ExpireTimeSpan = TimeSpan.FromHours(2);
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(10); // 改為 10 分鐘
+        options.SlidingExpiration = true; // 啟用滑動過期（每次活動重置時間）
     });
 var app = builder.Build();
 

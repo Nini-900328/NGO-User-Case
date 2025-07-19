@@ -6,7 +6,25 @@
 <div class="container py-5">
     <h3 class="mb-4">編輯個人資料</h3>
 
-    <form asp-action="EditProfile" method="post">
+    <form asp-action="EditProfile" method="post" enctype="multipart/form-data">
+        <!-- 頭像編輯區域 -->
+        <div class="mb-4">
+            <label class="form-label">個人頭像</label>
+            <div class="d-flex align-items-center">
+                <div class="me-3">
+                    <img src="@Model.ProfileImage" alt="目前頭像" id="currentAvatar" 
+                         style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #dee2e6;" />
+                </div>
+                <div>
+                    <input type="file" name="profileImageFile" id="profileImageFile" 
+                           accept=".jpg,.jpeg,.png" class="form-control" style="width: 250px;" 
+                           onchange="previewImage(this)" />
+                    <div class="form-text">支援 JPG、PNG 格式，檔案大小不超過 2MB</div>
+                    <span asp-validation-for="ProfileImage" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
         <div class="mb-3">
             <label asp-for="Name" class="form-label">姓名</label>
             <input asp-for="Name" class="form-control" />
@@ -43,4 +61,31 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        function previewImage(input) {
+            const file = input.files[0];
+            if (file) {
+                // 檢查檔案類型
+                if (!file.type.match(/image\/(jpeg|jpg|png)/)) {
+                    alert('只允許上傳 JPG 或 PNG 格式的圖片');
+                    input.value = '';
+                    return;
+                }
+
+                // 檢查檔案大小 (2MB)
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('檔案大小不能超過 2MB');
+                    input.value = '';
+                    return;
+                }
+
+                // 預覽圖片
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('currentAvatar').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
 }

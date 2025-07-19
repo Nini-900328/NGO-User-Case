@@ -26,6 +26,9 @@ namespace NGOPlatformWeb.Models.ViewModels
         [Display(Name = "身份證字號")]
         public string IdentityNumber { get; set; } = string.Empty;
         
+        [Display(Name = "個人頭像")]
+        public string? ProfileImage { get; set; }
+        
         // 活動報名共同統計
         public int TotalActivitiesRegistered { get; set; }
         public int ActiveRegistrations { get; set; }

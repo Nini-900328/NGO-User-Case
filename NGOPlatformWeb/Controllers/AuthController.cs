@@ -16,11 +16,13 @@ namespace NGOPlatformWeb.Controllers
     {
         private readonly NGODbContext _context;
         private readonly EmailService _emailService;
+        private readonly PasswordService _passwordService;
 
-        public AuthController(NGODbContext context, EmailService emailService)
+        public AuthController(NGODbContext context, EmailService emailService, PasswordService passwordService)
         {
             _context = context;
             _emailService = emailService;
+            _passwordService = passwordService;
         }
 
         // GET: /Auth/Login
@@ -37,10 +39,26 @@ namespace NGOPlatformWeb.Controllers
             if (!ModelState.IsValid)
                 return View(vm);
 
-            // 1) 嘗試普通使用者
+            // 1) 嘗試普通使用者（BCrypt）
             var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Email == vm.Email && u.Password == vm.Password);
+                .FirstOrDefaultAsync(u => u.Email == vm.Email);
+            
+            bool userPasswordValid = false;
             if (user != null)
+            {
+                // 檢查是否為 BCrypt 雜湊
+                if (user.Password.StartsWith("$2a$"))
+                {
+                    userPasswordValid = _passwordService.VerifyPassword(vm.Password, user.Password);
+                }
+                else
+                {
+                    // 明文密碼比較（向下兼容）
+                    userPasswordValid = vm.Password == user.Password;
+                }
+            }
+
+            if (userPasswordValid)
             {
                 await SignInAsync(
                     httpContext: HttpContext,
@@ -55,8 +73,24 @@ namespace NGOPlatformWeb.Controllers
 
             // 2) 嘗試個案登入
             var caseLogin = await _context.CaseLogins
-                .FirstOrDefaultAsync(c => c.Email == vm.Email && c.Password == vm.Password);
+                .FirstOrDefaultAsync(c => c.Email == vm.Email);
+            
+            bool passwordValid = false;
             if (caseLogin != null)
+            {
+                // 檢查是否為 BCrypt 雜湊（以 $2a$ 開頭）
+                if (caseLogin.Password.StartsWith("$2a$"))
+                {
+                    passwordValid = _passwordService.VerifyPassword(vm.Password, caseLogin.Password);
+                }
+                else
+                {
+                    // 明文密碼比較（社工設定的初始密碼）
+                    passwordValid = vm.Password == caseLogin.Password;
+                }
+            }
+            
+            if (passwordValid)
             {
                 var caseName = await _context.Cases
                     .Where(c => c.CaseId == caseLogin.CaseId)
@@ -122,9 +156,10 @@ namespace NGOPlatformWeb.Controllers
             {
                 Name = vm.Name,
                 Email = vm.Email,
-                Password = vm.Password,
+                Password = _passwordService.HashPassword(vm.Password),
                 Phone = vm.Phone,
-                IdentityNumber = vm.IdentityNumber
+                IdentityNumber = vm.IdentityNumber,
+                ProfileImage = "/images/user-avatar-circle.svg" // 預設頭像
             };
 
             _context.Users.Add(newUser);
@@ -307,7 +342,7 @@ namespace NGOPlatformWeb.Controllers
 
                     if (user != null)
                     {
-                        user.Password = model.Password; // Should encrypt password in production
+                        user.Password = _passwordService.HashPassword(model.Password);
                         _context.Users.Update(user);
                     }
                 }
@@ -318,7 +353,7 @@ namespace NGOPlatformWeb.Controllers
 
                     if (caseLogin != null)
                     {
-                        caseLogin.Password = model.Password;
+                        caseLogin.Password = _passwordService.HashPassword(model.Password);
                         _context.CaseLogins.Update(caseLogin);
                     }
                 }
@@ -341,7 +376,6 @@ namespace NGOPlatformWeb.Controllers
                 return View(model);
             }
         }
-
 
     }
 }
