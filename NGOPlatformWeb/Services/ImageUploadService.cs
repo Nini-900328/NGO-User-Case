@@ -112,7 +112,7 @@ namespace NGOPlatformWeb.Services
         {
             return userType.ToLower() == "case" 
                 ? "/images/case-avatar-circle.svg" 
-                : "/images/user-avatar-circle.svg";
+                : "/images/user-default-new.svg";
         }
     }
 }
