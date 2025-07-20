@@ -338,11 +338,11 @@
 }
 
 .case-page .stat-number {
-    color: var(--primary-dark);
+    color: var(--primary-dark) !important;
 }
 
 .case-page .stat-label {
-    color: var(--text-secondary);
+    color: var(--text-secondary) !important;
 }
 
 /* Case專用篩選按鈕 - 更新使用 design tokens */

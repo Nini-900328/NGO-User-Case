@@ -1,42 +1,29 @@
 /* ================================
-   NGO Platform - Profile Components (Optimized)
-   個人資料頁面特定組件樣式 - 優化版本
+   NGO Platform - Profile Components
+   個人資料頁面特定組件樣式
    ================================ */
 
-/* 主題色彩定義 */
-:root {
-    --success-color: #28a745;
-    --success-hover: #1e7e34;
-    --danger-color: #dc3545;
-    --danger-hover: #bd2130;
-    --info-color: #17a2b8;
-    --info-hover: #138496;
-    --teal-color: #20c997;
-}
-
-/* 通用項目卡片基礎樣式 */
-.activity-item,
-.case-activity-item {
+/* 活動項目卡片 */
+.activity-item {
     display: flex;
     align-items: center;
-    padding: var(--spacing-sm) var(--spacing-md);
-    margin-bottom: var(--spacing-sm);
-    background: var(--bg-light);
-    border-radius: var(--radius-md);
-    transition: var(--transition-base);
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
 }
 
-.activity-item:hover,
-.case-activity-item:hover {
-    background: var(--border-color);
+.activity-item:hover {
+    background: #e9ecef;
 }
 
 .activity-thumb {
     width: 50px;
     height: 50px;
-    border-radius: var(--radius-sm);
+    border-radius: 8px;
     object-fit: cover;
-    margin-right: var(--spacing-md);
+    margin-right: 1rem;
     flex-shrink: 0;
 }
 
@@ -47,8 +34,8 @@
 
 .activity-name {
     font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-xs);
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
     font-size: 0.9rem;
     white-space: nowrap;
     overflow: hidden;
@@ -56,14 +43,14 @@
 }
 
 .activity-date {
-    color: var(--text-secondary);
+    color: #6c757d;
     font-size: 0.8rem;
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: 0.25rem;
 }
 
 .activity-status {
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--radius-sm);
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
     font-size: 0.7rem;
     font-weight: 500;
     display: inline-block;
@@ -71,27 +58,27 @@
 
 /* 認購項目卡片 */
 .purchase-item {
-    padding: var(--spacing-sm) var(--spacing-md);
-    margin-bottom: var(--spacing-sm);
-    background: var(--bg-light);
-    border-radius: var(--radius-md);
-    transition: var(--transition-base);
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
 }
 
 .purchase-item:hover {
-    background: var(--border-color);
+    background: #e9ecef;
 }
 
 .purchase-info {
     display: grid;
     grid-template-columns: 1fr auto;
-    gap: var(--spacing-sm);
+    gap: 0.5rem;
     align-items: center;
 }
 
 .purchase-number {
     font-weight: 600;
-    color: var(--text-primary);
+    color: #2c3e50;
     font-size: 0.9rem;
     white-space: nowrap;
     overflow: hidden;
@@ -99,19 +86,19 @@
 }
 
 .purchase-date {
-    color: var(--text-secondary);
+    color: #6c757d;
     font-size: 0.8rem;
 }
 
 .purchase-amount {
-    color: var(--success-color);
+    color: #28a745;
     font-weight: 600;
     font-size: 0.9rem;
 }
 
 .purchase-status {
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--radius-sm);
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
     font-size: 0.7rem;
     font-weight: 500;
     grid-column: 2;
@@ -120,49 +107,119 @@
     white-space: nowrap;
 }
 
-/* 主題色彩樣式 - 使用 CSS 變數系統 */
-.activity-overview .stat-number,
-.activity-overview .overview-header h5,
+/* 活動總覽特殊樣式 */
+.activity-overview .stat-number {
+    color: #28a745;
+}
+
+.activity-overview .overview-header h5 {
+    color: #28a745;
+}
+
 .activity-overview .view-all-btn {
-    color: var(--success-color);
+    color: #28a745;
 }
 
 .activity-overview .view-all-btn:hover {
-    color: var(--success-hover);
+    color: #1e7e34;
 }
 
-.purchase-overview .stat-number,
-.purchase-overview .overview-header h5,
+/* 認購總覽特殊樣式 */
+.purchase-overview .stat-number {
+    color: #dc3545;
+}
+
+.purchase-overview .overview-header h5 {
+    color: #dc3545;
+}
+
 .purchase-overview .view-all-btn {
-    color: var(--danger-color);
+    color: #dc3545;
 }
 
 .purchase-overview .view-all-btn:hover {
-    color: var(--danger-hover);
+    color: #bd2130;
 }
 
-/* Case 主題的特殊色彩 */
-.case-theme .activity-overview .stat-number,
-.case-theme .activity-overview .overview-header h5,
+/* Case主題的活動總覽 */
+.case-theme .activity-overview .stat-number {
+    color: #20c997;
+}
+
+.case-theme .activity-overview .overview-header h5 {
+    color: #20c997;
+}
+
 .case-theme .activity-overview .view-all-btn {
-    color: var(--teal-color);
+    color: #20c997;
 }
 
 .case-theme .activity-overview .view-all-btn:hover {
-    color: var(--info-color);
+    color: #17a2b8;
 }
 
-.case-theme .purchase-overview .stat-number,
-.case-theme .purchase-overview .overview-header h5,
+/* Case主題的認購總覽 */
+.case-theme .purchase-overview .stat-number {
+    color: #17a2b8;
+}
+
+.case-theme .purchase-overview .overview-header h5 {
+    color: #17a2b8;
+}
+
 .case-theme .purchase-overview .view-all-btn {
-    color: var(--info-color);
+    color: #17a2b8;
 }
 
 .case-theme .purchase-overview .view-all-btn:hover {
-    color: var(--info-hover);
+    color: #138496;
 }
 
-/* Case 活動特殊狀態樣式 */
+/* Case活動項目樣式 */
+.case-activity-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.case-activity-item:hover {
+    background: #e9ecef;
+}
+
+.case-activity-item .activity-thumb {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.case-activity-item .activity-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.case-activity-item .activity-name {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.case-activity-item .activity-date {
+    color: #6c757d;
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+}
+
 .case-activity-item .activity-status.status-active {
     background: #d1ecf1;
     color: #0c5460;
@@ -171,9 +228,8 @@
 /* 響應式調整 */
 @media (max-width: 768px) {
     .activity-item,
-    .case-activity-item,
     .purchase-item {
-        padding: var(--spacing-sm);
+        padding: 0.5rem;
     }
     
     .activity-thumb {
@@ -193,20 +249,19 @@
     
     .purchase-info {
         grid-template-columns: 1fr;
-        gap: var(--spacing-xs);
+        gap: 0.25rem;
     }
     
     .purchase-status {
         grid-column: 1;
         grid-row: auto;
         justify-self: start;
-        margin-top: var(--spacing-xs);
+        margin-top: 0.25rem;
     }
 }
 
 @media (max-width: 576px) {
-    .activity-item,
-    .case-activity-item {
+    .activity-item {
         flex-direction: column;
         align-items: flex-start;
         text-align: left;
@@ -216,14 +271,19 @@
         width: 100%;
         height: 120px;
         margin-right: 0;
-        margin-bottom: var(--spacing-sm);
+        margin-bottom: 0.5rem;
     }
     
     .activity-info {
         width: 100%;
     }
     
-    .activity-name,
+    .activity-name {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: initial;
+    }
+    
     .purchase-number {
         white-space: normal;
         overflow: visible;

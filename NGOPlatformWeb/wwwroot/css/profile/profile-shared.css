@@ -1,43 +1,36 @@
 /* ================================
-   NGO Platform - Profile Shared Styles (整合設計系統)
-   共用個人資料頁面樣式 - 使用統一設計變數
+   NGO Platform - Profile Shared Styles
+   共用個人資料頁面樣式
    ================================ */
-
-/* 
- * 注意: 所有設計變數現在來自 design-tokens.css
- * 已移除重複的變數定義，統一使用全局設計系統
- */
 
 /* 頁面標題和標頭區域 */
 .page-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: var(--spacing-xl);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    margin-bottom: var(--spacing-xl);
-    color: var(--bg-white);
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
 }
 
 .page-title {
-    font-weight: var(--font-bold);
+    color: #2c3e50;
+    font-weight: 700;
     margin: 0;
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
-    font-size: var(--font-3xl);
 }
 
 .page-subtitle {
-    margin: var(--spacing-sm) 0 0 0;
-    font-size: var(--font-lg);
-    opacity: 0.9;
+    color: #6c757d;
+    margin: 0.5rem 0 0 0;
+    font-size: 1.1rem;
 }
 
 /* 個人資料側邊欄 */
 .profile-sidebar {
-    background: var(--bg-gradient);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-xl);
+    background: linear-gradient(145deg, #fff 0%, #f8f9fa 100%);
+    border-radius: 20px;
+    padding: 2rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: transform 0.3s ease;
@@ -64,72 +57,22 @@
 
 .avatar-overlay {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0, 123, 255, 0.9), transparent);
+    bottom: 5px;
+    right: 5px;
+    background: #007bff;
     color: white;
-    height: 50%;
-    border-radius: 0 0 50% 50%;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
-    padding: 8px;
+    justify-content: center;
     opacity: 0;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    font-size: 0.75rem;
-    font-weight: 500;
-}
-
-.avatar-overlay:hover {
-    opacity: 1;
-    background: linear-gradient(to top, rgba(0, 123, 255, 1), rgba(0, 123, 255, 0.3));
+    transition: opacity 0.3s ease;
 }
 
 .profile-avatar:hover .avatar-overlay {
     opacity: 1;
-}
-
-.avatar-overlay i {
-    font-size: 1rem;
-    margin-bottom: 2px;
-}
-
-.avatar-overlay span {
-    font-size: 0.7rem;
-    line-height: 1;
-    text-align: center;
-}
-
-/* 上傳中狀態樣式 */
-.avatar-overlay.uploading {
-    opacity: 1 !important;
-    background: linear-gradient(to top, rgba(255, 193, 7, 0.9), rgba(255, 193, 7, 0.3)) !important;
-    pointer-events: none;
-}
-
-.avatar-overlay.uploading i {
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* 頭像輸入框隱藏樣式 */
-input[type="file"][id*="profileImage"] {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    white-space: nowrap !important;
-    border: 0 !important;
 }
 
 .profile-info h5 {
@@ -189,11 +132,7 @@ input[type="file"][id*="profileImage"] {
 }
 
 .case-avatar {
-    background: linear-gradient(to top, rgba(23, 162, 184, 0.9), transparent) !important;
-}
-
-.case-avatar:hover {
-    background: linear-gradient(to top, rgba(23, 162, 184, 1), rgba(23, 162, 184, 0.3)) !important;
+    background: linear-gradient(135deg, #17a2b8, #138496) !important;
 }
 
 .profile-nav .nav-item:hover,
@@ -327,21 +266,15 @@ input[type="file"][id*="profileImage"] {
     color: white;
 }
 
-.stat-content {
-    flex: 1;
-}
-
-/* 統計數字樣式 - 統一定義 */
 .stat-number {
     font-size: 2rem;
     font-weight: 700;
-    color: #2c3e50 !important;
+    color: #2c3e50;
     margin-bottom: 0.25rem;
-    line-height: 1.2;
 }
 
 .stat-label {
-    color: #666 !important;
+    color: #6c757d;
     font-size: 0.9rem;
     font-weight: 500;
 }
@@ -700,19 +633,6 @@ input[type="file"][id*="profileImage"] {
         margin-bottom: 2rem;
     }
     
-    .profile-avatar img {
-        width: 100px;
-        height: 100px;
-    }
-    
-    .avatar-overlay {
-        height: 40%;
-    }
-    
-    .avatar-overlay span {
-        font-size: 0.6rem;
-    }
-    
     .field-row {
         flex-direction: column;
         align-items: flex-start;
@@ -752,23 +672,6 @@ input[type="file"][id*="profileImage"] {
     
     .profile-sidebar {
         padding: 1.5rem;
-    }
-    
-    .profile-avatar img {
-        width: 80px;
-        height: 80px;
-    }
-    
-    .avatar-overlay {
-        height: 35%;
-    }
-    
-    .avatar-overlay i {
-        font-size: 0.8rem;
-    }
-    
-    .avatar-overlay span {
-        font-size: 0.55rem;
     }
     
     .profile-content .content-header {
