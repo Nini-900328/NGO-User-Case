@@ -1,0 +1,121 @@
+@{
+    ViewData["Title"] = "正在跳轉到付款頁面";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 50px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .loading {
+            margin: 20px 0;
+        }
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @@keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>正在為您跳轉到安全付款頁面</h2>
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>請稍候，系統正在處理您的付款請求...</p>
+            <p>將在 <span id="countdown">10</span> 秒後自動跳轉</p>
+            <button onclick="submitNow()" style="background: #fff; color: #333; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+                立即跳轉
+            </button>
+        </div>
+        
+        <div id="ecpay-form">
+            @Html.Raw(ViewBag.PaymentForm)
+        </div>
+        
+        <!-- 調試信息 -->
+        <div style="margin-top: 20px; font-size: 12px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 5px;">
+            <strong>調試信息：</strong><br>
+            ReturnURL: @ViewBag.DebugReturnUrl<br>
+            ClientBackURL: @ViewBag.DebugClientBackUrl<br>
+            OrderNumber: @ViewBag.DebugOrderNumber
+        </div>
+    </div>
+
+    <script>
+        // 本地測試模式 - 直接模擬付款成功
+        document.addEventListener('DOMContentLoaded', function() {
+            // 檢查是否為本地測試環境
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                let countdown = 3;
+                const countdownElement = document.getElementById('countdown');
+                
+                // 顯示本地測試提示
+                document.querySelector('h2').textContent = '本地測試模式 - 模擬付款成功';
+                document.querySelector('p').textContent = '系統將模擬ECPay付款成功流程...';
+                
+                const timer = setInterval(() => {
+                    countdown--;
+                    countdownElement.textContent = countdown;
+                    
+                    if (countdown <= 0) {
+                        clearInterval(timer);
+                        // 直接跳轉到成功頁面而不是提交到ECPay
+                        const clientBackUrl = '@ViewBag.DebugClientBackUrl';
+                        window.location.href = clientBackUrl;
+                    }
+                }, 1000);
+            } else {
+                // 正常的ECPay流程
+                const form = document.querySelector('form');
+                if (form) {
+                    let countdown = 10;
+                    const countdownElement = document.getElementById('countdown');
+                    
+                    const timer = setInterval(() => {
+                        countdown--;
+                        countdownElement.textContent = countdown;
+                        
+                        if (countdown <= 0) {
+                            clearInterval(timer);
+                            form.submit();
+                        }
+                    }, 1000);
+                }
+            }
+        });
+        
+        // 手動提交按鈕
+        function submitNow() {
+            const form = document.querySelector('form');
+            if (form) {
+                form.submit();
+            }
+        }
+    </script>
+</body>
+</html>

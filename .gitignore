@@ -74,3 +74,6 @@ desktop.ini
 # Documentation and config files
 docs/
 .prettierrc
+
+# Claude CLI data
+NGOPlatformWeb/claudecliData/

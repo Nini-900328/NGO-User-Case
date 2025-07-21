@@ -13,6 +13,7 @@ namespace NGOPlatformWeb.Models.Entity
         public string ?Email { get; set; }
 
         [Required]
+        [StringLength(60)]
         public string ?Password { get; set; }
 
         public DateTime? LastLogin { get; set; }

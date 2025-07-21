@@ -61,9 +61,12 @@
 
 /* ✅ 搜尋框 */
 .search-box {
-    border-radius: 20px;
-    border: 1px solid #28a745;
-    padding-left: 12px;
+    border-radius: 30px;
+    padding: .6rem 1rem;
+    box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    border: 1px solid #ccc;
+    width: 250px;
+    margin-top: 10px;
 }
 
     .search-box:focus {
@@ -135,7 +138,7 @@
         border-radius: 20px;
         font-size: 0.9rem;
         font-weight: 600;
-        padding: 0.4rem 0.8rem;
+        padding: 0.4rem 1rem; /* 🔹左右縮小，原本是 0.4rem 0.8rem */
         color: #fff;
         transition: background 0.3s ease;
     }
@@ -143,3 +146,24 @@
         .card-body .btn-success:hover {
             background: linear-gradient(45deg, #28a745, #1e7e34);
         }
+
+.btn-filter {
+    border-radius: 50px;
+    font-weight: bold;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+    .btn-filter:focus,
+    .btn-filter:active {
+        outline: none !important; /* 移除藍色外框 */
+        box-shadow: none !important; /* 移除藍色陰影 */
+        border-color: #28a745 !important; /* 邊框維持原本綠色或你想要的顏色 */
+    }
+
+    .btn-filter.active,
+    .btn-filter:active {
+        background-color: #28a745 !important; /* 綠底 */
+        color: #fff !important; /* 白字 */
+        border-color: #28a745 !important; /* 邊框也變綠 */
+    }

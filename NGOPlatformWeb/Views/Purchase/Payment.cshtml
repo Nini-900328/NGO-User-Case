@@ -1,10 +1,10 @@
 ﻿<!-- 付款確認頁面 - 顯示付款資訊並處理付款流程 -->
-@model PaymentViewModel
+@model NGOPlatformWeb.Models.ViewModels.Purchase.PaymentViewModel
 @{
     ViewData["Title"] = "確認付款";
 }
 
-<link rel="stylesheet" href="~/css/payment.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/purchase/payment.css" asp-append-version="true" />
 
 <div class="payment-page">
     <div class="container">
@@ -339,10 +339,17 @@
                 $btnText.hide();
                 $btnLoading.show();
                 
-                // 模擬付款處理時間
-                setTimeout(() => {
+                // 所有付款方式都使用 ProcessPayment
+                const selectedPaymentMethod = $('input[name="PaymentMethod"]:checked').val();
+                if (selectedPaymentMethod === 'ecpay') {
+                    // ECPay 直接提交，不需要等待時間
                     this.submit();
-                }, 2000);
+                } else {
+                    // 模擬付款處理時間
+                    setTimeout(() => {
+                        this.submit();
+                    }, 2000);
+                }
             });
             
             // 卡號格式化

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 namespace NGOPlatformWeb.Models.Entity
 {
     public class User
@@ -15,7 +16,7 @@ namespace NGOPlatformWeb.Models.Entity
         public string ?Email { get; set; }
 
         [Required]
-        [StringLength(100)]
+        [StringLength(60)]
         public string ?Password { get; set; }
 
         [StringLength(20)]
@@ -23,5 +24,8 @@ namespace NGOPlatformWeb.Models.Entity
 
         [StringLength(50)]
         public string ?Name { get; set; }
+        
+        [StringLength(500)]
+        public string ?ProfileImage { get; set; }
     }
 }

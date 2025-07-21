@@ -1,15 +1,17 @@
-﻿namespace NGOPlatformWeb.Models
+﻿using NGOPlatformWeb.Models.Entity;
+
+namespace NGOPlatformWeb.Models
 {
     /// <summary>
     /// 首頁的ViewModel
-    /// 包含輪播圖、功能卡片、最新消息、活動資訊等首頁元素
+    /// 包含最新活動、影響力統計、使命陳述等首頁元素
     /// </summary>
     public class HomeViewModel
     {
         public List<CarouselItem> CarouselItems { get; set; } = new List<CarouselItem>();
-        public List<FeatureCard> FeatureCards { get; set; } = new List<FeatureCard>();
-        public List<NewsItem> NewsItems { get; set; } = new List<NewsItem>();
-        public ActivityInfo ActivityInfo { get; set; } = new ActivityInfo();
+        public List<NGOPlatformWeb.Models.Entity.Activity> RecentActivities { get; set; } = new List<NGOPlatformWeb.Models.Entity.Activity>();
+        public ImpactStats ImpactStats { get; set; } = new ImpactStats();
+        public MissionStatement MissionStatement { get; set; } = new MissionStatement();
     }
 
     /// <summary>
@@ -20,6 +22,8 @@
         public string ImageUrl { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        public string ButtonText { get; set; } = string.Empty;
+        public string ButtonLink { get; set; } = string.Empty;
     }
 
     /// <summary>
@@ -44,13 +48,23 @@
     }
 
     /// <summary>
-    /// 首頁活動資訊
+    /// 影響力統計
     /// </summary>
-    public class ActivityInfo
+    public class ImpactStats
+    {
+        public int TotalActivities { get; set; }
+        public int TotalParticipants { get; set; }
+        public int TotalCases { get; set; }
+        public int TotalSupplies { get; set; }
+    }
+    
+    /// <summary>
+    /// 使命陳述
+    /// </summary>
+    public class MissionStatement
     {
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public DateTime StartDate { get; set; }
         public string ImageUrl { get; set; } = string.Empty;
     }
 }
