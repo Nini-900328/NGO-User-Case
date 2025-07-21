@@ -1,6 +1,6 @@
 ﻿using NGOPlatformWeb.Models.Entity;
 
-namespace NGOPlatformWeb.Models.ViewModels
+namespace NGOPlatformWeb.Models.ViewModels.Profile
 {
     public class UserProfileViewModel : BaseProfileViewModel
     {

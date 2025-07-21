@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NGOPlatformWeb.Models.Entity;
 using NGOPlatformWeb.Models.ViewModels;
+using NGOPlatformWeb.Models.ViewModels.Profile;
+using NGOPlatformWeb.Models.ViewModels.ActivityRegistrations;
+using NGOPlatformWeb.Services;
 using System.Security.Claims;
 // 個案身份操作功能，例如查看適用活動或可領取物資
 
@@ -12,10 +15,14 @@ namespace NGOPlatformWeb.Controllers
     {
         //目的：讓 Controller 能透過 DbContext 從資料庫撈資料，給 View 顯示。
         private readonly NGODbContext _context;
+        private readonly PasswordService _passwordService;
+        private readonly ImageUploadService _imageUploadService;
 
-        public CaseController(NGODbContext context)
+        public CaseController(NGODbContext context, PasswordService passwordService, ImageUploadService imageUploadService)
         {
             _context = context;
+            _passwordService = passwordService;
+            _imageUploadService = imageUploadService;
         }
 
         public IActionResult ShoppingIndex(string category)
@@ -213,6 +220,7 @@ namespace NGOPlatformWeb.Controllers
                 Email = caseLogin.Email,
                 Phone = cas.Phone,
                 IdentityNumber = cas.IdentityNumber,
+                ProfileImage = cas.ProfileImage ?? _imageUploadService.GetDefaultProfileImage("case"),
                 Birthday = cas.Birthday,
                 Address = cas.FullAddress,
 
@@ -239,7 +247,7 @@ namespace NGOPlatformWeb.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Case")]
-        public IActionResult CaseProfile(CaseProfileViewModel vm)
+        public async Task<IActionResult> CaseProfile(CaseProfileViewModel vm, IFormFile? profileImageFile)
         {
             if (vm.NewPassword != vm.ConfirmPassword)
             {
@@ -248,14 +256,85 @@ namespace NGOPlatformWeb.Controllers
             }
 
             var email = User.FindFirstValue(ClaimTypes.Email);
-            var caseLogin = _context.CaseLogins.FirstOrDefault(c => c.Email == email);
+            var caseLogin = await _context.CaseLogins.FirstOrDefaultAsync(c => c.Email == email);
             if (caseLogin == null) return NotFound();
 
-            caseLogin.Password = vm.NewPassword;
-            _context.SaveChanges();
+            var cas = await _context.Cases.FirstOrDefaultAsync(c => c.CaseId == caseLogin.CaseId);
+            if (cas == null) return NotFound();
+
+            // 處理圖片上傳
+            string? newImagePath = cas.ProfileImage;
+            if (profileImageFile != null)
+            {
+                var uploadResult = await _imageUploadService.UploadImageAsync(profileImageFile, cas.ProfileImage);
+                if (uploadResult.Success)
+                {
+                    newImagePath = uploadResult.ImagePath;
+                }
+                else
+                {
+                    ModelState.AddModelError("ProfileImage", uploadResult.ErrorMessage ?? "圖片上傳失敗");
+                    vm.ProfileImage = cas.ProfileImage ?? _imageUploadService.GetDefaultProfileImage("case");
+                    return View(vm);
+                }
+            }
+
+            // 更新密碼和頭像
+            caseLogin.Password = _passwordService.HashPassword(vm.NewPassword);
+            cas.ProfileImage = newImagePath;
+            await _context.SaveChangesAsync();
 
             ViewBag.SuccessMessage = "密碼修改成功";
             return View(vm);
+        }
+
+        // AJAX 頭像上傳 API (個案專用)
+        [Authorize(Roles = "Case")]
+        [HttpPost]
+        public async Task<IActionResult> UploadCaseProfileImage(IFormFile profileImage)
+        {
+            try
+            {
+                if (profileImage == null)
+                {
+                    return Json(new { success = false, message = "請選擇要上傳的圖片" });
+                }
+
+                // 取得當前登入個案
+                var email = User.FindFirstValue(ClaimTypes.Email);
+                var caseLogin = await _context.CaseLogins.FirstOrDefaultAsync(c => c.Email == email);
+                if (caseLogin == null)
+                {
+                    return Json(new { success = false, message = "找不到個案登入資料" });
+                }
+
+                var cas = await _context.Cases.FirstOrDefaultAsync(c => c.CaseId == caseLogin.CaseId);
+                if (cas == null)
+                {
+                    return Json(new { success = false, message = "找不到個案資料" });
+                }
+
+                // 上傳圖片
+                var uploadResult = await _imageUploadService.UploadImageAsync(profileImage, cas.ProfileImage);
+                if (!uploadResult.Success)
+                {
+                    return Json(new { success = false, message = uploadResult.ErrorMessage });
+                }
+
+                // 更新資料庫
+                cas.ProfileImage = uploadResult.ImagePath;
+                await _context.SaveChangesAsync();
+
+                return Json(new { 
+                    success = true, 
+                    message = "頭像更新成功",
+                    imageUrl = uploadResult.ImagePath
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"上傳失敗：{ex.Message}" });
+            }
         }
 
         // 個案活動報名紀錄頁面 - 顯示個案所有活動參與歷史
@@ -290,7 +369,7 @@ namespace NGOPlatformWeb.Controllers
                 CaseName = cas.Name ?? "個案",
                 TotalRegistrations = registrations.Count,
                 ActiveRegistrations = registrations.Count(r => r.Status == "registered"),
-                Registrations = registrations.Select(r => new CaseActivityRegistrationItem
+                Registrations = registrations.Select(r => new ActivityRegistrationItem
                 {
                     RegistrationId = r.RegistrationId,
                     ActivityId = r.ActivityId,

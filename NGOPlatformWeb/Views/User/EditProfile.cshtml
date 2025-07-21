@@ -1,46 +1,143 @@
-﻿@model NGOPlatformWeb.Models.ViewModels.UserEditViewModel
+﻿@model NGOPlatformWeb.Models.ViewModels.Profile.UserEditViewModel
 @{
     ViewData["Title"] = "編輯個人資料";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/profile/profile-shared.css" />
+    <link rel="stylesheet" href="~/css/profile/profile-components.css" />
+}
+
 <div class="container py-5">
-    <h3 class="mb-4">編輯個人資料</h3>
+    <div class="row g-4">
+        <!-- 左側邊欄 - 保持與個人資料頁一致 -->
+        <div class="col-md-4">
+            <div class="profile-sidebar">
+                <!-- 使用者頭像區域 -->
+                <div class="profile-avatar">
+                    <img src="@Model.ProfileImage" alt="目前頭像" id="currentAvatar" />
+                </div>
+                
+                <!-- 基本資訊顯示 -->
+                <div class="profile-info">
+                    <h5>@Model.Name</h5>
+                    <p>@Model.Email</p>
+                </div>
 
-    <form asp-action="EditProfile" method="post">
-        <div class="mb-3">
-            <label asp-for="Name" class="form-label">姓名</label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+                <!-- 導航選單 -->
+                <nav class="profile-nav">
+                    <a asp-controller="User" asp-action="UserProfile" class="nav-item">
+                        <i class="fas fa-user"></i>個人資料
+                    </a>
+                    <a href="#" class="nav-item active">
+                        <i class="fas fa-edit"></i>編輯資料
+                    </a>
+                    <a asp-controller="User" asp-action="Registrations" class="nav-item">
+                        <i class="fas fa-calendar-check"></i>活動紀錄
+                    </a>
+                    <a asp-controller="User" asp-action="PurchaseRecords" class="nav-item">
+                        <i class="fas fa-shopping-cart"></i>認購記錄
+                    </a>
+                </nav>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label asp-for="Email" class="form-label">Email（不可更改）</label>
-            <input asp-for="Email" class="form-control" readonly />
-        </div>
+        <!-- 右側主內容區域 -->
+        <div class="col-md-8">
+            <div class="profile-main-content">
+                <div class="section-header">
+                    <h3><i class="fas fa-edit me-2"></i>編輯個人資料</h3>
+                    <p class="text-muted">更新您的個人資訊</p>
+                </div>
 
-        <div class="mb-3">
-            <label asp-for="Phone" class="form-label">電話</label>
-            <input asp-for="Phone" class="form-control" />
-            <span asp-validation-for="Phone" class="text-danger"></span>
-        </div>
+                <form asp-action="EditProfile" method="post" enctype="multipart/form-data">
+                    <!-- 頭像編輯區域 -->
+                    <div class="form-section">
+                        <h5><i class="fas fa-camera me-2"></i>個人頭像</h5>
+                        <div class="avatar-upload-section">
+                            <div class="current-avatar-preview">
+                                <img src="@Model.ProfileImage" alt="目前頭像" id="currentAvatar" 
+                                     class="avatar-preview-img" />
+                            </div>
+                            <div class="upload-controls">
+                                <input type="file" name="profileImageFile" id="profileImageFile" 
+                                       accept=".jpg,.jpeg,.png" class="form-control" 
+                                       onchange="previewImage(this)" />
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    支援 JPG、PNG 格式，檔案大小不超過 2MB
+                                </div>
+                                <span asp-validation-for="ProfileImage" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
 
-        <div class="mb-3">
-            <label asp-for="IdentityNumber" class="form-label">身分證字號</label>
-            <input asp-for="IdentityNumber" class="form-control" />
-            <span asp-validation-for="IdentityNumber" class="text-danger"></span>
-        </div>
+                    <!-- 基本資料區域 -->
+                    <div class="form-section">
+                        <h5><i class="fas fa-user me-2"></i>基本資料</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Name" class="form-label">姓名</label>
+                                <input asp-for="Name" class="form-control" placeholder="請輸入您的姓名" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label">
+                                    Email
+                                    <span class="text-muted">(不可更改)</span>
+                                </label>
+                                <input asp-for="Email" class="form-control" readonly />
+                            </div>
+                        </div>
+                        <div class="row g-3 mt-2">
+                            <div class="col-md-6">
+                                <label asp-for="Phone" class="form-label">聯絡電話</label>
+                                <input asp-for="Phone" class="form-control" placeholder="請輸入聯絡電話" />
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="IdentityNumber" class="form-label">身分證字號</label>
+                                <input asp-for="IdentityNumber" class="form-control" placeholder="請輸入身分證字號" />
+                                <span asp-validation-for="IdentityNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
 
-        <div class="mb-3">
-            <label asp-for="Password" class="form-label">密碼</label>
-            <input asp-for="Password" class="form-control" />
-            <span asp-validation-for="Password" class="text-danger"></span>
-        </div>
+                    <!-- 密碼變更區域 -->
+                    <div class="form-section">
+                        <h5><i class="fas fa-lock me-2"></i>變更密碼</h5>
+                        <div class="password-change-notice">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            如不需要變更密碼，請留空此欄位
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Password" class="form-label">新密碼</label>
+                            <input asp-for="Password" type="password" class="form-control" placeholder="留空表示不變更密碼" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
 
-        <button type="submit" class="btn btn-primary">儲存變更</button>
-        <a asp-action="UserProfile" class="btn btn-secondary ms-2">取消</a>
-    </form>
+                    <!-- 操作按鈕 -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>儲存變更
+                        </button>
+                        <a asp-action="UserProfile" class="btn btn-outline-secondary ms-2">
+                            <i class="fas fa-times me-2"></i>取消
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/profile-common.js"></script>
+    <script>
+        function previewImage(input) {
+            return previewProfileImage(input, 'currentAvatar');
+        }
+    </script>
 }

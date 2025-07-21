@@ -175,51 +175,7 @@
     color: #138496;
 }
 
-/* Case活動項目樣式 */
-.case-activity-item {
-    display: flex;
-    align-items: center;
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;
-    background: #f8f9fa;
-    border-radius: 12px;
-    transition: background-color 0.3s ease;
-}
-
-.case-activity-item:hover {
-    background: #e9ecef;
-}
-
-.case-activity-item .activity-thumb {
-    width: 50px;
-    height: 50px;
-    border-radius: 8px;
-    object-fit: cover;
-    margin-right: 1rem;
-    flex-shrink: 0;
-}
-
-.case-activity-item .activity-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.case-activity-item .activity-name {
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 0.25rem;
-    font-size: 0.9rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.case-activity-item .activity-date {
-    color: #6c757d;
-    font-size: 0.8rem;
-    margin-bottom: 0.25rem;
-}
-
+/* Case活動項目特殊樣式 */
 .case-activity-item .activity-status.status-active {
     background: #d1ecf1;
     color: #0c5460;

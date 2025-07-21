@@ -1,9 +1,9 @@
-﻿@model OrderResultViewModel
+﻿@model NGOPlatformWeb.Models.ViewModels.Purchase.OrderResultViewModel
 @{
     ViewData["Title"] = "捐贈成功";
 }
 
-<link rel="stylesheet" href="~/css/payment.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/purchase/payment.css" asp-append-version="true" />
 
 <div class="success-page">
     <div class="container">
@@ -161,7 +161,7 @@
 
                 <!-- 行動按鈕 -->
                 <div class="action-buttons">
-                    <a href="@Url.Action("Index")" class="btn btn-primary">
+                    <a href="@Url.Action("Index", "Purchase")" class="btn btn-primary">
                         <i class="fas fa-hands-helping me-2"></i>繼續幫助更多人
                     </a>
                     

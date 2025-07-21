@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace NGOPlatformWeb.Models.ViewModels
+namespace NGOPlatformWeb.Models.ViewModels.Purchase
 {
     /// <summary>
     /// 使用者認購紀錄的主要ViewModel
