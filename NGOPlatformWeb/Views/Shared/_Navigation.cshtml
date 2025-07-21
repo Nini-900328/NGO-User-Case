@@ -144,10 +144,10 @@
                 }
                 else
                 {
-                    <a href="@Url.Action("Register", "Auth")" class="btn register-btn">
+                    <a href="@Url.Action("Register", "Auth")" class="btn register-btn" onclick="sessionStorage.setItem('showPlaneAnimation', 'true')">
                         <i class="fas fa-user-plus me-1"></i>註冊
                     </a>
-                    <a href="@Url.Action("Login", "Auth")" class="btn btn-outline-light-modern">
+                    <a href="@Url.Action("Login", "Auth")" class="btn btn-outline-light-modern" onclick="sessionStorage.setItem('showPlaneAnimation', 'true')">
                         <i class="fas fa-sign-in-alt me-1"></i>登入
                     </a>
                 }
