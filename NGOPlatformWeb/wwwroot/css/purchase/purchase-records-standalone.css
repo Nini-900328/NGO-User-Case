@@ -1554,3 +1554,31 @@
     text-align: right !important;
     font-weight: 500 !important;
 }
+
+/* 付款狀態樣式 */
+.delivery-status .status-success {
+    color: #28a745 !important;
+    font-weight: 600 !important;
+}
+
+.delivery-status .status-pending {
+    color: #ffc107 !important;
+    font-weight: 600 !important;
+    animation: pulse 2s infinite;
+}
+
+.delivery-status .status-failed {
+    color: #dc3545 !important;
+    font-weight: 600 !important;
+}
+
+.delivery-status .status-unknown {
+    color: #6c757d !important;
+    font-weight: 600 !important;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+}

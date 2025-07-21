@@ -353,7 +353,38 @@
                                         }
                                         <i class="@paymentIcon"></i><span>@paymentText</span>
                                     </div>
-                                    <div class="delivery-status">✓ 已送達</div>
+                                    <div class="delivery-status">
+                                        @{
+                                            string statusIcon = "";
+                                            string statusText = "";
+                                            string statusClass = "";
+                                            
+                                            switch (order.PaymentStatus)
+                                            {
+                                                case "已付款":
+                                                    statusIcon = "✓";
+                                                    statusText = "已送達";
+                                                    statusClass = "success";
+                                                    break;
+                                                case "待付款":
+                                                    statusIcon = "⏳";
+                                                    statusText = "待付款";
+                                                    statusClass = "pending";
+                                                    break;
+                                                case "付款失敗":
+                                                    statusIcon = "❌";
+                                                    statusText = "付款失敗";
+                                                    statusClass = "failed";
+                                                    break;
+                                                default:
+                                                    statusIcon = "?";
+                                                    statusText = order.PaymentStatus ?? "未知";
+                                                    statusClass = "unknown";
+                                                    break;
+                                            }
+                                        }
+                                        <span class="status-@statusClass">@statusIcon @statusText</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

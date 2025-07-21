@@ -37,24 +37,39 @@
     transform: scale(1.05) rotate(2deg);
 }
 
-/* 社工管理按鈕樣式 */
-.social-worker-btn {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    border: none;
-    color: white;
-    font-weight: 500;
-    border-radius: 10px;
-    padding: 8px 16px;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
-    position: relative;
+/* 社工管理按鈕樣式 - 強化保護 */
+.modern-navbar .social-worker-btn,
+nav.navbar .social-worker-btn {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 500 !important;
+    border-radius: 10px !important;
+    padding: 8px 16px !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2) !important;
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    text-decoration: none !important;
 }
 
-.social-worker-btn:hover {
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4), 0 0 20px rgba(139, 92, 246, 0.2);
-    color: white;
+.modern-navbar .social-worker-btn i,
+nav.navbar .social-worker-btn i {
+    margin-right: 8px !important;
+    width: 16px !important;
+    text-align: center !important;
+    font-size: 14px !important;
+}
+
+.modern-navbar .social-worker-btn:hover,
+nav.navbar .social-worker-btn:hover {
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%) !important;
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4), 0 0 20px rgba(139, 92, 246, 0.2) !important;
+    color: white !important;
 }
 
 /* 漢堡按鈕現代化 */
@@ -127,43 +142,57 @@
     transform: scale(1.05);
 }
 
-/* 右側按鈕組現代化 */
-.modern-navbar .btn-outline-light-modern {
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: rgba(255, 255, 255, 0.9);
-    border-radius: 6px;
-    padding: 8px 16px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    background: transparent;
+/* 右側按鈕組現代化 - 強化保護 */
+.modern-navbar .btn-outline-light-modern,
+nav.navbar .btn-outline-light-modern {
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 6px !important;
+    padding: 8px 16px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    background: transparent !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
 }
 
-.modern-navbar .btn-outline-light-modern:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.4);
-    color: #ffffff;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+.modern-navbar .btn-outline-light-modern:hover,
+nav.navbar .btn-outline-light-modern:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1) !important;
 }
 
-/* 註冊按鈕特殊樣式 */
-.register-btn {
-    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-    border: none;
-    color: white;
-    border-radius: 10px;
-    padding: 8px 16px;
-    font-weight: 500;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
-    position: relative;
+/* 註冊按鈕特殊樣式 - 強化保護 */
+.modern-navbar .register-btn,
+nav.navbar .register-btn {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+    border: none !important;
+    color: white !important;
+    border-radius: 10px !important;
+    padding: 8px 16px !important;
+    font-weight: 500 !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2) !important;
+    position: relative !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
 }
 
-.register-btn:hover {
-    background: linear-gradient(135deg, #047857 0%, #065f46 100%);
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 6px 16px rgba(5, 150, 105, 0.4), 0 0 20px rgba(16, 185, 129, 0.2);
-    color: white;
+.modern-navbar .register-btn:hover,
+nav.navbar .register-btn:hover {
+    background: linear-gradient(135deg, #047857 0%, #065f46 100%) !important;
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 6px 16px rgba(5, 150, 105, 0.4), 0 0 20px rgba(16, 185, 129, 0.2) !important;
+    color: white !important;
 }
 
 /* 下拉菜單現代化 */
@@ -201,24 +230,31 @@
     border-color: rgba(0, 0, 0, 0.1);
 }
 
-/* 用戶歡迎按鈕 */
-.user-welcome-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #ffffff;
-    border-radius: 6px;
-    padding: 8px 16px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+/* 用戶歡迎按鈕 - 強化樣式保護 */
+.modern-navbar .user-welcome-btn,
+nav.navbar .user-welcome-btn {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    border-radius: 6px !important;
+    padding: 8px 16px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1) !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
 }
 
-.user-welcome-btn:hover {
-    transform: translateY(-1px);
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
-    color: #ffffff;
+.modern-navbar .user-welcome-btn:hover,
+nav.navbar .user-welcome-btn:hover {
+    transform: translateY(-1px) !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
 }
 
 /* 手機版專用樣式 */

@@ -339,10 +339,17 @@
                 $btnText.hide();
                 $btnLoading.show();
                 
-                // 模擬付款處理時間
-                setTimeout(() => {
+                // 所有付款方式都使用 ProcessPayment
+                const selectedPaymentMethod = $('input[name="PaymentMethod"]:checked').val();
+                if (selectedPaymentMethod === 'ecpay') {
+                    // ECPay 直接提交，不需要等待時間
                     this.submit();
-                }, 2000);
+                } else {
+                    // 模擬付款處理時間
+                    setTimeout(() => {
+                        this.submit();
+                    }, 2000);
+                }
             });
             
             // 卡號格式化

@@ -378,5 +378,12 @@ namespace NGOPlatformWeb.Controllers
             }
         }
 
+        // 登入設計演示頁面 - 不影響現有功能
+        [HttpGet]
+        public IActionResult LoginDemo()
+        {
+            return View();
+        }
+
     }
 }

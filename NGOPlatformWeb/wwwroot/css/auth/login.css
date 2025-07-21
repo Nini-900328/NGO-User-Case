@@ -1,14 +1,61 @@
-﻿/* 全屏居中背景 */
+﻿/* Lottie Loading Overlay */
+.loading-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 99999 !important;
+    transition: opacity 0.5s ease, visibility 0.5s ease !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.loading-overlay.hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+.loading-container {
+    text-align: center;
+    color: white;
+}
+
+.loading-text {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+/* 全屏居中背景 - 改進漸變 */
 .login-wrapper {
-	height: 100vh;
-	background: #f9f9f6;
+	min-height: 100vh;
+	background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	opacity: 0;
+	transform: translateY(20px);
+	transition: all 0.8s ease;
+	padding: 20px;
+}
+
+.login-wrapper.visible {
+	opacity: 1;
+	transform: translateY(0);
 }
 
 /* 卡片容器 */
 .login-container {
+	display: flex;
+	flex-wrap: wrap; /* 保證手機版能換行 */
 	max-width: 1200px;
 	width: 100%;
 	border-radius: 20px;
@@ -18,12 +65,20 @@
 
 /* 左侧背景图 */
 .login-image {
+	flex: 1 1 50%; /* 每邊各佔 50%，自動調整 */
+	display: flex;
+	flex-direction: column;
+	justify-content: center; /* 垂直置中 */
 	background: url('/images/LoginImage.png') center/cover no-repeat;
 	min-height: 600px;
 }
 
 /* 右侧表单内距 */
 .login-form-area {
+	flex: 1 1 50%; /* 每邊各佔 50%，自動調整 */
+	display: flex;
+	flex-direction: column;
+	justify-content: center; /* 垂直置中 */
 	padding: 2.5rem 2rem;
 }
 
@@ -245,6 +300,24 @@
 .modal.show .modal-dialog {
 	transform: translateY(0);
 }
+.login-container {
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+/* 壓縮登入表單區高度 */
+.login-form-area {
+	padding-top: 0.5rem !important; /* 原本可能是 2.5rem */
+	padding-bottom: 0.5rem!important;
+}
+.breadcrumb {
+	margin-bottom: 0.25rem; /* 原本可能是1rem或更多 */
+}
+/* 壓縮 logo 圖、標題上下間距 */
+.login-form-area h1,
+.login-form-area h2 {
+	margin-top: 0.25rem !important;
+	margin-bottom: 0.5rem !important;
+}
 
 /* 手机版隐藏左图 & 去圆角阴影 */
 @media (max-width: 767.98px) {
@@ -257,11 +330,36 @@
 		display: none;
 	}
 	
-	.login-form-area {
-		padding: 2rem 1.5rem;
-	}
-	
 	.modal-dialog {
 		margin: 1rem;
 	}
 }
+/* ==== 只影響註冊表單的雙欄排版 ==== */
+.register-form .form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.register-form .form-row .form-control {
+    flex: 1 1 50%;
+}
+
+.register-form label {
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.register-form .form-control {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    height: auto;
+}
+
+/* 手機版改回單欄 */
+@media (max-width: 767.98px) {
+    .register-form .form-row {
+        flex-direction: column;
+    }
+}
+

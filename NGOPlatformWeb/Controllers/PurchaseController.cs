@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NGOPlatformWeb.Models.Entity;
 using NGOPlatformWeb.Models.ViewModels;
 using NGOPlatformWeb.Models.ViewModels.Purchase;
+using NGOPlatformWeb.Services;
 
 namespace NGOPlatformWeb.Controllers
 {
@@ -10,10 +12,12 @@ namespace NGOPlatformWeb.Controllers
     public class PurchaseController : Controller
     {
         private readonly NGODbContext _context;
+        private readonly EcpayService _ecpayService;
 
-        public PurchaseController(NGODbContext context)
+        public PurchaseController(NGODbContext context, EcpayService ecpayService)
         {
             _context = context;
+            _ecpayService = ecpayService;
         }
 
         // 主要捐贈頁面 - 顯示緊急需求和常規物資供民眾認購
@@ -329,6 +333,9 @@ namespace NGOPlatformWeb.Controllers
                 // 檢查是否為組合包
                 bool isPackage = model.SupplyType == "package";
                 
+                // 宣告訂單變數
+                UserOrder? order = null;
+                
                 if (isPackage)
                 {
                     // 處理組合包購買 - 需要記錄所有包含的物資
@@ -378,7 +385,7 @@ namespace NGOPlatformWeb.Controllers
                     // 如果是已登入用戶，創建訂單記錄
                     if (model.IsLoggedIn && model.UserId.HasValue)
                     {
-                        var order = new UserOrder
+                        order = new UserOrder
                         {
                             UserId = model.UserId.Value,
                             OrderNumber = orderNumber,
@@ -496,7 +503,7 @@ namespace NGOPlatformWeb.Controllers
                             else
                             {
                                 // 創建單項物資訂單
-                                var order = new UserOrder
+                                order = new UserOrder
                                 {
                                     UserId = model.UserId.Value,
                                     OrderNumber = orderNumber,
@@ -576,6 +583,24 @@ namespace NGOPlatformWeb.Controllers
                     CaseId = model.CaseId
                 };
 
+                // 如果選擇 ECPay，則跳轉到 ECPay 付款
+                if (model.PaymentMethod == "ecpay" && order != null)
+                {
+                    // 產生 ECPay 付款表單
+                    var returnUrl = Url.Action("EcpayCallback", "Purchase", null, Request.Scheme);
+                    var clientBackUrl = Url.Action("PaymentSuccess", "Purchase", new { MerchantTradeNo = order.OrderNumber }, Request.Scheme);
+                    
+                    // 調試信息
+                    ViewBag.DebugReturnUrl = returnUrl;
+                    ViewBag.DebugClientBackUrl = clientBackUrl;
+                    ViewBag.DebugOrderNumber = order.OrderNumber;
+                    
+                    var paymentForm = _ecpayService.CreatePayment(order, returnUrl!, clientBackUrl!);
+
+                    ViewBag.PaymentForm = paymentForm;
+                    return View("EcpayRedirect");
+                }
+                
                 return View("Success", result);
             }
             catch (Exception ex)
@@ -671,6 +696,143 @@ namespace NGOPlatformWeb.Controllers
                 return "https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400&h=250&fit=crop";
             else
                 return "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=400&h=250&fit=crop";
+        }
+
+        // ECPay 付款處理
+        [HttpPost]
+        public IActionResult EcpayPayment(PaymentViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Payment", model);
+            }
+
+            try
+            {
+                // 建立訂單
+                var order = new UserOrder
+                {
+                    UserId = model.UserId ?? 0,
+                    OrderNumber = GenerateOrderNumberAsync().Result,
+                    OrderDate = DateTime.Now,
+                    TotalPrice = model.TotalPrice,
+                    PaymentStatus = "待付款",
+                    PaymentMethod = "ecpay",
+                    OrderSource = model.SupplyType ?? "regular",
+                    EmergencyNeedId = model.EmergencyNeedId
+                };
+
+                _context.UserOrders.Add(order);
+                _context.SaveChanges();
+
+                // 建立訂單明細
+                if (model.SupplyId.HasValue)
+                {
+                    var orderDetail = new UserOrderDetail
+                    {
+                        UserOrderId = order.UserOrderId,
+                        SupplyId = model.SupplyId.Value,
+                        Quantity = model.Quantity,
+                        UnitPrice = model.TotalPrice / model.Quantity,
+                        EmergencyNeedId = model.EmergencyNeedId
+                    };
+                    _context.UserOrderDetails.Add(orderDetail);
+                    _context.SaveChanges();
+                }
+
+                // 產生 ECPay 付款表單
+                var returnUrl = Url.Action("EcpayCallback", "Purchase", null, Request.Scheme);
+                var clientBackUrl = Url.Action("PaymentSuccess", "Purchase", null, Request.Scheme);
+                var paymentForm = _ecpayService.CreatePayment(order, returnUrl!, clientBackUrl!);
+
+                ViewBag.PaymentForm = paymentForm;
+                return View("EcpayRedirect");
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = "建立付款時發生錯誤: " + ex.Message;
+                if (ex.InnerException != null)
+                {
+                    errorMessage += " 內部錯誤: " + ex.InnerException.Message;
+                    if (ex.InnerException.InnerException != null)
+                    {
+                        errorMessage += " 更詳細錯誤: " + ex.InnerException.InnerException.Message;
+                    }
+                }
+                ModelState.AddModelError("", errorMessage);
+                return View("Payment", model);
+            }
+        }
+
+        // ECPay 付款回調
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult EcpayCallback()
+        {
+            var parameters = Request.Form.ToDictionary(x => x.Key, x => x.Value.ToString());
+            var success = _ecpayService.ProcessCallback(parameters);
+            
+            // 記錄回調參數供調試
+            var merchantTradeNo = parameters.GetValueOrDefault("MerchantTradeNo");
+            var rtnCode = parameters.GetValueOrDefault("RtnCode");
+            
+            return Content(success ? "1|OK" : "0|ERROR");
+        }
+
+        // 付款成功頁面
+        [AllowAnonymous]
+        public IActionResult PaymentSuccess()
+        {
+            // 嘗試從多個來源獲取訂單編號
+            string? merchantTradeNo = Request.Query["MerchantTradeNo"].FirstOrDefault() 
+                                    ?? Request.Form["MerchantTradeNo"].FirstOrDefault()
+                                    ?? Request.Query["orderNumber"].FirstOrDefault();
+
+            if (string.IsNullOrEmpty(merchantTradeNo))
+            {
+                // 如果沒有訂單編號，顯示通用成功頁面
+                var genericResult = new OrderResultViewModel
+                {
+                    OrderNumber = "未知",
+                    OrderDate = DateTime.Now,
+                    TotalPrice = 0,
+                    PaymentStatus = "付款成功",
+                    PaymentMethod = "ECPay",
+                    DonorName = "匿名捐贈者"
+                };
+                return View("Success", genericResult);
+            }
+
+            var order = _context.UserOrders
+                .Include(o => o.OrderDetails)
+                .FirstOrDefault(o => o.OrderNumber == merchantTradeNo);
+
+            if (order == null)
+            {
+                // 即使找不到訂單，也顯示成功頁面
+                var fallbackResult = new OrderResultViewModel
+                {
+                    OrderNumber = merchantTradeNo,
+                    OrderDate = DateTime.Now,
+                    TotalPrice = 0,
+                    PaymentStatus = "付款成功",
+                    PaymentMethod = "ECPay",
+                    DonorName = "匿名捐贈者"
+                };
+                return View("Success", fallbackResult);
+            }
+
+            var viewModel = new OrderResultViewModel
+            {
+                OrderNumber = order.OrderNumber!,
+                OrderDate = order.OrderDate,
+                TotalPrice = order.TotalPrice,
+                PaymentStatus = order.PaymentStatus!,
+                PaymentMethod = "ECPay",
+                DonorName = order.OrderDetails.FirstOrDefault()?.Supply?.SupplyName ?? "物資認購"
+            };
+
+            return View("Success", viewModel);
         }
     }
 }

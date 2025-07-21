@@ -134,31 +134,10 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/profile-common.js"></script>
     <script>
         function previewImage(input) {
-            const file = input.files[0];
-            if (file) {
-                // 檢查檔案類型
-                if (!file.type.match(/image\/(jpeg|jpg|png)/)) {
-                    alert('只允許上傳 JPG 或 PNG 格式的圖片');
-                    input.value = '';
-                    return;
-                }
-
-                // 檢查檔案大小 (2MB)
-                if (file.size > 2 * 1024 * 1024) {
-                    alert('檔案大小不能超過 2MB');
-                    input.value = '';
-                    return;
-                }
-
-                // 預覽圖片
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('currentAvatar').src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
+            return previewProfileImage(input, 'currentAvatar');
         }
     </script>
 }

@@ -14,6 +14,7 @@ builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<PasswordService>();
 builder.Services.AddScoped<PasswordMigrationService>();
 builder.Services.AddScoped<ImageUploadService>();
+builder.Services.AddScoped<EcpayService>();
 // Add Background Service
 builder.Services.AddHostedService<TokenCleanupService>();
 // DbContext

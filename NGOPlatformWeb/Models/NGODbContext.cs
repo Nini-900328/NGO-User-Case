@@ -26,5 +26,8 @@ namespace NGOPlatformWeb.Models.Entity
         
         // 緊急物資認購記錄系統
         public DbSet<EmergencyPurchaseRecord> EmergencyPurchaseRecords { get; set; }
+        
+        // ECPay 付款交易記錄
+        public DbSet<EcpayTransaction> EcpayTransactions { get; set; }
     }
 }
