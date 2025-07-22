@@ -190,3 +190,60 @@
         .activity-card-vertical .btn-join:hover {
             background: linear-gradient(45deg, #f28c45, #f56a0f);
         }
+
+.filter-btn {
+    display: inline-block;
+    text-decoration: none;
+    border: 1px solid #f28c45; /* 邊框珊瑚橘 */
+    background-color: #fff;
+    color: #f28c45; /* 文字珊瑚橘 */
+    border-radius: 50px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.3s;
+    cursor: pointer;
+    margin-top: 10px;
+    line-height: 1.2;
+}
+
+    /* 滑鼠移上去時 */
+    .filter-btn:hover {
+        background-color: #f28c45; /* 背景珊瑚橘 */
+        color: #fff; /* 文字白 */
+        border-color: #f28c45; /* 邊框也跟著珊瑚橘 */
+    }
+
+    /* 被選取的狀態 */
+    .filter-btn.active {
+        background-color: #f28c45;
+        color: #fff;
+        border-color: #f28c45;
+        box-shadow: none;
+    }
+
+/* 覆寫 Bootstrap 的 btn-outline-success 為珊瑚橘 */
+.btn-outline-success {
+    border-color: #f28c45 !important;
+    color: #f28c45 !important;
+    background-color: #fff !important;
+}
+
+    .btn-outline-success:hover,
+    .btn-outline-success.active,
+    .btn-outline-success:focus {
+        background-color: #f28c45 !important;
+        color: #fff !important;
+        border-color: #f28c45 !important;
+    }
+.search-box:focus {
+    border-color: #f28c45; /* 邊框改珊瑚橘 */
+    box-shadow: 0 0 5px rgba(242, 140, 69, 0.6); /* 外框光暈珊瑚橘 */
+    outline: none; /* 移除預設藍色外框 */
+}
+.btn-filter:focus,
+.btn-filter:active {
+    outline: none !important;
+    border-color: #f28c45 !important;
+    box-shadow: 0 0 5px rgba(242,140,69,0.6) !important; /* 橘色光暈 */
+}
