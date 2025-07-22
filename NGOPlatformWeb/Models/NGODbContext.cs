@@ -32,5 +32,21 @@ namespace NGOPlatformWeb.Models.Entity
         
         // 成就系統
         public DbSet<UserAchievement> UserAchievements { get; set; }
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            
+            // 配置有觸發器的表，告訴 EF Core 不使用 OUTPUT 子句
+            // 使用任意名稱，EF Core 只需要知道這些表有觸發器
+            modelBuilder.Entity<Activity>()
+                .ToTable(tb => tb.HasTrigger("ActivityTrigger"));
+                
+            modelBuilder.Entity<UserActivityRegistration>()
+                .ToTable(tb => tb.HasTrigger("UserRegistrationTrigger"));
+                
+            modelBuilder.Entity<CaseActivityRegistrations>()
+                .ToTable(tb => tb.HasTrigger("CaseRegistrationTrigger"));
+        }
     }
 }
