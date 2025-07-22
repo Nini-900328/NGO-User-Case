@@ -1,30 +1,16 @@
 /* ================================
    NGO Platform - Achievement Wall Styles
-   成就牆專用樣式 - 獨立設計不影響其他頁面
+   成就牆專用樣式 - 專業低調設計
    ================================ */
 
 /* 成就牆主容器 */
 .achievement-wall-card {
-    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-    border-radius: 20px;
+    background: #ffffff;
+    border-radius: 8px;
     padding: 2rem;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e9ecef;
     margin-bottom: 2rem;
-    position: relative;
-    overflow: hidden;
-}
-
-/* 成就牆背景裝飾 */
-.achievement-wall-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 100px;
-    height: 100px;
-    background: radial-gradient(circle, rgba(255, 193, 7, 0.1) 0%, transparent 70%);
-    border-radius: 50%;
 }
 
 /* 成就牆標題區 */
@@ -34,8 +20,7 @@
     align-items: center;
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid #f1f3f4;
-    position: relative;
+    border-bottom: 1px solid #e9ecef;
 }
 
 .achievement-header h5 {
@@ -46,18 +31,17 @@
 }
 
 .achievement-header i {
-    color: #ffc107;
-    text-shadow: 0 2px 4px rgba(255, 193, 7, 0.3);
+    color: #6c757d;
 }
 
 .achievement-count {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 25px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    background: #f8f9fa;
+    color: #495057;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    border: 1px solid #dee2e6;
 }
 
 /* 成就網格佈局 */
@@ -71,63 +55,53 @@
 /* 個別成就項目 */
 .achievement-item {
     background: white;
-    border-radius: 16px;
+    border-radius: 6px;
     padding: 1.5rem;
-    border: 2px solid transparent;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #e9ecef;
+    transition: all 0.2s ease;
     position: relative;
-    overflow: hidden;
 }
 
 /* 已獲得成就 */
 .achievement-item.earned {
-    border-color: rgba(40, 167, 69, 0.3);
-    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.15);
+    border-color: #198754;
+    background: #f8fff9;
 }
 
 .achievement-item.earned:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 35px rgba(40, 167, 69, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* 未獲得成就 */
 .achievement-item.locked {
     background: #f8f9fa;
-    border-color: #e9ecef;
-    opacity: 0.7;
+    border-color: #dee2e6;
+    opacity: 0.6;
 }
 
 .achievement-item.locked:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    opacity: 0.8;
 }
 
-/* 新獲得成就 - 特殊效果 (24小時內) */
+/* 新獲得成就 - 簡潔效果 (24小時內) */
 .achievement-item.new-achievement {
-    animation: newAchievementPulse 3s ease-in-out infinite;
-    border-color: #ffc107;
-    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
+    border-color: #0d6efd;
+    background: #f0f6ff;
     position: relative;
 }
 
 .achievement-item.new-achievement::before {
-    content: '24hrs';
+    content: 'NEW';
     position: absolute;
-    top: -5px;
-    left: -5px;
-    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+    top: 8px;
+    right: 8px;
+    background: #0d6efd;
     color: white;
-    font-size: 0.6rem;
-    font-weight: 700;
+    font-size: 0.65rem;
+    font-weight: 600;
     padding: 0.2rem 0.4rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.4);
-    z-index: 1;
-}
-
-@keyframes newAchievementPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.03); }
+    border-radius: 3px;
 }
 
 /* 成就圖標區域 */
@@ -140,46 +114,28 @@
     border-radius: 50%;
     margin: 0 auto 1rem;
     position: relative;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .earned .achievement-icon {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+    background: #198754;
+    border: 2px solid #198754;
 }
 
 .locked .achievement-icon {
-    background: #dee2e6;
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
 }
 
 .achievement-icon i {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: white;
 }
 
 .locked .achievement-icon i {
-    color: #6c757d;
+    color: #adb5bd;
 }
 
-/* NEW 徽章 */
-.new-badge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%);
-    color: white;
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 0.2rem 0.5rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);
-    animation: newBadgeBounce 1s ease-in-out infinite alternate;
-}
-
-@keyframes newBadgeBounce {
-    0% { transform: scale(1) rotate(-3deg); }
-    100% { transform: scale(1.1) rotate(3deg); }
-}
 
 /* 成就資訊區域 */
 .achievement-info {
@@ -187,7 +143,7 @@
 }
 
 .achievement-name {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 600;
     color: #2c3e50;
     margin-bottom: 0.5rem;
@@ -198,7 +154,7 @@
 }
 
 .achievement-desc {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #6c757d;
     line-height: 1.4;
     margin-bottom: 0.5rem;
@@ -210,9 +166,9 @@
 }
 
 .earned-date {
-    color: #28a745;
+    color: #198754;
     font-weight: 500;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
 }
 
 /* 無成就狀態 */
@@ -277,9 +233,9 @@
     }
 }
 
-/* 特殊成就圖標顏色 */
-.achievement-icon.star-icon { background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%); }
-.achievement-icon.heart-icon { background: linear-gradient(135deg, #e83e8c 0%, #dc3545 100%); }
-.achievement-icon.rainbow-icon { background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 50%, #ffc107 100%); }
-.achievement-icon.users-icon { background: linear-gradient(135deg, #20c997 0%, #0dcaf0 100%); }
-.achievement-icon.check-icon { background: linear-gradient(135deg, #198754 0%, #20c997 100%); }
+/* 特殊成就圖標顏色 - 統一專業色調 */
+.earned .achievement-icon.star-icon { background: #6c757d; border-color: #6c757d; }
+.earned .achievement-icon.heart-icon { background: #6c757d; border-color: #6c757d; }
+.earned .achievement-icon.rainbow-icon { background: #6c757d; border-color: #6c757d; }
+.earned .achievement-icon.users-icon { background: #6c757d; border-color: #6c757d; }
+.earned .achievement-icon.check-icon { background: #198754; border-color: #198754; }

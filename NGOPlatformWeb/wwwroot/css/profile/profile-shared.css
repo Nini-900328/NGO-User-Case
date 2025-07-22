@@ -676,8 +676,8 @@
 }
 
 .status-cancelled {
-    background: #f8d7da;
-    color: #721c24;
+    background: #f8f9fa;
+    color: #6c757d;
 }
 
 .status-paid {

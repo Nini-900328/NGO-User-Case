@@ -9,13 +9,14 @@
     align-items: center;
     padding: 0.75rem;
     margin-bottom: 0.5rem;
-    background: #f8f9fa;
-    border-radius: 12px;
-    transition: background-color 0.3s ease;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    transition: background-color 0.15s ease;
 }
 
 .activity-item:hover {
-    background: #e9ecef;
+    background: #f8f9fa;
 }
 
 .activity-thumb {
@@ -60,13 +61,14 @@
 .purchase-item {
     padding: 0.75rem;
     margin-bottom: 0.5rem;
-    background: #f8f9fa;
-    border-radius: 12px;
-    transition: background-color 0.3s ease;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    transition: background-color 0.15s ease;
 }
 
 .purchase-item:hover {
-    background: #e9ecef;
+    background: #f8f9fa;
 }
 
 .purchase-info {
@@ -126,19 +128,19 @@
 
 /* 認購總覽特殊樣式 */
 .purchase-overview .stat-number {
-    color: #dc3545;
+    color: #6f42c1;
 }
 
 .purchase-overview .overview-header h5 {
-    color: #dc3545;
+    color: #6f42c1;
 }
 
 .purchase-overview .view-all-btn {
-    color: #dc3545;
+    color: #6f42c1;
 }
 
 .purchase-overview .view-all-btn:hover {
-    color: #bd2130;
+    color: #5a2d91;
 }
 
 /* Case主題的活動總覽 */

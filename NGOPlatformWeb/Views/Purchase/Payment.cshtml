@@ -98,12 +98,17 @@
                                         {
                                             <div class="quantity-selector mb-2">
                                                 <label class="form-label">援助數量:</label>
-                                                <select id="quantitySelect" class="form-select form-select-sm d-inline-block" style="width: auto;">
-                                                    @for (int i = 1; i <= Model.MaxQuantity.Value; i++)
-                                                    {
-                                                        <option value="@i" selected="@(i == Model.Quantity)">@i 份</option>
-                                                    }
-                                                </select>
+                                                <div class="custom-select-wrapper">
+                                                    <select id="quantitySelect" class="custom-select">
+                                                        @for (int i = 1; i <= Model.MaxQuantity.Value; i++)
+                                                        {
+                                                            <option value="@i" selected="@(i == Model.Quantity)">@i 份</option>
+                                                        }
+                                                    </select>
+                                                    <div class="select-arrow">
+                                                        <i class="fas fa-chevron-down"></i>
+                                                    </div>
+                                                </div>
                                                 <div class="remaining-info mt-2">
                                                     <small class="text-muted">
                                                         個案剩餘需求: @Model.MaxQuantity 份<br>
@@ -183,8 +188,9 @@
                                             <input type="radio" asp-for="PaymentMethod" value="credit_card" checked />
                                             <label>
                                                 <i class="fas fa-credit-card"></i>
-                                                <span>信用卡付款</span>
-                                                <small>支援 Visa、Mastercard、JCB</small>
+                                                <div class="payment-text">
+                                                    <span>信用卡付款 <small class="inline-support">Visa、Mastercard、JCB</small></span>
+                                                </div>
                                             </label>
                                         </div>
                                         
@@ -192,8 +198,9 @@
                                             <input type="radio" asp-for="PaymentMethod" value="atm" />
                                             <label>
                                                 <i class="fas fa-university"></i>
-                                                <span>ATM 轉帳</span>
-                                                <small>虛擬帳號，24小時內完成</small>
+                                                <div class="payment-text">
+                                                    <span>ATM 轉帳 <small class="inline-support">虛擬帳號，24小時內完成</small></span>
+                                                </div>
                                             </label>
                                         </div>
                                         
@@ -201,37 +208,34 @@
                                             <input type="radio" asp-for="PaymentMethod" value="ecpay" />
                                             <label>
                                                 <i class="fas fa-credit-card"></i>
-                                                <span>綠界 ECPay</span>
-                                                <small>支援信用卡、LINE Pay、Apple Pay</small>
+                                                <div class="payment-text">
+                                                    <span>綠界 ECPay <small class="inline-support">信用卡、LINE Pay、Apple Pay</small></span>
+                                                </div>
                                             </label>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- 模擬信用卡資訊 -->
+                                <!-- 信用卡資訊 -->
                                 <div class="form-section credit-card-section">
-                                    <h5>信用卡資訊 (模擬)</h5>
-                                    <div class="card-demo-note">
-                                        <i class="fas fa-info-circle"></i>
-                                        此為模擬付款，請使用測試卡號
-                                    </div>
+                                    <h5>信用卡資訊</h5>
                                     
                                     <div class="form-group">
                                         <label>卡號</label>
-                                        <input type="text" class="form-control" placeholder="4111 1111 1111 1111" maxlength="19" readonly />
+                                        <input type="text" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19" />
                                     </div>
                                     
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label>有效期限</label>
-                                                <input type="text" class="form-control" placeholder="12/25" readonly />
+                                                <input type="text" class="form-control" placeholder="MM/YY" maxlength="5" />
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label>安全碼</label>
-                                                <input type="text" class="form-control" placeholder="123" readonly />
+                                                <input type="text" class="form-control" placeholder="CVV" maxlength="3" />
                                             </div>
                                         </div>
                                     </div>

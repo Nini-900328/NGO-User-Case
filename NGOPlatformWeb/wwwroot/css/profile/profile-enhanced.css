@@ -225,46 +225,21 @@
 .overview-card {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
-    border-radius: 25px;
-    padding: 2rem;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e9ecef;
     height: 100%;
     position: relative;
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .overview-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
-/* 活動總覽特殊背景 */
-.activity-overview::before {
-    content: '';
-    position: absolute;
-    top: -20px;
-    right: -20px;
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, #28a745, #20c997);
-    border-radius: 50%;
-    opacity: 0.1;
-}
-
-/* 認購總覽特殊背景 */
-.purchase-overview::before {
-    content: '';
-    position: absolute;
-    top: -20px;
-    right: -20px;
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, #ffc107, #fd7e14);
-    border-radius: 50%;
-    opacity: 0.1;
-}
 
 /* 統計數字增強 */
 .overview-stats .stat-number {
@@ -286,37 +261,60 @@
 /* 項目列表增強 */
 .activity-item,
 .purchase-item {
-    background: rgba(248, 249, 250, 0.5);
-    border-radius: 15px;
+    background: #ffffff;
+    border-radius: 8px;
     padding: 1rem;
     margin-bottom: 0.75rem;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+    will-change: background-color;
 }
 
 .activity-item:hover,
 .purchase-item:hover {
-    background: rgba(248, 249, 250, 0.8);
-    transform: translateX(5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    background: #f8f9fa;
+    border-color: #dee2e6;
 }
 
-/* 查看全部按鈕增強 */
+/* 查看全部按鈕增強 - NAV風格 */
 .view-all-btn {
-    color: #667eea;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9rem;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    border: 2px solid #667eea;
+    color: #6c757d !important;
+    text-decoration: none !important;
+    font-weight: 500;
+    font-size: 0.85rem;
+    padding: 0.6rem 1rem;
+    border-radius: 12px;
+    border: 1px solid transparent;
     transition: all 0.3s ease;
+    background: #f8f9fa;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.view-all-btn::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    transition: width 0.3s ease;
+    z-index: -1;
+}
+
+.view-all-btn:hover::before {
+    width: 100%;
 }
 
 .view-all-btn:hover {
-    background: #667eea;
-    color: white;
-    transform: scale(1.05);
+    color: white !important;
+    text-decoration: none !important;
+    transform: translateX(3px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 /* 無資料狀態增強 */
@@ -424,11 +422,12 @@
 
 /* 互動動畫 */
 .profile-avatar img:hover {
-    animation: pulse 1s ease-in-out;
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
 }
 
 .achievement-item.new-achievement {
-    animation: pulse 2s ease-in-out infinite;
+    transition: all 0.3s ease;
 }
 
 /* 載入骨架動畫 */
@@ -452,20 +451,22 @@
     animation: float 6s ease-in-out infinite;
 }
 
-/* hover 光暈效果 */
+/* hover 邊框效果 */
 .overview-card::after {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    transition: left 0.5s;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid transparent;
+    border-radius: 16px;
+    transition: border-color 0.3s ease;
+    pointer-events: none;
 }
 
 .overview-card:hover::after {
-    left: 100%;
+    border-color: rgba(102, 126, 234, 0.3);
 }
 
 /* 統計數字閃爍動畫 */

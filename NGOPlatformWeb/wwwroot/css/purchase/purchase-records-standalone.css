@@ -456,14 +456,14 @@
 
 /* 援助故事卡片 */
 .donation-story-card {
-    background: #ffffff !important;
+    background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%) !important;
     border-radius: 16px !important;
     overflow: hidden !important;
     box-shadow: 0 3px 20px rgba(0,0,0,0.08) !important;
     transition: all 0.3s ease !important;
     margin: 0 !important;
     padding: 0 !important;
-    border: 1px solid #f0f2f5 !important;
+    border: 1px solid #e9ecef !important;
 }
 
 .donation-story-card:hover {
@@ -472,21 +472,32 @@
 }
 
 .donation-story-card.emergency-type {
-    border-left: 4px solid #e74c3c !important;
+    border-left: 4px solid #fd7e14 !important;
+    background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%) !important;
+}
+
+.donation-story-card.emergency-type .story-header {
+    background: white !important;
 }
 
 .donation-story-card.package-type {
     border-left: 4px solid #3498db !important;
+    background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%) !important;
+}
+
+.donation-story-card.package-type .story-header {
+    background: white !important;
 }
 
 /* 故事標題區 */
 .story-header {
     display: flex !important;
-    align-items: flex-start !important;
+    align-items: center !important;
+    justify-content: space-between !important;
     gap: 20px !important;
     padding: 24px !important;
-    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
-    border-bottom: 1px solid #eee !important;
+    background: white !important;
+    border-bottom: 1px solid #f0f2f5 !important;
 }
 
 .story-timeline {
@@ -515,7 +526,10 @@
 
 .story-content {
     flex: 1 !important;
-    padding-right: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    min-height: 80px !important;
 }
 
 .story-title {
@@ -555,17 +569,33 @@
 
 .story-amount {
     flex-shrink: 0 !important;
-    text-align: right !important;
-    padding: 16px !important;
-    background: #ffffff !important;
-    border-radius: 12px !important;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important;
-    border: 1px solid #f0f2f5 !important;
+    text-align: center !important;
+    padding: 16px 20px !important;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+    border: 1px solid #e9ecef !important;
+    position: relative !important;
+    min-width: 120px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
 }
+
+.donation-story-card.emergency-type .story-amount {
+    border-color: #e9ecef !important;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
+}
+
+.donation-story-card.package-type .story-amount {
+    border-color: #e9ecef !important;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
+}
+
 
 .amount-label {
     font-size: 11px !important;
-    color: #95a5a6 !important;
+    color: #6c757d !important;
     font-weight: 500 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.5px !important;
@@ -582,28 +612,29 @@
 .payment-info {
     display: flex !important;
     flex-direction: column !important;
-    gap: 6px !important;
-    margin-top: 8px !important;
+    gap: 4px !important;
+    align-items: center !important;
+    margin-top: 6px !important;
 }
 
 .payment-method {
-    font-size: 11px !important;
-    color: #7f8c8d !important;
+    font-size: 10px !important;
+    color: #6c757d !important;
     font-weight: 500 !important;
     display: flex !important;
     align-items: center !important;
+    justify-content: center !important;
     gap: 4px !important;
+    text-align: center !important;
 }
 
 .payment-method i {
-    font-size: 10px !important;
-    color: #95a5a6 !important;
+    font-size: 9px !important;
+    color: #6c757d !important;
 }
 
 .delivery-status {
-    font-size: 12px !important;
-    color: #27ae60 !important;
-    font-weight: 500 !important;
+    display: none !important;
 }
 
 /* 可展開詳情區域 */
@@ -729,10 +760,21 @@
     justify-content: space-between !important;
     align-items: center !important;
     padding: 20px 24px !important;
-    background: #f8f9fa !important;
-    border-top: 1px solid #f0f2f5 !important;
+    background: linear-gradient(135deg, #f8f9fa 0%, #f0f2f5 100%) !important;
+    border-top: 1px solid #e9ecef !important;
     flex-wrap: wrap !important;
     gap: 16px !important;
+    position: relative !important;
+}
+
+.donation-story-card .impact-footer::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 2px !important;
+    background: linear-gradient(90deg, transparent, rgba(52, 152, 219, 0.2), transparent) !important;
 }
 
 .donation-story-card .impact-stats {
@@ -939,11 +981,12 @@
 }
 
 .amount-value {
-    font-size: 28px !important;
+    font-size: 24px !important;
     font-weight: 700 !important;
-    color: #28a745 !important;
+    color: #0056b3 !important;
     margin: 0 !important;
-    line-height: 1 !important;
+    line-height: 1.2 !important;
+}
 }
 
 /* 狀態標籤 */
