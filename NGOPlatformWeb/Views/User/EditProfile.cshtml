@@ -6,6 +6,8 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/profile/profile-shared.css" />
     <link rel="stylesheet" href="~/css/profile/profile-components.css" />
+    <link rel="stylesheet" href="~/css/profile/profile-enhanced.css" />
+    <link rel="stylesheet" href="~/css/profile/profile-edit.css" />
 }
 
 <div class="container py-5">
@@ -44,9 +46,9 @@
 
         <!-- 右側主內容區域 -->
         <div class="col-md-8">
-            <div class="profile-main-content">
-                <div class="section-header">
-                    <h3><i class="fas fa-edit me-2"></i>編輯個人資料</h3>
+            <div class="profile-content">
+                <div class="content-header">
+                    <h4><i class="fas fa-edit me-2"></i>編輯個人資料</h4>
                     <p class="text-muted">更新您的個人資訊</p>
                 </div>
 
@@ -122,7 +124,7 @@
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save me-2"></i>儲存變更
                         </button>
-                        <a asp-action="UserProfile" class="btn btn-outline-secondary ms-2">
+                        <a asp-action="UserProfile" class="btn btn-secondary">
                             <i class="fas fa-times me-2"></i>取消
                         </a>
                     </div>
@@ -136,8 +138,39 @@
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/profile-common.js"></script>
     <script>
+        // 頁面載入動畫
+        document.addEventListener('DOMContentLoaded', function() {
+            // 為所有主要元素添加淡入動畫
+            const elements = document.querySelectorAll('.profile-sidebar, .profile-content');
+            elements.forEach((element, index) => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    element.style.transition = 'all 0.6s ease';
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+            
+            // 表單區域依序淡入
+            const sections = document.querySelectorAll('.form-section');
+            sections.forEach((section, index) => {
+                setTimeout(() => {
+                    section.style.animation = 'slideInUp 0.5s ease forwards';
+                }, 800 + (index * 200));
+            });
+        });
+        
         function previewImage(input) {
             return previewProfileImage(input, 'currentAvatar');
         }
+        
+        // 表單提交時的載入效果
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const submitBtn = document.querySelector('.btn-primary');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>儲存中...';
+            submitBtn.disabled = true;
+        });
     </script>
 }

@@ -18,12 +18,14 @@ namespace NGOPlatformWeb.Controllers
         private readonly NGODbContext _context;
         private readonly EmailService _emailService;
         private readonly PasswordService _passwordService;
+        private readonly AchievementService _achievementService;
 
-        public AuthController(NGODbContext context, EmailService emailService, PasswordService passwordService)
+        public AuthController(NGODbContext context, EmailService emailService, PasswordService passwordService, AchievementService achievementService)
         {
             _context = context;
             _emailService = emailService;
             _passwordService = passwordService;
+            _achievementService = achievementService;
         }
 
         // GET: /Auth/Login
@@ -40,26 +42,10 @@ namespace NGOPlatformWeb.Controllers
             if (!ModelState.IsValid)
                 return View(vm);
 
-            // 1) 嘗試普通使用者（BCrypt）
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Email == vm.Email);
+                // 嘗試一般使用者登入
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == vm.Email);
             
-            bool userPasswordValid = false;
-            if (user != null)
-            {
-                // 檢查是否為 BCrypt 雜湊
-                if (user.Password.StartsWith("$2a$"))
-                {
-                    userPasswordValid = _passwordService.VerifyPassword(vm.Password, user.Password);
-                }
-                else
-                {
-                    // 明文密碼比較（向下兼容）
-                    userPasswordValid = vm.Password == user.Password;
-                }
-            }
-
-            if (userPasswordValid)
+            if (user != null && ValidatePassword(vm.Password, user.Password))
             {
                 await SignInAsync(
                     httpContext: HttpContext,
@@ -72,26 +58,10 @@ namespace NGOPlatformWeb.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            // 2) 嘗試個案登入
-            var caseLogin = await _context.CaseLogins
-                .FirstOrDefaultAsync(c => c.Email == vm.Email);
+            // 嘗試個案登入
+            var caseLogin = await _context.CaseLogins.FirstOrDefaultAsync(c => c.Email == vm.Email);
             
-            bool passwordValid = false;
-            if (caseLogin != null)
-            {
-                // 檢查是否為 BCrypt 雜湊（以 $2a$ 開頭）
-                if (caseLogin.Password.StartsWith("$2a$"))
-                {
-                    passwordValid = _passwordService.VerifyPassword(vm.Password, caseLogin.Password);
-                }
-                else
-                {
-                    // 明文密碼比較（社工設定的初始密碼）
-                    passwordValid = vm.Password == caseLogin.Password;
-                }
-            }
-            
-            if (passwordValid)
+            if (caseLogin != null && ValidatePassword(vm.Password, caseLogin.Password))
             {
                 var caseName = await _context.Cases
                     .Where(c => c.CaseId == caseLogin.CaseId)
@@ -109,7 +79,7 @@ namespace NGOPlatformWeb.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            // 3) 都找不到就回錯誤
+            // 登入失敗
             ModelState.AddModelError(string.Empty, "帳號或密碼錯誤");
             return View(vm);
         }
@@ -174,6 +144,20 @@ namespace NGOPlatformWeb.Controllers
                 name: newUser.Name,
                 role: "User"
             );
+
+            // 檢查新用戶成就 (註冊時可能有初始成就)
+            try
+            {
+                var newAchievements = await _achievementService.CheckAndAwardAchievements(newUser.UserId);
+                if (newAchievements.Any())
+                {
+                    TempData["NewAchievements"] = string.Join(",", newAchievements);
+                }
+            }
+            catch
+            {
+                // 成就檢查失敗不影響註冊流程
+            }
 
             TempData["SuccessMessage"] = "註冊成功！歡迎加入恩舉平台。";
             return RedirectToAction("Index", "Home");
@@ -378,11 +362,16 @@ namespace NGOPlatformWeb.Controllers
             }
         }
 
-        // 登入設計演示頁面 - 不影響現有功能
-        [HttpGet]
-        public IActionResult LoginDemo()
+        // 密碼驗證輔助方法 - 支援 BCrypt 和明文密碼
+        private bool ValidatePassword(string inputPassword, string storedPassword)
         {
-            return View();
+            // BCrypt 加密密碼驗證
+            if (storedPassword.StartsWith("$2a$"))
+            {
+                return _passwordService.VerifyPassword(inputPassword, storedPassword);
+            }
+            // 向下兼容明文密碼
+            return inputPassword == storedPassword;
         }
 
     }

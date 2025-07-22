@@ -17,12 +17,14 @@ namespace NGOPlatformWeb.Controllers
         private readonly NGODbContext _context;
         private readonly PasswordService _passwordService;
         private readonly ImageUploadService _imageUploadService;
+        private readonly AchievementService _achievementService;
 
-        public UserController(NGODbContext context, PasswordService passwordService, ImageUploadService imageUploadService)
+        public UserController(NGODbContext context, PasswordService passwordService, ImageUploadService imageUploadService, AchievementService achievementService)
         {
             _context = context;
             _passwordService = passwordService;
             _imageUploadService = imageUploadService;
+            _achievementService = achievementService;
         }
         // 一般使用者的個人資料頁面 - 顯示基本資料、活動參與統計、認購統計
         [Authorize(Roles = "User")]
@@ -78,6 +80,25 @@ namespace NGOPlatformWeb.Controllers
                 .Where(o => o.UserId == userId && o.PaymentStatus == "已付款")
                 .SumAsync(o => o.TotalPrice);
 
+            // 檢查並獲取用戶成就
+            List<UserAchievementViewModel> userAchievements = new();
+            List<string> newlyEarnedAchievements = new();
+            try
+            {
+                newlyEarnedAchievements = await _achievementService.CheckAndAwardAchievements(userId);
+                userAchievements = await _achievementService.GetUserAchievements(userId);
+                
+                // 如果有新獲得的成就，設置到 TempData 讓前端知道
+                if (newlyEarnedAchievements.Any())
+                {
+                    TempData["NewlyEarnedAchievements"] = string.Join(",", newlyEarnedAchievements);
+                }
+            }
+            catch
+            {
+                // 成就系統失敗不影響頁面顯示
+            }
+
             // 建立 ViewModel 傳入前端頁面
             var vm = new UserProfileViewModel
             {
@@ -110,7 +131,10 @@ namespace NGOPlatformWeb.Controllers
                     TotalPrice = o.TotalPrice,
                     Status = o.PaymentStatus,
                     OrderNumber = o.OrderNumber
-                }).ToList()
+                }).ToList(),
+                
+                // 成就資料
+                Achievements = userAchievements
             };
 
             return View(vm); // 對應 Views/User/UserProfile.cshtml
@@ -121,15 +145,12 @@ namespace NGOPlatformWeb.Controllers
         [HttpGet]
         public IActionResult EditProfile()
         {
-            // 取得當前登入使用者的 Email
             var email = User.FindFirstValue(ClaimTypes.Email);
             if (email == null) return RedirectToAction("Login", "Auth");
 
-            // 查找使用者資料
             var user = _context.Users.FirstOrDefault(u => u.Email == email);
             if (user == null) return NotFound();
 
-            // 建立編輯用的 ViewModel
             var vm = new UserEditViewModel
             {
                 Name = user.Name,
@@ -148,16 +169,14 @@ namespace NGOPlatformWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> EditProfile(UserEditViewModel vm, IFormFile? profileImageFile)
         {
-            // 驗證表單資料
             if (!ModelState.IsValid)
                 return View(vm);
 
-            // 取得當前登入使用者
             var email = User.FindFirstValue(ClaimTypes.Email);
             var user = _context.Users.FirstOrDefault(u => u.Email == email);
             if (user == null) return NotFound();
 
-            // 處理圖片上傳
+            // 處理圖片上傳（如果有新圖片）
             string? newImagePath = user.ProfileImage;
             if (profileImageFile != null)
             {
@@ -183,7 +202,7 @@ namespace NGOPlatformWeb.Controllers
 
             _context.SaveChanges();
 
-            // 更新登入狀態 - 清除舊的 Cookie 並重新登入
+            // 重新登入以更新 Cookie 中的資料
             await HttpContext.SignOutAsync();
             await AuthController.SignInAsync(HttpContext,
                 id: user.UserId.ToString(),
@@ -237,16 +256,6 @@ namespace NGOPlatformWeb.Controllers
             }
         }
 
-        public IActionResult CaseActivityList()
-        {
-            // 之後會改成從資料庫撈，現在先給假資料
-            return View(); // View 名稱預設會叫 CaseActivityList.cshtml
-        }
-
-        public IActionResult CasePurchaseList()
-        {
-            return View();
-        }
 
         // 使用者活動報名紀錄頁面 - 顯示所有活動參與歷史
         [Authorize(Roles = "User")]

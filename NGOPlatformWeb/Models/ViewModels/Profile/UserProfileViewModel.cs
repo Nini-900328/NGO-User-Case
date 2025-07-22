@@ -1,4 +1,5 @@
 ﻿using NGOPlatformWeb.Models.Entity;
+using NGOPlatformWeb.Services;
 
 namespace NGOPlatformWeb.Models.ViewModels.Profile
 {
@@ -13,5 +14,8 @@ namespace NGOPlatformWeb.Models.ViewModels.Profile
         public int TotalPurchaseOrders { get; set; }
         public decimal TotalPurchaseAmount { get; set; }
         public List<PurchaseSummary> RecentPurchases { get; set; } = new List<PurchaseSummary>();
+        
+        // 成就系統
+        public List<UserAchievementViewModel> Achievements { get; set; } = new List<UserAchievementViewModel>();
     }
 }

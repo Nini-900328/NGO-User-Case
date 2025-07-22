@@ -822,6 +822,10 @@ namespace NGOPlatformWeb.Controllers
                 return View("Success", fallbackResult);
             }
 
+            // 獲取用戶名稱
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == order.UserId);
+            var donorName = user?.Name ?? "匿名捐贈者";
+            
             var viewModel = new OrderResultViewModel
             {
                 OrderNumber = order.OrderNumber!,
@@ -829,7 +833,7 @@ namespace NGOPlatformWeb.Controllers
                 TotalPrice = order.TotalPrice,
                 PaymentStatus = order.PaymentStatus!,
                 PaymentMethod = "ECPay",
-                DonorName = order.OrderDetails.FirstOrDefault()?.Supply?.SupplyName ?? "物資認購"
+                DonorName = donorName
             };
 
             return View("Success", viewModel);

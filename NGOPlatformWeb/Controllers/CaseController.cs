@@ -131,42 +131,24 @@ namespace NGOPlatformWeb.Controllers
 )
     .OrderByDescending(s => s.PickupDate) // ✅ 依領取時間排序
             .ToList()
-                // 暫時移除 EmergencySupplyNeeds 查詢，因為資料庫結構不匹配
-                // .Union(
-                //     _context.EmergencySupplyNeeds
-                //         .Include(e => e.Supply)
-                //         .ThenInclude(s => s.SupplyCategory)
-                //         .Where(e => e.CaseId == caseId && e.Status == "已領取")
-                //         .Select(e => new SupplyRecordItem
-                //         {
-                //             Name = e.Supply.SupplyName,
-                //             Category = e.Supply.SupplyCategory.SupplyCategoryName,
-                //             Quantity = e.Quantity,
-                //             ApplyDate = e.VisitDate ?? DateTime.Now,
-                //             PickupDate = e.PickupDate,
-                //             Status = "訪談物資", // 強制標示為訪談物資
-                //             ImageUrl = e.Supply.ImageUrl
-                //         })
-                // )
 
             };
             return View(viewModel);
         }
 
         [HttpGet]
-        public IActionResult CaseActivityList() //目前還未完成 無法顯示正確筆數
+        // 個案活動清單頁面 - 顯示已報名的活動
+        public IActionResult CaseActivityList()
         {
-            // 從登入者資訊取得 CaseId
             var caseIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (caseIdClaim == null)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Auth");
             }
 
             int currentCaseId = int.Parse(caseIdClaim.Value);
-            Console.WriteLine("✅ 目前登入者的 CaseId：" + currentCaseId);
 
-            // 撈取對應報名紀錄
+            // 查詢該個案的所有活動報名紀錄
             var result = (from reg in _context.CaseActivityRegistrations
                           join act in _context.Activities
                           on reg.ActivityId equals act.ActivityId
@@ -180,12 +162,10 @@ namespace NGOPlatformWeb.Controllers
                               EndDate = act.EndDate
                           }).ToList();
 
-            Console.WriteLine("✅ 撈出筆數：" + result.Count);
-
             return View(result);
         }
 
-        //for case edit page
+        // 個案個人資料頁面 - 顯示和編輯個案資料
         [Authorize(Roles = "Case")]
         public async Task<IActionResult> CaseProfile()
         {
@@ -237,9 +217,9 @@ namespace NGOPlatformWeb.Controllers
                     Category = r.Activity?.Category ?? ""
                 }).ToList(),
 
-                // 物資申請統計（預留給其他組員）
-                TotalApplications = 0, // 待實作
-                PendingApplications = 0 // 待實作
+                // TODO: 物資申請統計待其他組員實作
+                TotalApplications = 0,
+                PendingApplications = 0
             };
 
             return View(vm);

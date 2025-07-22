@@ -21,20 +21,6 @@ body {
   margin-bottom: 60px;
 }
 
-/*測試用 styles*/
-@keyframes scroll-left {
-    0% {
-        transform: translate3d(100%, 0, 0);
-    }
-
-    100% {
-        transform: translate3d(-100%, 0, 0);
-    }
-}
-
-marquee {
-    animation: scroll-left 20s linear infinite;
-}
 
 .fixed-icon {
     width: 1.25rem; /* 固定 icon 寬度，統一對齊 */
