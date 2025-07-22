@@ -58,15 +58,22 @@
                 <li class="nav-item">
                     @if (User.FindFirstValue(ClaimTypes.Role) == "Case")
                     {
-                        <a asp-controller="Activity" asp-action="CaseActivityIndex"
-                           class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Activity" && ViewContext.RouteData.Values["action"]?.ToString() == "CaseActivityIndex" ? "active" : "")">
+                        <a asp-controller="Activity" asp-action="CaseIndex"
+                           class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Activity" && (ViewContext.RouteData.Values["action"]?.ToString() == "CaseIndex" || ViewContext.RouteData.Values["action"]?.ToString() == "CaseActivityIndex") ? "active" : "")">
+                            <i class="fas fa-calendar-alt"></i>活動報名
+                        </a>
+                    }
+                    else if (User.FindFirstValue(ClaimTypes.Role) == "User")
+                    {
+                        <a asp-controller="Activity" asp-action="UserIndex"
+                           class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Activity" && ViewContext.RouteData.Values["action"]?.ToString() == "UserIndex" ? "active" : "")">
                             <i class="fas fa-calendar-alt"></i>活動報名
                         </a>
                     }
                     else
                     {
-                        <a asp-controller="Event" asp-action="Index"
-                           class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Event" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
+                        <a asp-controller="Activity" asp-action="PublicIndex"
+                           class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Activity" && ViewContext.RouteData.Values["action"]?.ToString() == "PublicIndex" ? "active" : "")">
                             <i class="fas fa-calendar-alt"></i>活動報名
                         </a>
                     }
