@@ -29,5 +29,8 @@ namespace NGOPlatformWeb.Models.Entity
         
         // ECPay 付款交易記錄
         public DbSet<EcpayTransaction> EcpayTransactions { get; set; }
+        
+        // 成就系統
+        public DbSet<UserAchievement> UserAchievements { get; set; }
     }
 }

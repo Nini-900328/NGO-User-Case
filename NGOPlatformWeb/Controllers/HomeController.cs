@@ -92,12 +92,12 @@ namespace NGOPlatformWeb.Controllers
             };
         }
 
-        // 根據登入狀態取得最新活動
+        // 根據登入狀態取得最新活動 - 智慧顯示不同角色的活動
         private List<NGOPlatformWeb.Models.Entity.Activity> GetRecentActivities()
         {
             var targetAudience = "public"; // 預設顯示一般民眾活動
             
-            // 檢查是否為個案登入
+            // 檢查是否為個案登入，個案只看到個案專屬活動
             if (User.Identity.IsAuthenticated)
             {
                 var userRole = User.FindFirstValue(ClaimTypes.Role);
@@ -107,6 +107,7 @@ namespace NGOPlatformWeb.Controllers
                 }
             }
             
+            // 只顯示未來時間且開放報名的活動，最多3個
             return _context.Activities
                 .Where(a => a.TargetAudience == targetAudience && a.Status == "open" && a.StartDate > DateTime.Now)
                 .OrderBy(a => a.StartDate)
@@ -114,7 +115,7 @@ namespace NGOPlatformWeb.Controllers
                 .ToList();
         }
         
-        // 組織影響力統計
+        // 即時計算組織影響力統計 - 為首頁展示提供數據
         private ImpactStats GetImpactStats()
         {
             var totalActivities = _context.Activities.Count();

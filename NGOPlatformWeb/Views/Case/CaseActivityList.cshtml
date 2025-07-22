@@ -1,28 +1,307 @@
-﻿@model List<NGOPlatformWeb.Models.ViewModels.CaseActivityListItemViewModel>
+<!-- 個案活動報名紀錄頁面 - 顯示所有活動參與歷史 -->
+@model NGOPlatformWeb.Models.ViewModels.ActivityRegistrations.CaseActivityRegistrationsViewModel
+@{
+    ViewData["Title"] = "活動報名紀錄";
+}
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/profile/profile-shared.css" />
+    <link rel="stylesheet" href="~/css/activities/activity-records.css" />
+    <style>
+        /* 強制覆蓋背景樣式 - 內嵌樣式優先級最高 */
+        html, body {
+            background: white !important;
+            background-image: none !important;
+            background-color: white !important;
+        }
+        
+        .container.py-5,
+        .container {
+            background: white !important;
+            background-image: none !important;
+            background-color: white !important;
+            min-height: auto !important;
+            margin: 0 auto !important;
+            max-width: 1140px !important;
+            padding: 3rem 1rem !important;
+        }
+        
+        .container.py-5::before,
+        .container::before {
+            display: none !important;
+            content: none !important;
+        }
+        
+        /* 確保所有可能的容器都是白色 */
+        .container-fluid,
+        main,
+        section,
+        div {
+            background: inherit !important;
+        }
+        
+        /* 特別針對可能的漸層背景類別 */
+        [class*="gradient"],
+        [class*="bg-"],
+        [style*="background"] {
+            background: white !important;
+            background-image: none !important;
+        }
+    </style>
+}
 
-<div class="container py-4">
-    <h2 class="section-title">活動報名紀錄</h2>
+<div class="container py-5">
+    <!-- 頁面標題和返回按鈕 -->
+    <div class="page-header mb-5">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h2 class="page-title">
+                    <i class="fas fa-calendar-check me-3"></i>活動報名紀錄
+                </h2>
+                <p class="page-subtitle">@Model.CaseName 的活動參與歷程</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <a asp-action="CaseProfile" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>返回個人資料
+                </a>
+            </div>
+        </div>
+    </div>
 
-  
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-0">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-dark">
-                    <tr>
-                        <th class="text-center">活動名稱</th>
-                        <th class="text-center">活動時間</th>
-                        <th class="text-center">活動地點</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td class="fw-semibold text-center">@item.ActivityName</td>
-                            <td class="text-center">@item.StartDate.ToString("yyyy/MM/dd HH:mm") – @item.EndDate.ToString("HH:mm")</td>
-                            <td class="text-center">@item.Location</td>
-                        </tr>
+    <!-- 統計數據卡片區 -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card total-registrations">
+                <div class="stat-icon">
+                    <i class="fas fa-calendar-plus"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number">@Model.TotalRegistrations</div>
+                    <div class="stat-label">總報名次數</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card active-registrations">
+                <div class="stat-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number">@Model.ActiveRegistrations</div>
+                    <div class="stat-label">有效報名</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card upcoming-activities">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number">@Model.Registrations.Count(r => r.IsUpcoming && r.IsActive)</div>
+                    <div class="stat-label">即將到來</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card completed-activities">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number">@Model.Registrations.Count(r => r.IsCompleted && r.IsActive)</div>
+                    <div class="stat-label">已完成</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 活動列表區 -->
+    <div class="activities-section">
+        <div class="section-header mb-4">
+            <h4><i class="fas fa-list me-2"></i>活動列表</h4>
+            <div class="filter-tabs">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="upcoming">即將到來</button>
+                <button class="filter-btn" data-filter="completed">已完成</button>
+                <button class="filter-btn" data-filter="cancelled">已取消</button>
+            </div>
+        </div>
+
+        @if (Model.Registrations.Any())
+        {
+            <div class="activities-grid">
+                @foreach (var registration in Model.Registrations)
+                {
+                    <div class="activity-card @(registration.IsUpcoming ? "upcoming" : registration.IsCompleted ? "completed" : "") @(registration.Status == "cancelled" ? "cancelled" : "")" 
+                         data-category="@(registration.IsUpcoming && registration.IsActive ? "upcoming" : registration.IsCompleted && registration.IsActive ? "completed" : registration.Status == "cancelled" ? "cancelled" : "all")">
+                        
+                        <div class="activity-image">
+                            <img src="@registration.ImageUrl" alt="@registration.ActivityName" />
+                            <div class="activity-status-badge @(registration.IsActive ? "status-active" : "status-cancelled")">
+                                @registration.StatusDisplay
+                            </div>
+                        </div>
+                        
+                        <div class="activity-content">
+                            <div class="activity-header">
+                                <h5 class="activity-name">@registration.ActivityName</h5>
+                                <span class="activity-category">@registration.CategoryDisplay</span>
+                            </div>
+                            
+                            <p class="activity-description">@registration.ActivityDescription</p>
+                            
+                            <div class="activity-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>@registration.Location</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>@registration.StartDate.ToString("yyyy/MM/dd")</span>
+                                    @if (registration.StartDate.Date != registration.EndDate.Date)
+                                    {
+                                        <span> - @registration.EndDate.ToString("yyyy/MM/dd")</span>
+                                    }
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>報名時間：@registration.RegisterTime.ToString("yyyy/MM/dd HH:mm")</span>
+                                </div>
+                            </div>
+                            
+                            <div class="activity-footer">
+                                @if (registration.IsUpcoming && registration.IsActive)
+                                {
+                                    <span class="activity-time-badge upcoming-badge">
+                                        <i class="fas fa-hourglass-start"></i>即將開始
+                                    </span>
+                                }
+                                else if (registration.IsCompleted && registration.IsActive)
+                                {
+                                    <span class="activity-time-badge completed-badge">
+                                        <i class="fas fa-check-circle"></i>已完成
+                                    </span>
+                                }
+                                else if (registration.Status == "cancelled")
+                                {
+                                    <span class="activity-time-badge cancelled-badge">
+                                        <i class="fas fa-times-circle"></i>已取消
+                                    </span>
+                                }
+                                
+                                <a href="#" class="view-detail-btn" data-activity-id="@registration.ActivityId">
+                                    查看詳情 <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-calendar-times"></i>
+                </div>
+                <h4>尚未參與任何活動</h4>
+                <p>開始探索我們的活動，參與有意義的社會服務吧！</p>
+                <a asp-controller="Activity" asp-action="CaseActivityIndex" class="btn btn-primary">
+                    <i class="fas fa-search me-2"></i>瀏覽活動
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // 強制設置白色背景，防止CSS快取問題
+        document.addEventListener('DOMContentLoaded', function() {
+            // 設置body和html背景
+            document.documentElement.style.setProperty('background', 'white', 'important');
+            document.documentElement.style.setProperty('background-image', 'none', 'important');
+            document.body.style.setProperty('background', 'white', 'important');
+            document.body.style.setProperty('background-image', 'none', 'important');
+            
+            // 設置容器背景
+            const containers = document.querySelectorAll('.container, .container.py-5, .container-fluid');
+            containers.forEach(container => {
+                container.style.setProperty('background', 'white', 'important');
+                container.style.setProperty('background-image', 'none', 'important');
+                container.style.setProperty('background-color', 'white', 'important');
+            });
+            
+            // 移除可能的偽元素
+            const style = document.createElement('style');
+            style.textContent = `
+                .container.py-5::before,
+                .container::before,
+                body::before,
+                html::before {
+                    display: none !important;
+                    content: none !important;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+        
+        // 監聽可能的動態變化
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                    const target = mutation.target;
+                    if (target.classList.contains('container') || target.classList.contains('py-5')) {
+                        target.style.setProperty('background', 'white', 'important');
+                        target.style.setProperty('background-image', 'none', 'important');
                     }
-                </tbody>
-            </table>
+                }
+            });
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            observer.observe(document.body, {
+                attributes: true,
+                attributeFilter: ['style', 'class'],
+                subtree: true
+            });
+        });
+    </script>
+}
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 篩選功能
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const activityCards = document.querySelectorAll('.activity-card');
+    
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // 更新按鈕狀態
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            const filter = this.dataset.filter;
+            
+            // 篩選卡片
+            activityCards.forEach(card => {
+                if (filter === 'all') {
+                    card.classList.remove('hidden');
+                } else {
+                    const category = card.dataset.category;
+                    if (category === filter || (filter === 'all' && category !== 'cancelled')) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    });
+});
+</script>

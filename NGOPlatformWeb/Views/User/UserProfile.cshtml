@@ -7,6 +7,8 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/profile/profile-shared.css" />
     <link rel="stylesheet" href="~/css/profile/profile-components.css" />
+    <link rel="stylesheet" href="~/css/profile/achievement-wall.css" />
+    <link rel="stylesheet" href="~/css/profile/profile-enhanced.css" />
 }
 
 <div class="container py-5">
@@ -91,8 +93,72 @@
                 </div>
             </div>
             
+            <!-- 成就牆區域 -->
+            <div class="achievement-wall-card mt-4">
+                <div class="achievement-header">
+                    <h5><i class="fas fa-trophy me-2"></i>成就徽章</h5>
+                    <span class="achievement-count">@Model.Achievements.Count(a => a.IsEarned) / @Model.Achievements.Count</span>
+                </div>
+                
+                <!-- 成就網格 -->
+                <div class="achievements-grid">
+                    @foreach (var achievement in Model.Achievements)
+                    {
+                        <div class="achievement-item @(achievement.IsEarned ? "earned" : "locked") @(achievement.IsNew ? "new-achievement" : "")">
+                            <!-- 成就圖標 -->
+                            <div class="achievement-icon @(achievement.Icon)-icon">
+                                <i class="fas fa-@achievement.Icon"></i>
+                                @if (achievement.IsNew)
+                                {
+                                    <span class="new-badge">NEW!</span>
+                                }
+                            </div>
+                            
+                            <!-- 成就資訊 -->
+                            <div class="achievement-info">
+                                <h6 class="achievement-name">
+                                    @if (achievement.IsEarned)
+                                    {
+                                        @achievement.Name
+                                    }
+                                    else
+                                    {
+                                        <span>神秘成就</span>
+                                    }
+                                </h6>
+                                <p class="achievement-desc">
+                                    @if (achievement.IsEarned)
+                                    {
+                                        @achievement.Description
+                                    }
+                                    else
+                                    {
+                                        <span class="mystery-text">繼續參與活動來解鎖此成就</span>
+                                    }
+                                </p>
+                                @if (achievement.IsEarned && achievement.EarnedAt.HasValue)
+                                {
+                                    <small class="earned-date">
+                                        <i class="fas fa-calendar-alt me-1"></i>
+                                        @achievement.EarnedAt.Value.ToString("yyyy/MM/dd")
+                                    </small>
+                                }
+                            </div>
+                        </div>
+                    }
+                    
+                    @if (!Model.Achievements.Any())
+                    {
+                        <div class="no-achievements">
+                            <i class="fas fa-star"></i>
+                            <p>開始參與活動來獲得成就徽章吧！</p>
+                        </div>
+                    }
+                </div>
+            </div>
+            
             <!-- 活動與認購總覽區 -->
-            <div class="row g-4 mt-2">
+            <div class="row g-4 mt-4">
                 <!-- 活動報名總覽卡片 -->
                 <div class="col-md-6">
                     <div class="overview-card activity-overview">
@@ -198,6 +264,137 @@
 
 @section Scripts {
     <script src="~/js/profile-common.js"></script>
+    <script>
+        // 頁面載入動畫
+        document.addEventListener('DOMContentLoaded', function() {
+            // 為所有卡片添加淡入動畫
+            const cards = document.querySelectorAll('.profile-sidebar, .profile-content, .overview-card, .achievement-wall-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+            
+            // 成就徽章動畫
+            const achievements = document.querySelectorAll('.achievement-item');
+            achievements.forEach((achievement, index) => {
+                setTimeout(() => {
+                    achievement.style.animation = 'slideInUp 0.5s ease forwards';
+                }, 1000 + (index * 100));
+            });
+            
+            // 檢查是否有當前會話新獲得的成就
+            const newlyEarnedAchievements = '@TempData["NewlyEarnedAchievements"]';
+            if (newlyEarnedAchievements && newlyEarnedAchievements !== '') {
+                const achievementCodes = newlyEarnedAchievements.split(',');
+                setTimeout(() => {
+                    showNewAchievementToast(achievementCodes.length, achievementCodes);
+                }, 2000);
+            }
+        });
+        
+        // 新成就提示
+        function showNewAchievementToast(count, achievementCodes) {
+            // 成就名稱對應
+            const achievementNames = {
+                'first_registration': '初來乍到',
+                'first_completion': '初體驗',
+                'multi_category': '多元探索者',
+                'regular_participant': '熱心志工',
+                'case_helper': '溫暖陪伴'
+            };
+            
+            const toast = document.createElement('div');
+            toast.className = 'achievement-toast';
+            
+            let message = `恭喜獲得 ${count} 個新成就！`;
+            if (count === 1 && achievementCodes && achievementCodes.length > 0) {
+                const achievementName = achievementNames[achievementCodes[0]] || '特殊成就';
+                message = `恭喜獲得「${achievementName}」成就！`;
+            }
+            
+            toast.innerHTML = `
+                <i class="fas fa-trophy"></i>
+                <span>${message}</span>
+            `;
+            
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #28a745, #20c997);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-weight: 600;
+                opacity: 0;
+                transform: translateX(100%);
+                transition: all 0.5s ease;
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => document.body.removeChild(toast), 500);
+            }, 4000);
+        }
+        
+        // 統計數字計數動畫
+        function animateNumbers() {
+            const numbers = document.querySelectorAll('.stat-number');
+            numbers.forEach(num => {
+                const target = parseInt(num.textContent.replace(/[^0-9]/g, ''));
+                if (target > 0) {
+                    let current = 0;
+                    const increment = target / 30;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            current = target;
+                            clearInterval(timer);
+                        }
+                        if (num.textContent.includes('$')) {
+                            num.textContent = '$' + Math.floor(current).toLocaleString();
+                        } else {
+                            num.textContent = Math.floor(current);
+                        }
+                    }, 50);
+                }
+            });
+        }
+        
+        // 觀察器觸發數字動畫
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateNumbers();
+                    observer.disconnect();
+                }
+            });
+        });
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const statsSection = document.querySelector('.overview-card');
+            if (statsSection) observer.observe(statsSection);
+        });
+    </script>
     <script>
         // User 專用的頭像上傳函數
         function uploadUserProfileImage(input) {

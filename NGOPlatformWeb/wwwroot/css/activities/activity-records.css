@@ -503,37 +503,87 @@
     flex: 1 !important;
 }
 
-/* 頁面標題區域按鈕樣式 - 穩重顏色變化設計 */
+/* 頁面標題區域按鈕樣式 - 適配淺色背景的設計 */
 .page-header .btn {
-    background: transparent !important;
-    border: 2px solid rgba(255, 255, 255, 0.4) !important;
-    color: rgba(255, 255, 255, 0.85) !important;
-    border-radius: 8px !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border: 2px solid transparent !important;
+    color: white !important;
+    border-radius: 12px !important;
     padding: 0.7rem 1.4rem !important;
-    font-weight: 500 !important;
+    font-weight: 600 !important;
     text-decoration: none !important;
     display: inline-flex !important;
     align-items: center !important;
     gap: 0.6rem !important;
     transition: all 0.3s ease !important;
     position: relative !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
 }
 
 .page-header .btn:hover {
-    background: rgba(255, 255, 255, 0.9) !important;
-    border-color: rgba(255, 255, 255, 0.9) !important;
-    color: #667eea !important;
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%) !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+    color: white !important;
 }
 
 .page-header .btn:active {
-    background: rgba(255, 255, 255, 0.8) !important;
+    transform: translateY(-1px) !important;
     transition-duration: 0.1s !important;
 }
 
 .page-header .btn i {
     transition: color 0.3s ease !important;
+    color: white !important;
 }
 
 .page-header .btn:hover i {
-    color: #5a67d8 !important;
+    color: white !important;
+}
+
+/* 確保按鈕在所有背景下都可見 */
+.page-header .btn:focus {
+    outline: 3px solid rgba(102, 126, 234, 0.5) !important;
+    outline-offset: 2px !important;
+}
+
+/* 確保與其他 outline 按鈕不衝突 */
+.page-header .btn-outline-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border-color: transparent !important;
+    color: white !important;
+}
+
+.page-header .btn-outline-primary:hover,
+.page-header .btn-outline-primary:focus {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%) !important;
+    border-color: transparent !important;
+    color: white !important;
+}
+
+/* 確保活動紀錄頁面保持原有的白色背景 */
+body .container.py-5 {
+    background: white !important;
+    background-image: none !important;
+    min-height: auto !important;
+    margin: 0 auto !important;
+    max-width: 1140px !important;
+    padding: 3rem 1rem !important;
+}
+
+body .container.py-5::before {
+    display: none !important;
+    content: none !important;
+}
+
+/* 確保不受其他漸層背景影響 */
+body {
+    background: white !important;
+}
+
+/* 特別針對活動紀錄頁面 */
+[data-title="活動報名紀錄"] .container.py-5,
+.container.py-5:has(.page-header) {
+    background: white !important;
+    background-image: none !important;
 }

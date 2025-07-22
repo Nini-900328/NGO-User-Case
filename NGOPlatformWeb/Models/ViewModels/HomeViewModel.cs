@@ -26,26 +26,6 @@ namespace NGOPlatformWeb.Models
         public string ButtonLink { get; set; } = string.Empty;
     }
 
-    /// <summary>
-    /// 首頁功能卡片
-    /// </summary>
-    public class FeatureCard
-    {
-        public string Title { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public string IconUrl { get; set; } = string.Empty;
-        public string LinkUrl { get; set; } = string.Empty;
-    }
-
-    /// <summary>
-    /// 首頁最新消息項目
-    /// </summary>
-    public class NewsItem
-    {
-        public string Title { get; set; } = string.Empty;
-        public string Content { get; set; } = string.Empty;
-        public DateTime Date { get; set; }
-    }
 
     /// <summary>
     /// 影響力統計

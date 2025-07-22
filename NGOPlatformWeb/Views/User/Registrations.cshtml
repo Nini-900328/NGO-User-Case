@@ -7,6 +7,47 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/profile/profile-shared.css" />
     <link rel="stylesheet" href="~/css/activities/activity-records.css" />
+    <style>
+        /* 強制覆蓋背景樣式 - 內嵌樣式優先級最高 */
+        html, body {
+            background: white !important;
+            background-image: none !important;
+            background-color: white !important;
+        }
+        
+        .container.py-5,
+        .container {
+            background: white !important;
+            background-image: none !important;
+            background-color: white !important;
+            min-height: auto !important;
+            margin: 0 auto !important;
+            max-width: 1140px !important;
+            padding: 3rem 1rem !important;
+        }
+        
+        .container.py-5::before,
+        .container::before {
+            display: none !important;
+            content: none !important;
+        }
+        
+        /* 確保所有可能的容器都是白色 */
+        .container-fluid,
+        main,
+        section,
+        div {
+            background: inherit !important;
+        }
+        
+        /* 特別針對可能的漸層背景類別 */
+        [class*="gradient"],
+        [class*="bg-"],
+        [style*="background"] {
+            background: white !important;
+            background-image: none !important;
+        }
+    </style>
 }
 
 <div class="container py-5">
@@ -176,6 +217,61 @@
         }
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // 強制設置白色背景，防止CSS快取問題
+        document.addEventListener('DOMContentLoaded', function() {
+            // 設置body和html背景
+            document.documentElement.style.setProperty('background', 'white', 'important');
+            document.documentElement.style.setProperty('background-image', 'none', 'important');
+            document.body.style.setProperty('background', 'white', 'important');
+            document.body.style.setProperty('background-image', 'none', 'important');
+            
+            // 設置容器背景
+            const containers = document.querySelectorAll('.container, .container.py-5, .container-fluid');
+            containers.forEach(container => {
+                container.style.setProperty('background', 'white', 'important');
+                container.style.setProperty('background-image', 'none', 'important');
+                container.style.setProperty('background-color', 'white', 'important');
+            });
+            
+            // 移除可能的偽元素
+            const style = document.createElement('style');
+            style.textContent = `
+                .container.py-5::before,
+                .container::before,
+                body::before,
+                html::before {
+                    display: none !important;
+                    content: none !important;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+        
+        // 監聽可能的動態變化
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                    const target = mutation.target;
+                    if (target.classList.contains('container') || target.classList.contains('py-5')) {
+                        target.style.setProperty('background', 'white', 'important');
+                        target.style.setProperty('background-image', 'none', 'important');
+                    }
+                }
+            });
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            observer.observe(document.body, {
+                attributes: true,
+                attributeFilter: ['style', 'class'],
+                subtree: true
+            });
+        });
+    </script>
+}
 
 
 <script>
