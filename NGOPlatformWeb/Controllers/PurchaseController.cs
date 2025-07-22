@@ -781,7 +781,7 @@ namespace NGOPlatformWeb.Controllers
 
         // 付款成功頁面
         [AllowAnonymous]
-        public IActionResult PaymentSuccess()
+        public async Task<IActionResult> PaymentSuccess()
         {
             // 嘗試從多個來源獲取訂單編號
             string? merchantTradeNo = Request.Query["MerchantTradeNo"].FirstOrDefault() 

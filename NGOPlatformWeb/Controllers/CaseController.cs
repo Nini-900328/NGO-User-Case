@@ -137,32 +137,55 @@ namespace NGOPlatformWeb.Controllers
         }
 
         [HttpGet]
-        // 個案活動清單頁面 - 顯示已報名的活動
-        public IActionResult CaseActivityList()
+        // 個案活動清單頁面 - 顯示已報名的活動（使用rich UI pattern）
+        public async Task<IActionResult> CaseActivityList()
         {
-            var caseIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (caseIdClaim == null)
+            // 取得當前登入個案的 Email
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(email))
             {
                 return RedirectToAction("Login", "Auth");
             }
 
-            int currentCaseId = int.Parse(caseIdClaim.Value);
+            // 透過 Email 找到個案的登入資料和基本資料
+            var caseLogin = await _context.CaseLogins.FirstOrDefaultAsync(c => c.Email == email);
+            var cas = await _context.Cases.FirstOrDefaultAsync(c => c.CaseId == caseLogin.CaseId);
+            if (cas == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
 
-            // 查詢該個案的所有活動報名紀錄
-            var result = (from reg in _context.CaseActivityRegistrations
-                          join act in _context.Activities
-                          on reg.ActivityId equals act.ActivityId
-                          where reg.CaseId == currentCaseId && reg.Status == "registered"
-                          select new CaseActivityListItemViewModel
-                          {
-                              ActivityId = act.ActivityId,
-                              ActivityName = act.ActivityName,
-                              Location = act.Location,
-                              StartDate = act.StartDate,
-                              EndDate = act.EndDate
-                          }).ToList();
+            // 取得該個案的所有活動報名紀錄（包含活動詳情）
+            var registrations = await _context.CaseActivityRegistrations
+                .Include(r => r.Activity)
+                .Where(r => r.CaseId == cas.CaseId)
+                .OrderByDescending(r => r.RegisterTime)
+                .ToListAsync();
 
-            return View(result);
+            // 建立個案活動報名紀錄的 ViewModel
+            var viewModel = new CaseActivityRegistrationsViewModel
+            {
+                CaseName = cas.Name ?? "個案",
+                TotalRegistrations = registrations.Count,
+                ActiveRegistrations = registrations.Count(r => r.Status == "registered"),
+                Registrations = registrations.Select(r => new ActivityRegistrationItem
+                {
+                    RegistrationId = r.RegistrationId,
+                    ActivityId = r.ActivityId,
+                    ActivityName = r.Activity?.ActivityName ?? "未知活動",
+                    ActivityDescription = r.Activity?.Description ?? "",
+                    Location = r.Activity?.Location ?? "",
+                    StartDate = r.Activity?.StartDate ?? DateTime.MinValue,
+                    EndDate = r.Activity?.EndDate ?? DateTime.MinValue,
+                    RegisterTime = r.RegisterTime,
+                    Status = r.Status,
+                    ImageUrl = r.Activity?.ImageUrl ?? "/images/activity-default.png",
+                    Category = r.Activity?.Category ?? "",
+                    TargetAudience = r.Activity?.TargetAudience ?? ""
+                }).ToList()
+            };
+
+            return View(viewModel);
         }
 
         // 個案個人資料頁面 - 顯示和編輯個案資料
