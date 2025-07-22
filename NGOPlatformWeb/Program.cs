@@ -16,6 +16,9 @@ builder.Services.AddScoped<PasswordMigrationService>();
 builder.Services.AddScoped<ImageUploadService>();
 builder.Services.AddScoped<EcpayService>();
 builder.Services.AddScoped<AchievementService>();
+// Activity Service Layer
+builder.Services.AddScoped<NGOPlatformWeb.Repositories.IActivityRepository, NGOPlatformWeb.Repositories.ActivityRepository>();
+builder.Services.AddScoped<NGOPlatformWeb.Services.IActivityService, NGOPlatformWeb.Services.ActivityService>();
 // Add Background Service
 builder.Services.AddHostedService<TokenCleanupService>();
 // DbContext

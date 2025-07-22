@@ -12,6 +12,8 @@ namespace NGOPlatformWeb.Models.Entity
         
         public int ActivityId { get; set; }
         
+        public int? NumberOfCompanions { get; set; } // 攜帶同伴人數
+        
         [MaxLength(20)]
         public string Status { get; set; } = "registered"; // registered, cancelled
         

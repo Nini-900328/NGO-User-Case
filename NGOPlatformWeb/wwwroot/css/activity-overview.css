@@ -74,6 +74,23 @@
     min-width: 100px; /* 限制一個比較窄的最小寬度 */
     max-width: 120px; /* 防止過寬 */
     text-align: center;
+    text-decoration: none;
+}
+
+/* 取消報名按鈕 - 使用最高優先級 */
+.activity-card-vertical .activity-actions .btn-join.btn-cancel,
+.btn-join.btn-cancel {
+    background: #dc3545 !important;
+    background-image: none !important;
+    border: 2px solid #fff !important;
+    color: #fff !important;
+}
+
+.activity-card-vertical .activity-actions .btn-join.btn-cancel:hover,
+.btn-join.btn-cancel:hover {
+    background: #c82333 !important;
+    background-image: none !important;
+    border: 2px solid #fff !important;
 }
 
     /* 半透明遮罩 */
