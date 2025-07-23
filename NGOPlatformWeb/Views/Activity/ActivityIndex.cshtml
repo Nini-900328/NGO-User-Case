@@ -8,7 +8,7 @@
     </div>
 </div>
 
-<link rel="stylesheet" href="~/css/activity-overview.css" />
+<link rel="stylesheet" href="~/css/case/activity-overview.css" />
 
 <div class="container">
     <div class="mb-4">
@@ -17,12 +17,12 @@
                 var currentAction = Model.CurrentAction;
             }
             <input type="text" class="form-control search-box" placeholder="搜尋活動名稱…" />
-            <a asp-action="@currentAction" class="btn btn-outline-success">全部活動</a>
+            <a asp-action="@currentAction" class="btn btn-outline-success">全部</a>
             <a asp-action="@currentAction" asp-route-category="生活" class="btn btn-outline-success">生活</a>
-            <a asp-action="@currentAction" asp-route-category="運動" class="btn btn-outline-secondary">運動</a>
-            <a asp-action="@currentAction" asp-route-category="娛樂" class="btn btn-outline-secondary">娛樂</a>
-            <a asp-action="@currentAction" asp-route-category="教育" class="btn btn-outline-secondary">教育</a>
-            <a asp-action="@currentAction" asp-route-category="心靈" class="btn btn-outline-secondary">心靈</a>
+            <a asp-action="@currentAction" asp-route-category="運動" class="btn btn-outline-success">運動</a>
+            <a asp-action="@currentAction" asp-route-category="娛樂" class="btn btn-outline-success">娛樂</a>
+            <a asp-action="@currentAction" asp-route-category="教育" class="btn btn-outline-success">教育</a>
+            <a asp-action="@currentAction" asp-route-category="心靈" class="btn btn-outline-success">心靈</a>
         </div>
     </div>
 
