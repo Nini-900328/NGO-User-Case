@@ -456,14 +456,15 @@
 
 /* 援助故事卡片 */
 .donation-story-card {
-    background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%) !important;
+    background: linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(241, 245, 249, 0.95) 100%) !important;
     border-radius: 16px !important;
     overflow: hidden !important;
-    box-shadow: 0 3px 20px rgba(0,0,0,0.08) !important;
+    box-shadow: 0 3px 20px rgba(0,0,0,0.15) !important;
     transition: all 0.3s ease !important;
     margin: 0 !important;
     padding: 0 !important;
-    border: 1px solid #e9ecef !important;
+    border: 1px solid rgba(203, 213, 225, 0.6) !important;
+    backdrop-filter: blur(10px) !important;
 }
 
 .donation-story-card:hover {
@@ -473,20 +474,22 @@
 
 .donation-story-card.emergency-type {
     border-left: 4px solid #fd7e14 !important;
-    background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%) !important;
+    background: linear-gradient(135deg, rgba(254, 242, 242, 0.95) 0%, rgba(252, 231, 243, 0.95) 100%) !important;
 }
 
 .donation-story-card.emergency-type .story-header {
-    background: white !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(5px) !important;
 }
 
 .donation-story-card.package-type {
     border-left: 4px solid #3498db !important;
-    background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%) !important;
+    background: linear-gradient(135deg, rgba(239, 246, 255, 0.95) 0%, rgba(219, 234, 254, 0.95) 100%) !important;
 }
 
 .donation-story-card.package-type .story-header {
-    background: white !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(5px) !important;
 }
 
 /* 故事標題區 */
@@ -504,11 +507,12 @@
     flex-shrink: 0 !important;
     text-align: center !important;
     padding: 12px !important;
-    background: #ffffff !important;
+    background: rgba(255, 255, 255, 0.9) !important;
     border-radius: 12px !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
-    border: 1px solid #f0f2f5 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    border: 1px solid rgba(203, 213, 225, 0.5) !important;
     min-width: 80px !important;
+    backdrop-filter: blur(5px) !important;
 }
 
 .story-date {
@@ -571,25 +575,26 @@
     flex-shrink: 0 !important;
     text-align: center !important;
     padding: 16px 20px !important;
-    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
+    background: linear-gradient(135deg, rgba(248, 250, 252, 0.9) 0%, rgba(255, 255, 255, 0.85) 100%) !important;
     border-radius: 8px !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
-    border: 1px solid #e9ecef !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid rgba(203, 213, 225, 0.5) !important;
     position: relative !important;
     min-width: 120px !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
+    backdrop-filter: blur(5px) !important;
 }
 
 .donation-story-card.emergency-type .story-amount {
-    border-color: #e9ecef !important;
-    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
+    border-color: rgba(253, 126, 20, 0.3) !important;
+    background: linear-gradient(135deg, rgba(254, 242, 242, 0.9) 0%, rgba(255, 245, 245, 0.85) 100%) !important;
 }
 
 .donation-story-card.package-type .story-amount {
-    border-color: #e9ecef !important;
-    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
+    border-color: rgba(52, 152, 219, 0.3) !important;
+    background: linear-gradient(135deg, rgba(239, 246, 255, 0.9) 0%, rgba(219, 234, 254, 0.85) 100%) !important;
 }
 
 
@@ -656,8 +661,9 @@
 
 .details-header {
     padding: 16px 24px !important;
-    background: #fafbfc !important;
-    border-bottom: 1px solid #f0f2f5 !important;
+    background: rgba(250, 251, 252, 0.8) !important;
+    border-bottom: 1px solid rgba(240, 242, 245, 0.6) !important;
+    backdrop-filter: blur(3px) !important;
 }
 
 .toggle-details-btn {
@@ -678,8 +684,8 @@
 }
 
 .toggle-details-btn:hover {
-    background: #f7f9fa !important;
-    border-color: #ccd6dd !important;
+    background: rgba(247, 249, 250, 0.9) !important;
+    border-color: rgba(204, 214, 221, 0.8) !important;
     color: #1d1f23 !important;
 }
 
@@ -760,11 +766,12 @@
     justify-content: space-between !important;
     align-items: center !important;
     padding: 20px 24px !important;
-    background: linear-gradient(135deg, #f8f9fa 0%, #f0f2f5 100%) !important;
-    border-top: 1px solid #e9ecef !important;
+    background: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.8) 100%) !important;
+    border-top: 1px solid rgba(203, 213, 225, 0.5) !important;
     flex-wrap: wrap !important;
     gap: 16px !important;
     position: relative !important;
+    backdrop-filter: blur(3px) !important;
 }
 
 .donation-story-card .impact-footer::before {
@@ -828,12 +835,13 @@
     align-items: center !important;
     gap: 6px !important;
     padding: 8px 16px !important;
-    border: 1px solid #e1e8ed !important;
-    background: #ffffff !important;
+    border: 1px solid rgba(203, 213, 225, 0.6) !important;
+    background: rgba(255, 255, 255, 0.8) !important;
     border-radius: 8px !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     color: #536471 !important;
+    backdrop-filter: blur(5px) !important;
     cursor: pointer !important;
     transition: all 0.2s ease !important;
     text-decoration: none !important;
@@ -842,8 +850,8 @@
 }
 
 .donation-story-card .action-btn:hover {
-    background: #f7f9fa !important;
-    border-color: #ccd6dd !important;
+    background: rgba(247, 249, 250, 0.9) !important;
+    border-color: rgba(204, 214, 221, 0.8) !important;
     color: #1d1f23 !important;
     transform: translateY(-1px) !important;
 }
@@ -1170,13 +1178,24 @@
     margin-bottom: 32px !important;
 }
 
+/* 感謝區塊容器 - 使用更兼容的方法 */
+.purchase-records-page .container.py-5:last-of-type {
+    margin-bottom: 8rem !important;
+    padding-bottom: 4rem !important;
+}
+
+/* 或直接針對body添加底部間距 */
+.profile-page {
+    padding-bottom: 8rem !important;
+}
+
 /* 感謝區塊設計 */
 .gratitude-section {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
     border-radius: 20px !important;
     color: white !important;
     padding: 60px 40px !important;
-    margin: 0 !important;
+    margin: 0 0 6rem 0 !important;
 }
 
 .gratitude-content {

@@ -10,6 +10,40 @@
     <link rel="stylesheet" href="~/css/profile/achievement-wall.css" />
     <link rel="stylesheet" href="~/css/profile/profile-enhanced.css" />
     <link rel="stylesheet" href="~/css/profile/profile-dark-theme.css" />
+    <style>
+        /* 直接覆蓋樣式，確保生效 */
+        .profile-page .field-row {
+            background: rgba(248, 250, 252, 0.4) !important;
+            border-radius: 8px !important;
+            margin-bottom: 0.5rem !important;
+            padding: 1rem 1.5rem !important;
+            border-bottom: 1px solid rgba(241, 245, 249, 0.6) !important;
+        }
+        
+        .profile-page .field-row:hover {
+            background: rgba(241, 245, 249, 0.7) !important;
+        }
+        
+        .profile-page .edit-btn {
+            background: linear-gradient(135deg, #007bff, #0056b3) !important;
+            color: white !important;
+            text-decoration: none !important;
+            border: none !important;
+            padding: 0.75rem 2rem !important;
+            border-radius: 12px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3) !important;
+        }
+        
+        .profile-page .edit-btn:hover {
+            background: linear-gradient(135deg, #0056b3, #004085) !important;
+            color: white !important;
+            text-decoration: none !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4) !important;
+        }
+    </style>
 }
 
 @{
@@ -17,7 +51,7 @@
     ViewBag.BodyClass = "profile-page";
 }
 
-<div class="container py-5" style="padding-bottom: 0 !important;">
+<div class="container py-5" style="margin-bottom: 3rem;">
     <div class="row g-4">
         <!-- 左側邊欄 - 顯示頭像、基本資訊、導航選單 -->
         <div class="col-md-4">

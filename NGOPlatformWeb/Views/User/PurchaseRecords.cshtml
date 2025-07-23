@@ -8,6 +8,157 @@
     <link rel="stylesheet" href="~/css/profile/profile-shared.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/purchase/purchase-records-standalone.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/profile/profile-dark-theme.css" />
+    <style>
+        /* 修復成就徽章區域與背景對比度問題，並添加圓角設計 */
+        .achievement-badges-card,
+        .activity-timeline-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border: 1px solid rgba(203, 213, 225, 0.5) !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 20px !important; /* 與頁面其他區塊一致的圓角 */
+        }
+        
+        /* 讓成就徽章有更好的視覺層次 */
+        .badge-item.earned {
+            background: rgba(254, 243, 199, 0.9) !important;
+            border: 1px solid #f59e0b !important;
+            backdrop-filter: blur(5px) !important;
+            border-radius: 12px !important;
+        }
+        
+        .badge-item.locked {
+            background: rgba(241, 245, 249, 0.7) !important;
+            border: 1px solid rgba(203, 213, 225, 0.4) !important;
+            backdrop-filter: blur(5px) !important;
+            border-radius: 12px !important;
+        }
+        
+        /* 修復時間軸設計 - 移除奇怪的垂直線，改善視覺效果 */
+        .timeline-container {
+            position: relative !important;
+        }
+        
+        /* 隱藏或重新設計垂直連接線 */
+        .timeline-container::before {
+            display: none !important; /* 隱藏垂直線 */
+        }
+        
+        .timeline-item {
+            background: rgba(255, 255, 255, 0.15) !important;
+            border-radius: 12px !important;
+            padding: 1.25rem !important;
+            margin-bottom: 1rem !important;
+            backdrop-filter: blur(5px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            position: relative !important;
+        }
+        
+        /* 優化時間軸標記點 */
+        .timeline-marker {
+            width: 40px !important;
+            height: 40px !important;
+            border-radius: 50% !important;
+            margin-right: 1rem !important;
+            flex-shrink: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+        }
+        
+        .timeline-marker.delivered {
+            background: linear-gradient(135deg, #28a745, #20c997) !important;
+        }
+        
+        .timeline-marker.processing {
+            background: linear-gradient(135deg, #ffc107, #fd7e14) !important;
+        }
+        
+        .timeline-marker.donated {
+            background: linear-gradient(135deg, #007bff, #0056b3) !important;
+        }
+        
+        /* 移除任何可能造成垂直線的偽元素 */
+        .timeline-item::before,
+        .timeline-item::after,
+        .timeline-marker::before,
+        .timeline-marker::after {
+            display: none !important;
+        }
+        
+        /* 改善認購紀錄卡片的配色 - 讓它們不那麼白/stark */
+        .donation-story-card {
+            background: rgba(248, 250, 252, 0.85) !important;
+            border: 1px solid rgba(203, 213, 225, 0.4) !important;
+            backdrop-filter: blur(8px) !important;
+        }
+        
+        /* 緊急援助卡片 - 溫暖的橘紅色調 */
+        .donation-story-card.emergency-type {
+            background: linear-gradient(135deg, rgba(254, 242, 242, 0.9) 0%, rgba(252, 231, 243, 0.85) 100%) !important;
+            border-left: 4px solid #fd7e14 !important;
+            border: 1px solid rgba(253, 126, 20, 0.3) !important;
+        }
+        
+        /* 組合包卡片 - 清爽的藍色調 */
+        .donation-story-card.package-type {
+            background: linear-gradient(135deg, rgba(239, 246, 255, 0.9) 0%, rgba(219, 234, 254, 0.85) 100%) !important;
+            border-left: 4px solid #3498db !important;
+            border: 1px solid rgba(52, 152, 219, 0.3) !important;
+        }
+        
+        /* 卡片標題區域 - 讓內容區域也有顏色變化 */
+        .donation-story-card .story-header {
+            background: rgba(248, 250, 252, 0.7) !important;
+            backdrop-filter: blur(5px) !important;
+        }
+        
+        .donation-story-card.emergency-type .story-header {
+            background: rgba(254, 242, 242, 0.8) !important;
+        }
+        
+        .donation-story-card.package-type .story-header {
+            background: rgba(239, 246, 255, 0.8) !important;
+        }
+        
+        /* 時間標記區域 */
+        .story-timeline {
+            background: rgba(255, 255, 255, 0.8) !important;
+            border: 1px solid rgba(203, 213, 225, 0.3) !important;
+        }
+        
+        /* 金額區域 */
+        .story-amount {
+            background: rgba(248, 250, 252, 0.9) !important;
+            border: 1px solid rgba(203, 213, 225, 0.3) !important;
+        }
+        
+        /* 底部區域 - 也需要對應的顏色變化 */
+        .donation-story-card .impact-footer {
+            background: rgba(241, 245, 249, 0.7) !important;
+            border-top: 1px solid rgba(203, 213, 225, 0.4) !important;
+        }
+        
+        .donation-story-card.emergency-type .impact-footer {
+            background: rgba(254, 242, 242, 0.6) !important;
+            border-top: 1px solid rgba(253, 126, 20, 0.2) !important;
+        }
+        
+        .donation-story-card.package-type .impact-footer {
+            background: rgba(239, 246, 255, 0.6) !important;
+            border-top: 1px solid rgba(52, 152, 219, 0.2) !important;
+        }
+        
+        /* 篩選按鈕區域 - 確保不被影響 */
+        .records-section {
+            background: rgba(255, 255, 255, 0.95) !important;
+        }
+        
+        .records-header {
+            background: rgba(248, 250, 252, 0.8) !important;
+        }
+    </style>
 }
 
 @{
