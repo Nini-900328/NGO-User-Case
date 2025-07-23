@@ -9,9 +9,15 @@
     <link rel="stylesheet" href="~/css/profile/profile-components.css" />
     <link rel="stylesheet" href="~/css/profile/achievement-wall.css" />
     <link rel="stylesheet" href="~/css/profile/profile-enhanced.css" />
+    <link rel="stylesheet" href="~/css/profile/profile-dark-theme.css" />
 }
 
-<div class="container py-5">
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.BodyClass = "profile-page";
+}
+
+<div class="container py-5" style="padding-bottom: 0 !important;">
     <div class="row g-4">
         <!-- 左側邊欄 - 顯示頭像、基本資訊、導航選單 -->
         <div class="col-md-4">
@@ -101,49 +107,58 @@
                 </div>
                 
                 <!-- 成就網格 -->
-                <div class="achievements-grid">
-                    @foreach (var achievement in Model.Achievements)
+                <div class="achievements-grid" id="achievementsGrid">
+                    @if (Model.Achievements.Any())
                     {
-                        <div class="achievement-item @(achievement.IsEarned ? "earned" : "locked") @(achievement.IsNew ? "new-achievement" : "")">
-                            <!-- 成就圖標 -->
-                            <div class="achievement-icon @(achievement.Icon)-icon">
-                                <i class="fas fa-@achievement.Icon"></i>
+                        // 將成就按照是否獲得排序：已獲得的在前，未獲得的在後
+                        var sortedAchievements = Model.Achievements
+                            .OrderByDescending(a => a.IsEarned)
+                            .ThenByDescending(a => a.EarnedAt ?? DateTime.MinValue)
+                            .ToList();
+                        
+                        @for (int i = 0; i < sortedAchievements.Count; i++)
+                        {
+                            var achievement = sortedAchievements[i];
+                            <div class="achievement-item @(achievement.IsEarned ? "earned" : "locked") @(achievement.IsNew ? "new-achievement" : "") @(i >= 6 ? "achievement-hidden" : "")">
+                                <!-- 成就圖標 -->
+                                <div class="achievement-icon @(achievement.Icon)-icon">
+                                    <i class="fas fa-@achievement.Icon"></i>
+                                </div>
+                                
+                                <!-- 成就資訊 -->
+                                <div class="achievement-info">
+                                    <h6 class="achievement-name">
+                                        @if (achievement.IsEarned)
+                                        {
+                                            @achievement.Name
+                                        }
+                                        else
+                                        {
+                                            <span>神秘成就</span>
+                                        }
+                                    </h6>
+                                    <p class="achievement-desc">
+                                        @if (achievement.IsEarned)
+                                        {
+                                            @achievement.Description
+                                        }
+                                        else
+                                        {
+                                            <span class="mystery-text">繼續參與活動來解鎖此成就</span>
+                                        }
+                                    </p>
+                                    @if (achievement.IsEarned && achievement.EarnedAt.HasValue)
+                                    {
+                                        <small class="earned-date">
+                                            <i class="fas fa-calendar-alt me-1"></i>
+                                            @achievement.EarnedAt.Value.ToString("yyyy/MM/dd")
+                                        </small>
+                                    }
+                                </div>
                             </div>
-                            
-                            <!-- 成就資訊 -->
-                            <div class="achievement-info">
-                                <h6 class="achievement-name">
-                                    @if (achievement.IsEarned)
-                                    {
-                                        @achievement.Name
-                                    }
-                                    else
-                                    {
-                                        <span>神秘成就</span>
-                                    }
-                                </h6>
-                                <p class="achievement-desc">
-                                    @if (achievement.IsEarned)
-                                    {
-                                        @achievement.Description
-                                    }
-                                    else
-                                    {
-                                        <span class="mystery-text">繼續參與活動來解鎖此成就</span>
-                                    }
-                                </p>
-                                @if (achievement.IsEarned && achievement.EarnedAt.HasValue)
-                                {
-                                    <small class="earned-date">
-                                        <i class="fas fa-calendar-alt me-1"></i>
-                                        @achievement.EarnedAt.Value.ToString("yyyy/MM/dd")
-                                    </small>
-                                }
-                            </div>
-                        </div>
+                        }
                     }
-                    
-                    @if (!Model.Achievements.Any())
+                    else
                     {
                         <div class="no-achievements">
                             <i class="fas fa-star"></i>
@@ -151,6 +166,22 @@
                         </div>
                     }
                 </div>
+                
+                <!-- 展開/收起按鈕 -->
+                @if (Model.Achievements.Count > 6)
+                {
+                    var sortedAchievementsForCount = Model.Achievements
+                        .OrderByDescending(a => a.IsEarned)
+                        .ThenByDescending(a => a.EarnedAt ?? DateTime.MinValue)
+                        .ToList();
+                    <div class="achievement-toggle-section">
+                        <button type="button" class="achievement-toggle-btn" id="achievementToggleBtn">
+                            <span class="toggle-text">顯示更多成就</span>
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                            <span class="hidden-count">還有 @(sortedAchievementsForCount.Count - 6) 個成就</span>
+                        </button>
+                    </div>
+                }
             </div>
             
             <!-- 活動與認購總覽區 -->
@@ -175,14 +206,19 @@
                             </div>
                         </div>
                         
-                        <!-- 最近活動清單 -->
-                        <div class="recent-items">
+                        <!-- 最近活動清單 - 優化版 -->
+                        <div class="recent-items recent-activities-optimized">
                             @if (Model.RecentActivities.Any())
                             {
                                 @foreach (var activity in Model.RecentActivities)
                                 {
-                                    <div class="activity-item">
-                                        <img src="@activity.ImageUrl" alt="@activity.ActivityName" class="activity-thumb" />
+                                    <div class="activity-item activity-item-optimized">
+                                        <!-- 使用背景圖替代img標籤，避免載入延遲 -->
+                                        <div class="activity-thumb-bg" 
+                                             style="background-image: url('@activity.ImageUrl')" 
+                                             loading="lazy"
+                                             data-src="@activity.ImageUrl">
+                                        </div>
                                         <div class="activity-info">
                                             <div class="activity-name">@activity.ActivityName</div>
                                             <div class="activity-date">@activity.StartDate.ToString("yyyy/MM/dd")</div>
@@ -276,13 +312,16 @@
                 }, index * 150);
             });
             
-            // 成就徽章動畫
+            // 成就徽章動畫 - 優化版本，減少DOM查詢
             const achievements = document.querySelectorAll('.achievement-item');
             achievements.forEach((achievement, index) => {
                 setTimeout(() => {
                     achievement.style.animation = 'slideInUp 0.5s ease forwards';
                 }, 1000 + (index * 100));
             });
+            
+            // 活動清單效能優化
+            initializeActivityListOptimization();
             
             // 檢查是否有當前會話新獲得的成就
             const newlyEarnedAchievements = '@TempData["NewlyEarnedAchievements"]';
@@ -390,6 +429,159 @@
             const statsSection = document.querySelector('.overview-card');
             if (statsSection) observer.observe(statsSection);
         });
+        
+        // ================================
+        // 成就展開/收起功能
+        // ================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('achievementToggleBtn');
+            const achievementsGrid = document.getElementById('achievementsGrid');
+            const toggleText = toggleBtn?.querySelector('.toggle-text');
+            const toggleIcon = toggleBtn?.querySelector('.toggle-icon');
+            const hiddenCount = toggleBtn?.querySelector('.hidden-count');
+            
+            if (!toggleBtn) return; // 如果沒有切換按鈕就直接返回
+            
+            let isExpanded = false;
+            
+            toggleBtn.addEventListener('click', function() {
+                isExpanded = !isExpanded;
+                
+                if (isExpanded) {
+                    // 展開成就
+                    achievementsGrid.classList.add('achievements-expanded');
+                    toggleBtn.classList.add('expanded');
+                    toggleText.textContent = '收起成就';
+                    
+                    // 逐個顯示隱藏的成就項目
+                    const hiddenItems = document.querySelectorAll('.achievement-item.achievement-hidden');
+                    hiddenItems.forEach((item, index) => {
+                        setTimeout(() => {
+                            item.style.display = 'block';
+                            setTimeout(() => {
+                                item.style.opacity = '1';
+                                item.style.transform = 'translateY(0)';
+                            }, 50);
+                        }, index * 100);
+                    });
+                    
+                } else {
+                    // 收起成就
+                    achievementsGrid.classList.remove('achievements-expanded');
+                    toggleBtn.classList.remove('expanded');
+                    toggleText.textContent = '顯示更多成就';
+                    
+                    // 隱藏超出的成就項目
+                    const hiddenItems = document.querySelectorAll('.achievement-item.achievement-hidden');
+                    hiddenItems.forEach((item, index) => {
+                        setTimeout(() => {
+                            item.style.opacity = '0';
+                            item.style.transform = 'translateY(20px)';
+                            setTimeout(() => {
+                                item.style.display = 'none';
+                            }, 300);
+                        }, index * 50);
+                    });
+                }
+                
+                // 平滑滾動到成就區域（如果需要）
+                if (isExpanded) {
+                    setTimeout(() => {
+                        const achievementCard = document.querySelector('.achievement-wall-card');
+                        const rect = achievementCard.getBoundingClientRect();
+                        const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
+                        
+                        if (!isVisible) {
+                            achievementCard.scrollIntoView({ 
+                                behavior: 'smooth', 
+                                block: 'start',
+                                inline: 'nearest'
+                            });
+                        }
+                    }, 400);
+                }
+            });
+        });
+        
+        // ================================
+        // 活動清單效能優化函數
+        // ================================
+        function initializeActivityListOptimization() {
+            // 實現懶載入和虛擬滾動優化
+            const activityItems = document.querySelectorAll('.activity-item-optimized');
+            
+            // 使用 Intersection Observer 優化可見性檢測
+            const observerOptions = {
+                root: null,
+                rootMargin: '50px',
+                threshold: 0.1
+            };
+            
+            const activityObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const item = entry.target;
+                        // 優化圖片載入
+                        optimizeActivityImage(item);
+                        // 停止觀察已處理的項目
+                        activityObserver.unobserve(item);
+                    }
+                });
+            }, observerOptions);
+            
+            // 開始觀察所有活動項目
+            activityItems.forEach(item => {
+                activityObserver.observe(item);
+            });
+            
+            // 防抖滾動處理
+            let scrollTimeout;
+            const recentItemsContainer = document.querySelector('.recent-activities-optimized');
+            
+            if (recentItemsContainer) {
+                recentItemsContainer.addEventListener('scroll', function() {
+                    // 清除之前的定時器
+                    clearTimeout(scrollTimeout);
+                    
+                    // 設定新的定時器
+                    scrollTimeout = setTimeout(() => {
+                        optimizeScrollPerformance(this);
+                    }, 16); // 約60fps
+                }, { passive: true });
+            }
+        }
+        
+        function optimizeActivityImage(activityItem) {
+            const thumbBg = activityItem.querySelector('.activity-thumb-bg');
+            if (thumbBg && thumbBg.dataset.src) {
+                // 預載入圖片
+                const img = new Image();
+                img.onload = function() {
+                    thumbBg.style.backgroundImage = `url('${this.src}')`;
+                    thumbBg.classList.add('loaded');
+                };
+                img.onerror = function() {
+                    // 圖片載入失敗時保持預設樣式
+                    thumbBg.classList.add('load-error');
+                };
+                img.src = thumbBg.dataset.src;
+            }
+        }
+        
+        function optimizeScrollPerformance(container) {
+            // 使用 requestAnimationFrame 優化滾動效能
+            requestAnimationFrame(() => {
+                // 檢查是否接近底部，可以實現無限滾動
+                const scrollTop = container.scrollTop;
+                const scrollHeight = container.scrollHeight;
+                const clientHeight = container.clientHeight;
+                
+                // 如果滾動到接近底部（預留100px），可以載入更多內容
+                if (scrollTop + clientHeight >= scrollHeight - 100) {
+                    // 這裡可以觸發載入更多活動的邏輯（未來功能擴展點）
+                }
+            });
+        }
     </script>
     <script>
         // User 專用的頭像上傳函數

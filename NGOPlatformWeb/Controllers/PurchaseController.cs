@@ -279,29 +279,6 @@ namespace NGOPlatformWeb.Controllers
             return View("Payment", paymentModel);
         }
 
-        // 測試頁面
-        public async Task<IActionResult> Test()
-        {
-            try
-            {
-                // 測試資料庫連接
-                var suppliesCount = await _context.Supplies.CountAsync();
-                var usersCount = await _context.Users.CountAsync();
-                var ordersCount = await _context.UserOrders.CountAsync();
-                
-                ViewBag.SuppliesCount = suppliesCount;
-                ViewBag.UsersCount = usersCount;
-                ViewBag.OrdersCount = ordersCount;
-                ViewBag.DatabaseConnected = true;
-            }
-            catch (Exception ex)
-            {
-                ViewBag.DatabaseConnected = false;
-                ViewBag.DatabaseError = ex.Message;
-            }
-            
-            return View();
-        }
 
         // 處理付款 - 模擬付款流程並更新資料庫
         [HttpPost]

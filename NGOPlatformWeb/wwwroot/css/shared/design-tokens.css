@@ -3,41 +3,49 @@
    ================================= */
 
 :root {
-  /* 主要色彩 */
-  --primary-color: #667eea;
-  --primary-dark: #5a67d8;
-  --primary-light: rgba(102, 126, 234, 0.1);
-  --secondary-color: #764ba2;
-  --secondary-dark: #6b46c1;
+  /* 主要色彩 - 低調專業色系 */
+  --primary-color: #0891b2;          /* 溫和的青藍色 */
+  --primary-dark: #0e7490;           /* 深青藍色 */
+  --primary-light: rgba(8, 145, 178, 0.1);
+  --secondary-color: #64748b;        /* 沉穩的石板灰 */
+  --secondary-dark: #475569;         /* 深石板灰 */
   
-  /* 功能色彩 */
-  --success-color: #28a745;
-  --success-light: #20c997;
-  --warning-color: #ffc107;
-  --warning-light: #fd7e14;
-  --info-color: #007bff;
-  --info-dark: #6f42c1;
+  /* 功能色彩 - 柔和版本 */
+  --success-color: #059669;          /* 森林綠 */
+  --success-light: #10b981;          /* 翠綠色 */
+  --warning-color: #d97706;          /* 琥珀色 */
+  --warning-light: #f59e0b;          /* 金黃色 */
+  --info-color: #0891b2;             /* 青藍色 */
+  --info-dark: #0e7490;              /* 深青藍色 */
   
-  /* 中性色彩 */
-  --text-primary: #2c3e50;
-  --text-secondary: #666;
-  --text-muted: #888;
-  --text-light: #64748b;
-  --border-color: rgba(102, 126, 234, 0.1);
-  --border-light: #f0f0f0;
+  /* 中性色彩 - 深色系統 */
+  --text-primary: #1e293b;           /* 深石板色 */
+  --text-secondary: #475569;         /* 中石板色 */
+  --text-muted: #64748b;             /* 淺石板色 */
+  --text-light: #94a3b8;             /* 很淺石板色 */
+  --border-color: rgba(8, 145, 178, 0.12);
+  --border-light: #e2e8f0;           /* 極淺灰藍 */
   
-  /* 背景色彩 */
+  /* 背景色彩 - 深色但溫和 */
   --bg-white: #ffffff;
-  --bg-light: #f8f9fa;
-  --bg-muted: #e9ecef;
-  --bg-gradient: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  --bg-light: #f8fafc;               /* 極淺藍灰 */
+  --bg-muted: #f1f5f9;               /* 淺藍灰 */
+  --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
   
-  /* 陰影 */
-  --shadow-sm: 0 3px 15px rgba(0,0,0,0.08);
-  --shadow-md: 0 8px 32px rgba(0,0,0,0.08);
-  --shadow-lg: 0 15px 35px rgba(102, 126, 234, 0.06);
-  --shadow-xl: 0 25px 50px rgba(102, 126, 234, 0.08);
-  --shadow-hover: 0 16px 48px rgba(102, 126, 234, 0.15);
+  /* 頁面背景 - 適中的深色系 */
+  --page-bg: linear-gradient(135deg, #334155 0%, #475569 25%, #64748b 50%, #475569 75%, #334155 100%);
+  --page-bg-secondary: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
+  
+  /* 陰影 - 更柔和專業 */
+  --shadow-sm: 0 3px 15px rgba(30, 41, 59, 0.08);
+  --shadow-md: 0 8px 32px rgba(30, 41, 59, 0.12);
+  --shadow-lg: 0 15px 35px rgba(8, 145, 178, 0.08);
+  --shadow-xl: 0 25px 50px rgba(8, 145, 178, 0.12);
+  --shadow-hover: 0 16px 48px rgba(8, 145, 178, 0.18);
+  
+  /* 卡片陰影 - 專業版 */
+  --card-shadow: 0 4px 20px rgba(30, 41, 59, 0.08);
+  --card-shadow-hover: 0 8px 30px rgba(8, 145, 178, 0.15);
   
   /* 圓角 */
   --radius-sm: 10px;
@@ -92,17 +100,33 @@
   --z-tooltip: 5;
 }
 
-/* 漸層組合 */
+/* 漸層組合 - 專業低調版 */
 .gradient-primary {
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
 }
 
 .gradient-subtle {
-  background: linear-gradient(135deg, var(--primary-light), rgba(118, 75, 162, 0.02));
+  background: linear-gradient(135deg, var(--primary-light), rgba(8, 145, 178, 0.03));
 }
 
 .gradient-overlay {
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 50%, var(--primary-color) 100%);
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.1) 0%, rgba(30, 41, 59, 0.2) 50%, var(--primary-color) 100%);
+}
+
+/* 新增專業頁面背景 */
+.gradient-page-bg {
+  background: var(--page-bg);
+  min-height: 100vh;
+}
+
+.gradient-card-bg {
+  background: linear-gradient(135deg, var(--bg-white) 0%, var(--bg-light) 100%);
+  box-shadow: var(--card-shadow);
+  transition: box-shadow var(--transition-base);
+}
+
+.gradient-card-bg:hover {
+  box-shadow: var(--card-shadow-hover);
 }
 
 /* 通用動畫 */

@@ -341,3 +341,161 @@
 .earned .achievement-icon.rainbow-icon { background: #6c757d; border-color: #6c757d; }
 .earned .achievement-icon.users-icon { background: #6c757d; border-color: #6c757d; }
 .earned .achievement-icon.check-icon { background: #198754; border-color: #198754; }
+
+/* ================================
+   成就展開/收起功能樣式
+   ================================ */
+
+/* 隱藏的成就項目 */
+.achievement-item.achievement-hidden {
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+/* 展開狀態的成就項目 */
+.achievements-expanded .achievement-item.achievement-hidden {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    animation: slideInUp 0.4s ease forwards;
+}
+
+/* 成就展開按鈕區域 */
+.achievement-toggle-section {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-light);
+}
+
+/* 展開/收起按鈕 - 參照導航按鈕深色配色 */
+.achievement-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-2xl);
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.95) 100%);
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 12px rgba(30, 41, 59, 0.15);
+}
+
+/* 按鈕底線效果 - 參照導航按鈕 */
+.achievement-toggle-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.3));
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.achievement-toggle-btn:hover {
+    background: linear-gradient(135deg, rgba(51, 65, 85, 0.95) 0%, rgba(71, 85, 105, 1) 100%);
+    color: #ffffff;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(30, 41, 59, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.achievement-toggle-btn:hover::after {
+    width: 70%;
+}
+
+.achievement-toggle-btn:active {
+    transform: translateY(-1px) scale(1.01);
+    box-shadow: 0 3px 15px rgba(30, 41, 59, 0.2);
+}
+
+/* 按鈕圖標旋轉動畫 */
+.toggle-icon {
+    transition: transform 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.achievement-toggle-btn.expanded .toggle-icon {
+    transform: rotate(180deg);
+}
+
+/* 隱藏成就數量標籤 */
+.hidden-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* 按鈕文字切換動畫 */
+.toggle-text {
+    transition: opacity 0.2s ease;
+}
+
+/* 展開狀態樣式調整 */
+.achievement-toggle-btn.expanded .toggle-text::after {
+    content: '';
+}
+
+.achievement-toggle-btn.expanded .hidden-count {
+    display: none;
+}
+
+/* 滑入動畫 */
+@keyframes slideInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 響應式調整 - 維持深色主題 */
+@media (max-width: 768px) {
+    .achievement-toggle-btn {
+        padding: var(--spacing-sm) var(--spacing-lg);
+        font-size: 0.85rem;
+        gap: var(--spacing-xs);
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 1) 100%);
+    }
+    
+    .achievement-toggle-btn:hover::after {
+        width: 60%; /* 手機上底線稍微短一些 */
+    }
+    
+    .hidden-count {
+        font-size: 0.75rem;
+        padding: 0.15rem 0.4rem;
+        background: rgba(255, 255, 255, 0.15); /* 更深的背景 */
+    }
+}
+
+@media (max-width: 576px) {
+    .achievement-toggle-section {
+        margin-top: var(--spacing-md);
+        padding-top: var(--spacing-sm);
+    }
+    
+    .achievement-toggle-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
