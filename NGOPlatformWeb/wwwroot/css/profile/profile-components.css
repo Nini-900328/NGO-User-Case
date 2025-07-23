@@ -7,24 +7,24 @@
 .activity-item {
     display: flex;
     align-items: center;
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;
-    background: #ffffff;
-    border-radius: 8px;
-    border: 1px solid #e9ecef;
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+    background: var(--bg-white);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-light);
     transition: background-color 0.15s ease;
 }
 
 .activity-item:hover {
-    background: #f8f9fa;
+    background: var(--bg-light);
 }
 
 .activity-thumb {
     width: 50px;
     height: 50px;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     object-fit: cover;
-    margin-right: 1rem;
+    margin-right: var(--spacing-md);
     flex-shrink: 0;
 }
 
@@ -35,7 +35,7 @@
 
 .activity-name {
     font-weight: 600;
-    color: #2c3e50;
+    color: var(--text-primary);
     margin-bottom: 0.25rem;
     font-size: 0.9rem;
     white-space: nowrap;
