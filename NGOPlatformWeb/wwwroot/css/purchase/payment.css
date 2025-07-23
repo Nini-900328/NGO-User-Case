@@ -1,20 +1,48 @@
 /* 付款頁面樣式 */
 .payment-page {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     min-height: 100vh;
-    padding: 40px 0;
+    padding: 48px 0;
+    position: relative;
 }
 
-/* 付款進度條 */
+.payment-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.08) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+/* 付款進度條 - 企業級專業設計 */
 .payment-progress {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 40px;
-    padding: 20px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    margin-bottom: 48px;
+    padding: 28px 32px;
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 18px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.payment-progress::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+    border-radius: 18px 18px 0 0;
 }
 
 .progress-step {
@@ -32,14 +60,16 @@
     top: 25px;
     right: -50%;
     width: 100%;
-    height: 2px;
-    background: #e9ecef;
+    height: 3px;
+    background: linear-gradient(90deg, #e2e8f0, #cbd5e0);
     z-index: 1;
+    border-radius: 2px;
 }
 
 .progress-step.completed::after,
 .progress-step.active::after {
-    background: #28a745;
+    background: linear-gradient(90deg, #48bb78, #38a169);
+    box-shadow: 0 1px 3px rgba(72, 187, 120, 0.3);
 }
 
 .step-icon {
@@ -58,142 +88,311 @@
 }
 
 .progress-step.completed .step-icon {
-    background: #28a745;
+    background: linear-gradient(135deg, #48bb78, #38a169);
     color: white;
+    box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+    transform: scale(1.1);
 }
 
 .progress-step.active .step-icon {
-    background: #007bff;
+    background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
-    box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.25), 0 4px 12px rgba(102, 126, 234, 0.3);
+    transform: scale(1.15);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1.15); }
+    50% { transform: scale(1.2); }
 }
 
 .step-label {
-    font-size: 14px;
-    font-weight: 500;
-    color: #6c757d;
+    font-size: 15px;
+    font-weight: 600;
+    color: #4a5568;
     text-align: center;
+    letter-spacing: -0.01em;
+    margin-top: 2px;
 }
 
 .progress-step.completed .step-label,
 .progress-step.active .step-label {
-    color: #495057;
-    font-weight: 600;
+    color: #1a202c;
+    font-weight: 700;
 }
 
-/* 訂單摘要 */
+/* 訂單摘要 - 企業級專業設計 */
 .order-summary {
-    background: white;
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
+    border: 1px solid #e3e6ea;
     height: fit-content;
     position: sticky;
     top: 20px;
+    transition: all 0.3s ease;
 }
 
 .order-summary h4 {
-    color: #2c3e50;
-    margin-bottom: 25px;
-    font-weight: 600;
-    border-bottom: 2px solid #f8f9fa;
-    padding-bottom: 15px;
+    color: #1a202c;
+    margin-bottom: 28px;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 16px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.order-summary h4 i {
+    color: #4a5568;
+    margin-right: 12px;
+    font-size: 18px;
+}
+
+.order-summary h4::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 1px;
 }
 
 .order-item {
-    margin-bottom: 25px;
+    margin-bottom: 28px;
+    padding: 24px;
+    background: linear-gradient(145deg, #fafbfc, #ffffff);
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: all 0.3s ease;
+}
+
+.order-item:hover {
+    border-color: #cbd5e0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    transform: translateY(-1px);
 }
 
 .item-info h5 {
-    color: #2c3e50;
-    font-weight: 600;
-    margin-bottom: 10px;
+    color: #1a202c;
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
 }
 
 .emergency-badge {
-    display: inline-block;
-    background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, #f56565, #e53e3e);
     color: white;
-    padding: 4px 12px;
-    border-radius: 20px;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    box-shadow: 0 3px 12px rgba(229, 62, 62, 0.3);
+    letter-spacing: 0.02em;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.emergency-badge i {
+    margin-right: 8px;
     font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 8px;
+    animation: pulse-warning 2s infinite;
+}
+
+@keyframes pulse-warning {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
 }
 
 .package-badge {
-    display: inline-block;
-    background: linear-gradient(45deg, #28a745, #20c997);
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, #48bb78, #38a169);
     color: white;
-    padding: 4px 12px;
-    border-radius: 20px;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    box-shadow: 0 3px 12px rgba(56, 161, 105, 0.3);
+    letter-spacing: 0.02em;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.package-badge i {
+    margin-right: 8px;
     font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 8px;
 }
 
 .case-info {
-    color: #17a2b8;
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 5px;
+    color: #2b6cb0;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    padding: 8px 14px;
+    background: linear-gradient(135deg, #ebf8ff, #dbeafe);
+    border-radius: 10px;
+    display: inline-block;
+    border: 2px solid #93c5fd;
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15);
+    position: relative;
+}
+
+.case-info::before {
+    content: '#';
+    font-weight: 700;
+    margin-right: 2px;
+    color: #3b82f6;
 }
 
 .quantity {
-    color: #6c757d;
-    font-size: 14px;
+    color: #4a5568;
+    font-size: 15px;
+    font-weight: 500;
+    background: #f7fafc;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border-left: 3px solid #cbd5e0;
+    margin-top: 8px;
 }
 
 .order-total {
-    border-top: 2px solid #f8f9fa;
-    padding-top: 20px;
-    margin-top: 20px;
+    border-top: 2px solid #e2e8f0;
+    padding-top: 24px;
+    margin-top: 24px;
+    background: linear-gradient(145deg, #f8fafc, #ffffff);
+    padding: 24px 20px 20px;
+    margin-left: -20px;
+    margin-right: -20px;
+    border-radius: 0 0 12px 12px;
+    position: relative;
+}
+
+.order-total::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 20px;
+    right: 20px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #cbd5e0, transparent);
 }
 
 .total-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
-    color: #495057;
+    align-items: center;
+    margin-bottom: 12px;
+    color: #4a5568;
+    font-weight: 500;
+    padding: 8px 0;
+    position: relative;
+}
+
+.total-row:not(.final):hover {
+    background: rgba(113, 128, 150, 0.05);
+    margin-left: -16px;
+    margin-right: -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    border-radius: 6px;
 }
 
 .total-row.final {
-    font-size: 18px;
-    font-weight: 600;
-    color: #2c3e50;
-    border-top: 1px solid #dee2e6;
-    padding-top: 15px;
-    margin-top: 15px;
+    font-size: 20px;
+    font-weight: 800;
+    color: #1a202c;
+    border-top: 2px solid #e2e8f0;
+    padding: 18px 16px 8px;
+    margin: 16px -16px 0;
+    background: linear-gradient(135deg, #f7fafc, #edf2f7);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    position: relative;
+}
+
+.total-row.final::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 1px;
 }
 
 .trust-note {
-    background: linear-gradient(45deg, #e8f5e8, #f0f8f0);
-    border: 1px solid #d4edda;
-    border-radius: 10px;
-    padding: 15px;
-    margin-top: 20px;
+    background: linear-gradient(135deg, #f0fff4, #e6fffa);
+    border: 1px solid #9ae6b4;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-top: 24px;
     display: flex;
     align-items: center;
-    color: #155724;
+    color: #22543d;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+}
+
+.trust-note::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #38a169, #2f855a);
 }
 
 .trust-note i {
-    margin-right: 10px;
-    color: #28a745;
+    margin-right: 12px;
+    color: #38a169;
+    font-size: 16px;
+    flex-shrink: 0;
 }
 
-/* 付款表單 */
+/* 付款表單 - 企業級專業設計 */
 .payment-form-section {
-    background: white;
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 16px;
+    padding: 36px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
+    border: 1px solid #e3e6ea;
+    position: relative;
+    transition: all 0.3s ease;
 }
 
 .form-section {
-    margin-bottom: 30px;
-    padding-bottom: 25px;
-    border-bottom: 1px solid #f8f9fa;
+    margin-bottom: 32px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid #e2e8f0;
+    position: relative;
+}
+
+.form-section::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, #667eea, transparent);
 }
 
 .form-section:last-child {
@@ -202,9 +401,19 @@
 }
 
 .form-section h4 {
-    color: #2c3e50;
-    margin-bottom: 20px;
-    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 24px;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+}
+
+.form-section h4 i {
+    color: #4a5568;
+    margin-right: 12px;
+    font-size: 18px;
 }
 
 .form-section h5 {
@@ -214,61 +423,300 @@
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    position: relative;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #495057;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    position: relative;
+}
+
+.form-group label[asp-for*="Name"]::after,
+.form-group label[asp-for*="Phone"]::after,
+.form-group label[asp-for*="Email"]::after {
+    content: ' *';
+    color: #e53e3e;
+    font-weight: 700;
 }
 
 .form-control {
     width: 100%;
-    padding: 12px 16px;
-    border: 2px solid #e9ecef;
-    border-radius: 10px;
+    padding: 14px 18px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
     font-size: 16px;
+    font-weight: 500;
+    background: #fafbfc;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    color: #2d3748;
+}
+
+.form-control::placeholder {
+    color: #a0aec0;
+    font-weight: 400;
 }
 
 .form-control:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
     outline: none;
+    background: white;
+    transform: translateY(-1px);
+}
+
+.form-control:hover:not(:focus) {
+    border-color: #cbd5e0;
+    background: white;
 }
 
 .form-text {
+    font-size: 13px;
+    color: #718096;
+    margin-top: 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.form-text::before {
+    content: '💡';
+    margin-right: 6px;
     font-size: 12px;
-    color: #6c757d;
-    margin-top: 5px;
+}
+
+/* 數量選擇器 - 企業級專業設計 */
+.quantity-selector {
+    background: linear-gradient(145deg, #f8fafc, #ffffff);
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.quantity-selector:hover {
+    border-color: #cbd5e0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.quantity-selector .form-label {
+    font-weight: 700;
+    color: #2d3748;
+    font-size: 15px;
+    margin-bottom: 12px;
+    display: block;
+    letter-spacing: -0.01em;
+}
+
+/* 自定義下拉選單樣式 - 企業級設計 */
+.custom-select-wrapper {
+    position: relative;
+    display: inline-block;
+    min-width: 140px;
+}
+
+.custom-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: linear-gradient(145deg, #ffffff, #f8fafc);
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 14px 48px 14px 18px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a202c;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06), inset 0 1px 2px rgba(0,0,0,0.02);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    outline: none;
+    letter-spacing: -0.01em;
+}
+
+.custom-select:hover {
+    border-color: #cbd5e0;
+    background: linear-gradient(145deg, #f8fafc, #edf2f7);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    transform: translateY(-1px);
+}
+
+.custom-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15), 0 6px 16px rgba(0,0,0,0.08);
+    background: #ffffff;
+    transform: translateY(-1px);
+}
+
+.custom-select:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.select-arrow {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #4a5568;
+    font-size: 12px;
+    transition: all 0.3s ease;
+}
+
+.custom-select-wrapper:hover .select-arrow {
+    color: #2d3748;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.custom-select:focus + .select-arrow {
+    color: #667eea;
+    transform: translateY(-50%) rotate(180deg);
+}
+
+.custom-select option {
+    background: white;
+    color: #2d3748;
+    padding: 12px 16px;
+    font-weight: 600;
+    border: none;
+    font-size: 15px;
+}
+
+.remaining-info {
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 16px;
+}
+
+.remaining-info small {
+    color: #4a5568;
+    font-weight: 500;
+    line-height: 1.5;
+    font-size: 13px;
+}
+
+.remaining-info #remainingQuantity {
+    font-weight: 700;
+    color: #2b6cb0;
 }
 
 /* 付款方式 */
 .payment-methods {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 }
 
 .payment-method {
-    border: 2px solid #e9ecef;
-    border-radius: 10px;
-    padding: 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 20px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    will-change: transform, box-shadow, border-color;
 }
 
 .payment-method:hover {
-    border-color: #007bff;
-    background: #f8f9fa;
+    border-color: #667eea;
+    background: linear-gradient(145deg, #ffffff, #f7fafc);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.payment-method:hover label span {
+    color: #1a202c !important;
+}
+
+.payment-method:hover .inline-support {
+    color: #2d3748 !important;
+}
+
+.payment-method:hover label i {
+    color: #4c51bf !important;
 }
 
 .payment-method.active {
-    border-color: #007bff;
-    background: linear-gradient(45deg, #e3f2fd, #f0f8ff);
+    border-color: #667eea;
+    background: linear-gradient(135deg, #ffffff, #f7fafc);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+    position: relative;
+    transform: translateY(-1px);
+}
+
+.payment-method.active::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 16px;
+    z-index: -1;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+.payment-method.active::after {
+    content: '✓';
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 24px;
+    height: 24px;
+    background: #667eea;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    animation: checkmark-appear 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes checkmark-appear {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.payment-method.active label span {
+    color: #1a202c !important;
+    font-weight: 800 !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    line-height: 1.2;
+    vertical-align: baseline;
+}
+
+.payment-method.active .inline-support {
+    color: #2d3748 !important;
+    font-weight: 600 !important;
+}
+
+.payment-method.active label i {
+    color: #4c51bf !important;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
 }
 
 .payment-method input[type="radio"] {
@@ -282,50 +730,78 @@
     margin: 0;
     cursor: pointer;
     width: 100%;
+    line-height: 1;
 }
 
 .payment-method label i {
-    font-size: 24px;
-    margin-right: 15px;
-    color: #007bff;
-    width: 30px;
+    font-size: 20px;
+    margin-right: 14px;
+    color: #a0aec0;
+    width: 28px;
+    text-align: center;
+    transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
 }
 
-.payment-method label > div {
-    flex: 1;
-}
+/* 移除：舊的 div 結構已統一為 payment-text */
 
 .payment-method label span {
     display: block;
-    font-weight: 500;
-    color: #2c3e50;
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+    transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    line-height: 1.3;
+    margin-bottom: 6px;
 }
 
-.payment-method label small {
-    color: #6c757d;
-    font-size: 12px;
+/* 移除：舊的 block small 樣式已被內聯樣式取代 */
+
+/* 內聯支援文字樣式 */
+.payment-method .inline-support {
+    display: inline;
+    color: #a0aec0;
+    font-size: 13px;
+    font-weight: 500;
+    margin-left: 0;
+    transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.02em;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.payment-method .inline-support::before {
+    content: '•';
+    margin-right: 8px;
+    color: #cbd5e0;
+    font-weight: 600;
+}
+
+.payment-text {
+    flex: 1;
+}
+
+.payment-text span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.payment-text span > .inline-support {
+    margin-left: auto;
+    margin-right: 16px;
 }
 
 /* 信用卡區域 */
 .credit-card-section {
-    background: #f8f9fa;
-    border-radius: 10px;
-    padding: 20px;
-    margin-top: 15px;
-}
-
-.card-demo-note {
-    background: #fff3cd;
-    border: 1px solid #ffeaa7;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 15px;
-    color: #856404;
-    font-size: 14px;
-}
-
-.card-demo-note i {
-    margin-right: 8px;
+    background: linear-gradient(145deg, #f8fafc, #ffffff);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 20px;
 }
 
 /* 條款區域 */
@@ -370,22 +846,45 @@
     margin-top: 30px;
 }
 
-/* 頂部返回按鈕樣式 */
+/* 頂部返回按鈕樣式 - 企業級專業設計 */
 .btn-outline-secondary {
-    border: 1px solid #6c757d;
-    color: #6c757d;
-    background: transparent;
-    padding: 8px 16px;
-    border-radius: 8px;
+    border: 2px solid #667eea;
+    color: #667eea;
+    background: linear-gradient(145deg, #ffffff, #f7fafc);
+    padding: 10px 18px;
+    border-radius: 10px;
     transition: all 0.3s ease;
-    font-size: 0.9rem;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
+    letter-spacing: -0.01em;
 }
 
 .btn-outline-secondary:hover {
-    background: #6c757d;
+    background: linear-gradient(135deg, #667eea, #5a67d8);
     color: white;
-    border-color: #6c757d;
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(102, 126, 234, 0.25);
+    text-decoration: none;
+}
+
+.btn-outline-secondary:active {
     transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.btn-outline-secondary i {
+    font-size: 13px;
+    margin-right: 6px;
+    transition: transform 0.3s ease;
+}
+
+.btn-outline-secondary:hover i {
+    transform: translateX(-2px);
 }
 
 .btn {
@@ -414,20 +913,47 @@
 }
 
 .btn-primary {
-    background: linear-gradient(45deg, #007bff, #0056b3);
+    background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
-    min-width: 200px;
+    min-width: 220px;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 16px 32px;
+    letter-spacing: -0.01em;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.6s;
+}
+
+.btn-primary:hover::before {
+    left: 100%;
 }
 
 .btn-primary:hover:not(:disabled) {
-    background: linear-gradient(45deg, #0056b3, #004085);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,123,255,0.3);
+    background: linear-gradient(135deg, #5a67d8, #6b46c1);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
 }
 
 .btn-primary:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-primary:disabled::before {
+    display: none;
 }
 
 /* 成功頁面樣式 */
@@ -763,15 +1289,187 @@
     text-decoration: none;
 }
 
-/* 響應式設計 */
+/* 滾動和互動動畫 */
+.payment-form-section {
+    animation: slideInRight 0.8s ease-out;
+}
+
+.order-summary {
+    animation: slideInLeft 0.8s ease-out;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 企業級微動效 */
+.order-summary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.payment-form-section:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.form-group {
+    position: relative;
+    overflow: hidden;
+}
+
+.form-group::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #667eea, transparent);
+    transition: left 0.6s ease;
+    z-index: 1;
+}
+
+.form-group:focus-within::before {
+    left: 100%;
+}
+
+/* 響應式設計 - 企業級優化 */
 @media (max-width: 768px) {
+    .payment-page {
+        padding: 24px 0;
+    }
+    
     .payment-progress {
         flex-direction: column;
-        gap: 20px;
+        gap: 24px;
+        margin-bottom: 32px;
+        padding: 24px 20px;
     }
     
     .progress-step::after {
         display: none;
+    }
+    
+    .order-summary {
+        margin-bottom: 24px;
+        padding: 24px;
+    }
+    
+    .payment-form-section {
+        padding: 24px;
+    }
+    
+    .form-section {
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+    }
+    
+    .form-section h4 {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-control {
+        padding: 12px 16px;
+        font-size: 16px;
+    }
+    
+    .payment-methods {
+        gap: 16px;
+    }
+    
+    .payment-method {
+        padding: 20px;
+    }
+    
+    .payment-method label i {
+        font-size: 18px;
+        margin-right: 12px;
+        width: 24px;
+    }
+    
+    .payment-method label span {
+        font-size: 15px;
+        margin-bottom: 4px;
+    }
+    
+    /* 移除：舊的 small 樣式已被內聯樣式取代 */
+    
+    .payment-method .inline-support {
+        font-size: 12px;
+        margin-left: 0;
+    }
+    
+    .payment-text span {
+        flex-wrap: wrap;
+        white-space: normal;
+        justify-content: flex-start;
+    }
+    
+    .payment-text span > .inline-support {
+        margin-left: 12px;
+        margin-right: 8px;
+    }
+    
+    .quantity-selector {
+        padding: 16px;
+    }
+    
+    .custom-select-wrapper {
+        min-width: 120px;
+    }
+    
+    .custom-select {
+        padding: 12px 40px 12px 14px;
+        font-size: 14px;
+    }
+    
+    .select-arrow {
+        right: 12px;
+        font-size: 11px;
+    }
+    
+    .btn-primary {
+        width: 100%;
+        min-width: auto;
+        font-size: 16px;
+        padding: 14px 24px;
+    }
+    
+    .order-total {
+        margin-left: -16px;
+        margin-right: -16px;
+        padding: 20px 16px 16px;
+    }
+    
+    .total-row.final {
+        font-size: 18px;
+        margin-left: -12px;
+        margin-right: -12px;
+        padding: 16px 12px 8px;
     }
     
     .details-header {

@@ -18,7 +18,16 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 確保main內容區域填滿剩餘空間 */
+main {
+  flex: 1;
 }
 
 

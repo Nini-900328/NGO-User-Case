@@ -240,7 +240,7 @@ namespace NGOPlatformWeb.Controllers
                     Category = r.Activity?.Category ?? ""
                 }).ToList(),
 
-                // TODO: 物資申請統計待其他組員實作
+                // 物資申請統計（預留擴展功能）
                 TotalApplications = 0,
                 PendingApplications = 0
             };

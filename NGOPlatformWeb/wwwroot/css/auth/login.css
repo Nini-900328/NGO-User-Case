@@ -4,6 +4,13 @@
     --initial-content-opacity: 1;
 }
 
+/* 確保body沒有多餘空白 */
+.login-page {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden; /* 防止橫向滾動條 */
+}
+
 /* Lottie Loading Overlay */
 .loading-overlay {
     position: fixed !important;
@@ -13,7 +20,7 @@
     bottom: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%) !important;
+    background: linear-gradient(135deg, #374151 0%, #4b5563 50%, #374151 100%) !important;
     display: var(--initial-loading-display) !important;
     justify-content: center !important;
     align-items: center !important;
@@ -44,17 +51,66 @@
     -webkit-backface-visibility: hidden;
 }
 
-/* 全屏居中背景 - 改進漸變 */
+/* 全屏居中背景 - 專業漸變與幾何圖案 */
 .login-wrapper {
-	min-height: 100vh;
-	background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+	height: 100vh; /* 改為固定高度，不使用min-height */
+	background: 
+		/* 幾何圖案覆蓋層 */
+		radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+		radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.06) 0%, transparent 50%),
+		/* 主要漸變背景 */
+		linear-gradient(135deg, #1f2937 0%, #374151 25%, #4b5563 50%, #374151 75%, #1f2937 100%);
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	opacity: var(--initial-content-opacity);
 	transform: translateY(0);
 	transition: opacity 0.8s ease;
-	padding: 20px;
+	padding: 15px; /* 減少padding來縮小留白 */
+	margin: 0; /* 確保沒有外邊距 */
+	box-sizing: border-box; /* 確保padding不會增加總尺寸 */
+	overflow: hidden; /* 防止內容溢出造成滾動條 */
+	position: relative;
+}
+
+/* 添加細微的幾何裝飾元素 */
+.login-wrapper::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: 
+		/* 細微的網格圖案 */
+		linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+		linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+	background-size: 60px 60px;
+	pointer-events: none;
+	opacity: 0.5;
+}
+
+/* 筆電尺寸：消除下方留白，緊湊顯示 */
+@media (min-width: 768px) and (max-width: 1024px) {
+	.login-wrapper {
+		height: 100vh; /* 固定高度 */
+		align-items: center; /* 改回居中對齊，避免上方偏移 */
+		padding: 10px; /* 進一步減少padding */
+		overflow: hidden; /* 防止溢出 */
+	}
+	
+	/* 筆電專用：讓container更緊湊 */
+	.login-container {
+		max-width: 750px; /* 在筆電上進一步縮小 */
+		height: auto; /* 讓高度自適應內容 */
+		max-height: calc(100vh - 20px); /* 最大高度不超過螢幕減去padding */
+	}
+	
+	.login-image,
+	.login-form-area {
+		height: auto; /* 讓高度自適應 */
+		min-height: 450px; /* 減少最小高度 */
+	}
 }
 
 .login-wrapper.visible {
@@ -62,46 +118,134 @@
 	transform: translateY(0);
 }
 
-/* 卡片容器 - 固定尺寸避免抖動 */
+/* 卡片容器 - 響應式高度 */
 .login-container {
 	display: flex;
 	flex-wrap: wrap; /* 保證手機版能換行 */
-	max-width: 1200px;
+	max-width: 950px; /* 從1200px縮小到950px，讓容器更緊湊 */
 	width: 100%;
+	height: auto; /* 讓高度自適應內容 */
+	max-height: calc(100vh - 30px); /* 最大高度限制 */
 	border-radius: 20px;
 	overflow: hidden;
-	box-shadow: 0 0 24px rgba(0, 0, 0, 0.05);
-	/* 確保容器尺寸固定 */
-	min-height: 700px;
+	/* 增強陰影效果，營造專業感 */
+	box-shadow: 
+		0 25px 50px -12px rgba(0, 0, 0, 0.25),
+		0 0 0 1px rgba(255, 255, 255, 0.05);
 	position: relative;
+	/* 添加細微的邊框光暈 */
+	backdrop-filter: blur(10px);
 }
 
-/* 左侧背景图 - 固定尺寸避免抖動 */
+/* 為卡片添加細微的內陰影 */
+.login-container::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border-radius: 20px;
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.02) 100%);
+	pointer-events: none;
+	z-index: 1;
+}
+
+/* 只在大螢幕上設定最小高度 */
+@media (min-width: 1025px) {
+	.login-container {
+		min-height: 520px; /* 進一步降低高度 */
+		max-height: calc(100vh - 30px); /* 限制最大高度 */
+	}
+}
+
+
+/* 左侧背景图 - 響應式高度 */
 .login-image {
 	flex: 1 1 50%; /* 每邊各佔 50%，自動調整 */
 	display: flex;
 	flex-direction: column;
 	justify-content: center; /* 垂直置中 */
 	background: url('/images/LoginImage.png') center/cover no-repeat;
-	min-height: 700px; /* 固定最小高度 */
-	height: 700px; /* 固定高度避免變化 */
+	height: auto; /* 讓高度自適應 */
 	width: 50%; /* 固定寬度 */
 	position: relative;
 	overflow: hidden; /* 避免內容溢出導致尺寸變化 */
 }
 
-/* 右侧表单内距 - 固定尺寸避免抖動 */
+/* 為左側圖片添加漸變覆蓋層，增加專業感 */
+.login-image::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: 
+		/* 細微的彩色漸變覆蓋 */
+		linear-gradient(135deg, 
+			rgba(59, 130, 246, 0.15) 0%, 
+			rgba(16, 185, 129, 0.10) 25%, 
+			rgba(139, 92, 246, 0.08) 50%, 
+			rgba(236, 72, 153, 0.10) 75%, 
+			rgba(251, 146, 60, 0.12) 100%
+		),
+		/* 暗色遮罩確保文字清晰 */
+		linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
+	pointer-events: none;
+	z-index: 1;
+}
+
+/* 只在大螢幕上設定最小高度 */
+@media (min-width: 1025px) {
+	.login-image {
+		min-height: 520px; /* 與container統一高度 */
+	}
+}
+
+/* 右侧表单内距 - 響應式可滾動 */
 .login-form-area {
 	flex: 1 1 50%; /* 每邊各佔 50%，自動調整 */
 	display: flex;
 	flex-direction: column;
-	justify-content: center; /* 垂直置中 */
-	padding: 2rem;
-	min-height: 700px; /* 固定最小高度 */
-	height: 700px; /* 固定高度避免變化 */
+	justify-content: flex-start; /* 改為從上方對齊，避免內容被擠壓 */
+	padding: 1.5rem; /* 稍微減少padding */
+	height: auto; /* 讓高度自適應 */
 	width: 50%; /* 固定寬度 */
 	box-sizing: border-box; /* 確保padding不影響總尺寸 */
-	overflow: visible; /* 允許下拉選單顯示 */
+	overflow-y: auto; /* 允許垂直滾動 */
+	overflow-x: visible; /* 允許下拉選單顯示 */
+	position: relative;
+	z-index: 2; /* 確保表單在覆蓋層之上 */
+	/* 添加細微的背景漸變 */
+	background: 
+		linear-gradient(135deg, 
+			rgba(255, 255, 255, 0.98) 0%, 
+			rgba(248, 250, 252, 0.95) 100%
+		);
+}
+
+/* 為表單區域添加細微的紋理效果 */
+.login-form-area::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: 
+		/* 非常細微的點狀圖案 */
+		radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.02) 1px, transparent 0);
+	background-size: 20px 20px;
+	pointer-events: none;
+	z-index: -1;
+}
+
+/* 只在大螢幕上設定最小高度 */
+@media (min-width: 1025px) {
+	.login-form-area {
+		min-height: 520px; /* 與container統一高度 */
+	}
 }
 
 /* 共用：大号浅灰输入框 - 添加透明邊框避免跳動 */
@@ -628,7 +772,7 @@ a[href*="ResetPassword"]:not(.breadcrumb-item > a):after {
 	left: 0;
 	width: 0;
 	height: 2px;
-	background: linear-gradient(90deg, #0d6efd, #8b5cf6);
+	background: linear-gradient(90deg, #0d6efd, #6b7280);
 	transition: width 0.2s ease;
 }
 
@@ -705,31 +849,56 @@ a[href*="ResetPassword"]:not(.breadcrumb-item > a):hover:after {
 .login-container {
 	padding-top: 0 !important;
 	padding-bottom: 0 !important;
+	margin-bottom: 0 !important; /* 確保沒有底部margin */
 }
 /* 壓縮登入表單區高度 */
 .login-form-area {
-	padding-top: 0.5rem !important; /* 原本可能是 2.5rem */
-	padding-bottom: 0.5rem!important;
+	padding-top: 1rem !important; /* 減少上方padding */
+	padding-bottom: 1rem !important; /* 統一上下padding */
 }
 .breadcrumb {
 	margin-bottom: 0.25rem; /* 原本可能是1rem或更多 */
 }
 /* 壓縮 logo 圖、標題上下間距 */
 .login-form-area h1,
-.login-form-area h2 {
+.login-form-area h2,
+.login-form-area h4 {
 	margin-top: 0.25rem !important;
 	margin-bottom: 0.5rem !important;
 }
+
+/* 特別優化登入頁面的間距，讓Google登入按鈕有足夠空間 */
+.login-form-area .d-flex.align-items-center.mb-3 {
+	margin-bottom: 0.5rem !important; /* 減少logo區塊下方間距 */
+}
+
+.login-form-area .mb-3 {
+	margin-bottom: 0.75rem !important; /* 統一縮小表單項目間距 */
+}
+
+.login-form-area .mb-4 {
+	margin-bottom: 1rem !important; /* 縮小較大間距項目 */
+}
+
 
 /* 手机版隐藏左图 & 去圆角阴影 */
 @media (max-width: 767.98px) {
 	.login-container {
 		border-radius: 0;
 		box-shadow: none;
+		max-height: none;
+		min-height: 100vh;
 	}
 
 	.login-image {
 		display: none;
+	}
+	
+	.login-form-area {
+		width: 100%;
+		padding: 1rem;
+		min-height: 100vh;
+		justify-content: flex-start;
 	}
 	
 	.modal-dialog {

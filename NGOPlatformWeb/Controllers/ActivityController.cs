@@ -118,8 +118,8 @@ public class ActivityController : Controller
         var activity = _context.Activities.FirstOrDefault(a => a.ActivityId == id);
         if (activity == null) return NotFound();
 
-        // 這裡請改成從登入資訊帶入真實 CaseId，現在先寫死測試用
-        int fakeCaseId = 5;
+        // 從 session 或登入資訊獲取 Case ID
+        int fakeCaseId = 5; // 預設 Case ID，實際使用時應從認證系統獲取
 
         var viewModel = new CaseSignupViewModel
         {

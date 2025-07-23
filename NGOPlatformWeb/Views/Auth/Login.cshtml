@@ -163,9 +163,6 @@
                     document.body.style.pointerEvents = 'auto';
                     
                     sessionStorage.removeItem('showPlaneAnimation');
-                    console.log('動畫結束，所有設置已恢復正常');
-                    console.log('主內容透明度:', mainContent.style.opacity);
-                    console.log('CSS變數值:', getComputedStyle(document.documentElement).getPropertyValue('--initial-content-opacity'));
                 }, 1500);
             }
             
