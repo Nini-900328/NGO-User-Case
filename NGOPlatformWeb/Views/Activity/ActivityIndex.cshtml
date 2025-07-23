@@ -8,29 +8,28 @@
     </div>
 </div>
 
-<link rel="stylesheet" href="~/css/activity-overview.css" />
+<link rel="stylesheet" href="~/css/case/activity-overview.css" />
 
 <div class="container">
     <div class="mb-4">
         <div class="d-flex flex-wrap justify-content-center align-items-center gap-2">
-            @{
-                var currentAction = Model.CurrentAction;
-            }
             <input type="text" class="form-control search-box" placeholder="搜尋活動名稱…" />
-            <a asp-action="@currentAction" class="btn btn-outline-success">全部活動</a>
-            <a asp-action="@currentAction" asp-route-category="生活" class="btn btn-outline-success">生活</a>
-            <a asp-action="@currentAction" asp-route-category="運動" class="btn btn-outline-secondary">運動</a>
-            <a asp-action="@currentAction" asp-route-category="娛樂" class="btn btn-outline-secondary">娛樂</a>
-            <a asp-action="@currentAction" asp-route-category="教育" class="btn btn-outline-secondary">教育</a>
-            <a asp-action="@currentAction" asp-route-category="心靈" class="btn btn-outline-secondary">心靈</a>
+
+            <button class="btn btn-outline-success btn-filter" data-category="全部">全部</button>
+            <button class="btn btn-outline-success btn-filter" data-category="生活">生活</button>
+            <button class="btn btn-outline-success btn-filter" data-category="運動">運動</button>
+            <button class="btn btn-outline-success btn-filter" data-category="娛樂">娛樂</button>
+            <button class="btn btn-outline-success btn-filter" data-category="教育">教育</button>
+            <button class="btn btn-outline-success btn-filter" data-category="心靈">心靈</button>
         </div>
     </div>
+
 
     <div class="row">
         @foreach (var item in Model.Activities)
         {
             <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-                <div class="activity-card-vertical search-card">
+                <div class="activity-card-vertical search-card" data-category="@item.Category">
                     <div class="activity-img">
                         <img src="@item.ImageUrl" alt="活動圖片" />
                     </div>
@@ -242,292 +241,270 @@
 </div>
 
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-            // 原本的 TempData 處理已移除，現在使用 AJAX 方式處理取消報名
-            
-            $(".search-box").on("keyup", function () {
-                var value = $(this).val().toLowerCase();
-                let hasVisible = false;
+        <script>
+            $(document).ready(function () {
+                // 🔍 搜尋活動名稱
+                $(".search-box").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    let hasVisible = false;
 
-                $(".search-card").each(function () {
-                    const text = $(this).text().toLowerCase();
-                    const match = text.includes(value);
-                    $(this).closest(".col-12").toggle(match);
-                    if (match) hasVisible = true;
-                });
+                    $(".search-card").each(function () {
+                        const text = $(this).text().toLowerCase();
+                        const match = text.includes(value);
+                        $(this).closest(".col-12").toggle(match);
+                        if (match) hasVisible = true;
+                    });
 
-                // 控制卡片容器靠左
-                const $container = $("#activity-list");
-                if (hasVisible) {
-                    $container.addClass("justify-content-start");
-                } else {
-                    $container.removeClass("justify-content-start");
-                }
-            });
-        });
-
-        // 全域變數
-        let currentActivityId = null;
-        let currentCaseActivityId = null;
-
-
-        // 動態生成同伴人數選項
-        function generateCompanionOptions(maxCompanions) {
-            const select = $('#numberOfCompanions');
-            select.empty();
-            
-            for (let i = 0; i <= maxCompanions; i++) {
-                const text = i === 0 ? '僅自己參加' : `攜帶 ${i} 位同伴`;
-                select.append(`<option value="${i}">${text}</option>`);
-            }
-            
-            // 更新總人數顯示
-            updateTotalParticipants();
-        }
-
-        // 更新總參與人數顯示
-        function updateTotalParticipants() {
-            const companions = parseInt($('#numberOfCompanions').val()) || 0;
-            const total = 1 + companions;
-            $('#totalParticipants').text(total);
-        }
-
-        // 同伴人數改變時更新總人數
-        $(document).on('change', '#numberOfCompanions', function() {
-            updateTotalParticipants();
-        });
-
-        // 確認報名
-        $(document).on('click', '#confirmRegistration', function() {
-            const numberOfCompanions = parseInt($('#numberOfCompanions').val()) || 0;
-            
-            $(this).prop('disabled', true).text('報名中...');
-            
-            $.post('/Activity/RegisterWithCompanions', {
-                activityId: currentActivityId,
-                numberOfCompanions: numberOfCompanions
-            })
-            .done(function(data) {
-                if (data.success) {
-                    // 顯示成功 Toast
-                    showSuccessToast('恭喜您報名成功！', '期待您的參與！');
-                    // 關閉 Modal
-                    $('#registrationModal').modal('hide');
-                    // 立即更新按鈕狀態
-                    updateButtonState(currentActivityId, true);
-                    // 更新人數顯示
-                    updateParticipantCount(currentActivityId, data.currentParticipants, data.maxParticipants);
-                } else {
-                    showErrorToast('報名失敗', data.message);
-                }
-            })
-            .fail(function() {
-                showErrorToast('連線錯誤', '報名時發生網路錯誤，請稍後再試');
-            })
-            .always(function() {
-                $('#confirmRegistration').prop('disabled', false).text('確認報名');
-            });
-        });
-
-        // 顯示成功 Toast
-        function showSuccessToast(message, details) {
-            $('#successMessage').text(message);
-            $('#successDetails').text(details);
-            
-            var toast = new bootstrap.Toast(document.getElementById('successToast'), {
-                delay: 4000 // 4秒後自動關閉
-            });
-            toast.show();
-        }
-
-        // 顯示錯誤 Toast
-        function showErrorToast(message, details) {
-            $('#errorMessage').text(message);
-            $('#errorDetails').text(details);
-            
-            var toast = new bootstrap.Toast(document.getElementById('errorToast'), {
-                delay: 5000 // 5秒後自動關閉
-            });
-            toast.show();
-        }
-
-        // 改善其他地方的 alert 顯示
-        function showRegistrationModal(activityId, activityName) {
-            currentActivityId = activityId;
-            
-            // 取得活動資訊
-            $.get('/Activity/GetActivityInfo/' + activityId)
-                .done(function(data) {
-                    if (data.success) {
-                        // 填入活動資訊
-                        $('#activityName').text(data.activityName);
-                        $('#currentParticipants').text(data.currentParticipants);
-                        $('#maxParticipants').text(data.maxParticipants);
-                        $('#availableSlots').text(data.availableSlots);
-                        
-                        // 動態生成同伴人數選項
-                        generateCompanionOptions(data.maxCompanions);
-                        
-                        // 顯示 Modal
-                        var modal = new bootstrap.Modal(document.getElementById('registrationModal'));
-                        modal.show();
+                    // 控制卡片容器靠左
+                    const $container = $("#activity-list");
+                    if (hasVisible) {
+                        $container.addClass("justify-content-start");
                     } else {
-                        showErrorToast('無法載入活動', data.message);
+                        $container.removeClass("justify-content-start");
                     }
-                })
-                .fail(function() {
-                    showErrorToast('連線錯誤', '無法取得活動資訊，請檢查網路連線');
                 });
-        }
 
-        // 取消報名 - 顯示確認 Modal
-        function cancelRegistration(activityId, activityName) {
-            // 設定 Modal 內容
-            $('#cancelActivityName').text(activityName);
-            
-            // 設定確認按鈕的處理函數
-            $('#confirmCancelBtn').off('click').on('click', function() {
-                // 關閉確認 Modal
-                $('#cancelConfirmModal').modal('hide');
-                
-                // 執行取消報名
-                $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i>取消中...');
-                
-                $.post('/Activity/CancelRegistrationAjax', {
-                    activityId: activityId
-                })
-                .done(function(data) {
-                    if (data.success) {
-                        showSuccessToast('取消報名成功', data.message);
-                        // 立即更新按鈕狀態
-                        updateButtonState(activityId, false);
-                        // 更新人數顯示
-                        updateParticipantCount(activityId, data.currentParticipants, data.maxParticipants);
-                    } else {
-                        showErrorToast('取消報名失敗', data.message);
-                    }
-                })
-                .fail(function() {
-                    showErrorToast('連線錯誤', '取消報名時發生網路錯誤，請稍後再試');
-                })
-                .always(function() {
-                    $('#confirmCancelBtn').prop('disabled', false).html('<i class="fas fa-check me-1"></i>確定取消');
-                });
-            });
-            
-            // 顯示確認 Modal
-            var modal = new bootstrap.Modal(document.getElementById('cancelConfirmModal'));
-            modal.show();
-        }
+                // 🏷️ 點擊分類按鈕 (不跳頁，前端篩選)
+                $(".btn-filter").on("click", function () {
+                    const category = $(this).data("category");
 
-        // 更新按鈕狀態
-        function updateButtonState(activityId, isRegistered) {
-            // 使用 data 屬性精確找到對應活動的按鈕
-            const button = $(`button[data-activity-id="${activityId}"]`);
-            
-            if (button.length > 0) {
-                const activityName = button.data('activity-name') || '';
-                
-                if (isRegistered) {
-                    // 變更為取消報名按鈕
-                    button.removeClass('btn-join').addClass('btn-join btn-cancel');
-                    button.text('取消報名');
-                    button.attr('onclick', `cancelRegistration(${activityId}, '${activityName}')`);
-                } else {
-                    // 變更為立即參與按鈕
-                    button.removeClass('btn-cancel').addClass('btn-join');
-                    button.text('立即參與');
-                    
-                    // 檢查頁面上其他「立即參與」按鈕的類型來判斷用戶類型
-                    const otherJoinButtons = $('.btn-join').not(button);
-                    let isCase = false;
-                    
-                    otherJoinButtons.each(function() {
-                        const onclick = $(this).attr('onclick') || '';
-                        if (onclick.includes('showCaseRegistrationModal')) {
-                            isCase = true;
-                            return false; // 跳出 each 循環
+            // ✅ 這裡改為使用 active，因為你的 CSS 是透過 active 來改顏色
+            $(".btn-filter").removeClass("active");
+            $(this).addClass("active");
+
+                    // 篩選卡片
+                    $(".activity-card-vertical").each(function () {
+                        const cardCategory = $(this).data("category");
+                        if (category === "全部" || cardCategory === category) {
+                            $(this).closest(".col-12").show();
+                        } else {
+                            $(this).closest(".col-12").hide();
                         }
                     });
-                    
-                    if (isCase) {
-                        // Case 用戶
-                        button.attr('onclick', `showCaseRegistrationModal(${activityId}, '${activityName}')`);
-                    } else {
-                        // User 用戶
-                        button.attr('onclick', `showRegistrationModal(${activityId}, '${activityName}')`);
-                    }
+                });
+            });
+
+            // 全域變數
+            let currentActivityId = null;
+            let currentCaseActivityId = null;
+
+            // 動態生成同伴人數選項
+            function generateCompanionOptions(maxCompanions) {
+                const select = $('#numberOfCompanions');
+                select.empty();
+
+                for (let i = 0; i <= maxCompanions; i++) {
+                    const text = i === 0 ? '僅自己參加' : `攜帶 ${i} 位同伴`;
+                    select.append(`<option value="${i}">${text}</option>`);
                 }
-            }
-        }
 
-        // 更新參與人數顯示
-        function updateParticipantCount(activityId, currentParticipants, maxParticipants) {
-            const participantElement = $(`p[data-activity-id="${activityId}"] span.current`);
-            const maxElement = $(`p[data-activity-id="${activityId}"] span.max`);
-            
-            if (participantElement.length > 0) {
-                participantElement.text(currentParticipants);
+                updateTotalParticipants();
             }
-            if (maxElement.length > 0) {
-                maxElement.text(maxParticipants);
-            }
-        }
 
-        // Case 報名 Modal
-        function showCaseRegistrationModal(activityId, activityName) {
-            currentCaseActivityId = activityId;
-            
-            // 取得活動資訊
-            $.get('/Activity/GetActivityInfo/' + activityId)
-                .done(function(data) {
+            // 更新總參與人數顯示
+            function updateTotalParticipants() {
+                const companions = parseInt($('#numberOfCompanions').val()) || 0;
+                const total = 1 + companions;
+                $('#totalParticipants').text(total);
+            }
+
+            // 同伴人數改變時更新總人數
+            $(document).on('change', '#numberOfCompanions', function () {
+                updateTotalParticipants();
+            });
+
+            // 確認報名
+            $(document).on('click', '#confirmRegistration', function () {
+                const numberOfCompanions = parseInt($('#numberOfCompanions').val()) || 0;
+
+                $(this).prop('disabled', true).text('報名中...');
+
+                $.post('/Activity/RegisterWithCompanions', {
+                    activityId: currentActivityId,
+                    numberOfCompanions: numberOfCompanions
+                })
+                .done(function (data) {
                     if (data.success) {
-                        // 填入活動資訊
-                        $('#caseActivityName').text(data.activityName);
-                        $('#caseCurrentParticipants').text(data.currentParticipants);
-                        $('#caseMaxParticipants').text(data.maxParticipants);
-                        $('#caseAvailableSlots').text(data.availableSlots);
-                        
-                        // 顯示 Modal
-                        var modal = new bootstrap.Modal(document.getElementById('caseRegistrationModal'));
-                        modal.show();
+                        showSuccessToast('恭喜您報名成功！', '期待您的參與！');
+                        $('#registrationModal').modal('hide');
+                        updateButtonState(currentActivityId, true);
+                        updateParticipantCount(currentActivityId, data.currentParticipants, data.maxParticipants);
                     } else {
-                        showErrorToast('無法載入活動', data.message);
+                        showErrorToast('報名失敗', data.message);
                     }
                 })
-                .fail(function() {
-                    showErrorToast('連線錯誤', '無法取得活動資訊，請檢查網路連線');
+                .fail(function () {
+                    showErrorToast('連線錯誤', '報名時發生網路錯誤，請稍後再試');
+                })
+                .always(function () {
+                    $('#confirmRegistration').prop('disabled', false).text('確認報名');
                 });
-        }
-
-        // Case 確認報名
-        $(document).on('click', '#confirmCaseRegistration', function() {
-            $(this).prop('disabled', true).text('報名中...');
-            
-            $.post('/Activity/RegisterCase', {
-                activityId: currentCaseActivityId
-            })
-            .done(function(data) {
-                if (data.success) {
-                    // 顯示成功 Toast
-                    showSuccessToast('恭喜您報名成功！', '期待您的參與！');
-                    // 關閉 Modal
-                    $('#caseRegistrationModal').modal('hide');
-                    // 立即更新按鈕狀態
-                    updateButtonState(currentCaseActivityId, true);
-                    // 更新人數顯示
-                    updateParticipantCount(currentCaseActivityId, data.currentParticipants, data.maxParticipants);
-                } else {
-                    showErrorToast('報名失敗', data.message);
-                }
-            })
-            .fail(function() {
-                showErrorToast('連線錯誤', '報名時發生網路錯誤，請稍後再試');
-            })
-            .always(function() {
-                $('#confirmCaseRegistration').prop('disabled', false).text('確認報名');
             });
-        });
-    </script>
+
+            // 顯示成功 Toast
+            function showSuccessToast(message, details) {
+                $('#successMessage').text(message);
+                $('#successDetails').text(details);
+
+                var toast = new bootstrap.Toast(document.getElementById('successToast'), { delay: 4000 });
+                toast.show();
+            }
+
+            // 顯示錯誤 Toast
+            function showErrorToast(message, details) {
+                $('#errorMessage').text(message);
+                $('#errorDetails').text(details);
+
+                var toast = new bootstrap.Toast(document.getElementById('errorToast'), { delay: 5000 });
+                toast.show();
+            }
+
+            // 顯示報名 Modal
+            function showRegistrationModal(activityId, activityName) {
+                currentActivityId = activityId;
+
+                $.get('/Activity/GetActivityInfo/' + activityId)
+                    .done(function (data) {
+                        if (data.success) {
+                            $('#activityName').text(data.activityName);
+                            $('#currentParticipants').text(data.currentParticipants);
+                            $('#maxParticipants').text(data.maxParticipants);
+                            $('#availableSlots').text(data.availableSlots);
+                            generateCompanionOptions(data.maxCompanions);
+
+                            var modal = new bootstrap.Modal(document.getElementById('registrationModal'));
+                            modal.show();
+                        } else {
+                            showErrorToast('無法載入活動', data.message);
+                        }
+                    })
+                    .fail(function () {
+                        showErrorToast('連線錯誤', '無法取得活動資訊，請檢查網路連線');
+                    });
+            }
+
+            // 取消報名
+            function cancelRegistration(activityId, activityName) {
+                $('#cancelActivityName').text(activityName);
+
+                $('#confirmCancelBtn').off('click').on('click', function () {
+                    $('#cancelConfirmModal').modal('hide');
+                    $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i>取消中...');
+
+                    $.post('/Activity/CancelRegistrationAjax', { activityId: activityId })
+                        .done(function (data) {
+                            if (data.success) {
+                                showSuccessToast('取消報名成功', data.message);
+                                updateButtonState(activityId, false);
+                                updateParticipantCount(activityId, data.currentParticipants, data.maxParticipants);
+                            } else {
+                                showErrorToast('取消報名失敗', data.message);
+                            }
+                        })
+                        .fail(function () {
+                            showErrorToast('連線錯誤', '取消報名時發生網路錯誤，請稍後再試');
+                        })
+                        .always(function () {
+                            $('#confirmCancelBtn').prop('disabled', false).html('<i class="fas fa-check me-1"></i>確定取消');
+                        });
+                });
+
+                var modal = new bootstrap.Modal(document.getElementById('cancelConfirmModal'));
+                modal.show();
+            }
+
+            // 更新按鈕狀態
+            function updateButtonState(activityId, isRegistered) {
+                const button = $(`button[data-activity-id="${activityId}"]`);
+                if (button.length > 0) {
+                    const activityName = button.data('activity-name') || '';
+
+                    if (isRegistered) {
+                        button.removeClass('btn-join').addClass('btn-join btn-cancel');
+                        button.text('取消報名');
+                        button.attr('onclick', `cancelRegistration(${activityId}, '${activityName}')`);
+                    } else {
+                        button.removeClass('btn-cancel').addClass('btn-join');
+                        button.text('立即參與');
+
+                        const otherJoinButtons = $('.btn-join').not(button);
+                        let isCase = false;
+
+                        otherJoinButtons.each(function () {
+                            const onclick = $(this).attr('onclick') || '';
+                            if (onclick.includes('showCaseRegistrationModal')) {
+                                isCase = true;
+                                return false;
+                            }
+                        });
+
+                        if (isCase) {
+                            button.attr('onclick', `showCaseRegistrationModal(${activityId}, '${activityName}')`);
+                        } else {
+                            button.attr('onclick', `showRegistrationModal(${activityId}, '${activityName}')`);
+                        }
+                    }
+                }
+            }
+
+            // 更新人數顯示
+            function updateParticipantCount(activityId, currentParticipants, maxParticipants) {
+                const participantElement = $(`p[data-activity-id="${activityId}"] span.current`);
+                const maxElement = $(`p[data-activity-id="${activityId}"] span.max`);
+
+                if (participantElement.length > 0) {
+                    participantElement.text(currentParticipants);
+                }
+                if (maxElement.length > 0) {
+                    maxElement.text(maxParticipants);
+                }
+            }
+
+            // 個案報名 Modal
+            function showCaseRegistrationModal(activityId, activityName) {
+                currentCaseActivityId = activityId;
+
+                $.get('/Activity/GetActivityInfo/' + activityId)
+                    .done(function (data) {
+                        if (data.success) {
+                            $('#caseActivityName').text(data.activityName);
+                            $('#caseCurrentParticipants').text(data.currentParticipants);
+                            $('#caseMaxParticipants').text(data.maxParticipants);
+                            $('#caseAvailableSlots').text(data.availableSlots);
+
+                            var modal = new bootstrap.Modal(document.getElementById('caseRegistrationModal'));
+                            modal.show();
+                        } else {
+                            showErrorToast('無法載入活動', data.message);
+                        }
+                    })
+                    .fail(function () {
+                        showErrorToast('連線錯誤', '無法取得活動資訊，請檢查網路連線');
+                    });
+            }
+
+            // 個案確認報名
+            $(document).on('click', '#confirmCaseRegistration', function () {
+                $(this).prop('disabled', true).text('報名中...');
+
+                $.post('/Activity/RegisterCase', { activityId: currentCaseActivityId })
+                    .done(function (data) {
+                        if (data.success) {
+                            showSuccessToast('恭喜您報名成功！', '期待您的參與！');
+                            $('#caseRegistrationModal').modal('hide');
+                            updateButtonState(currentCaseActivityId, true);
+                            updateParticipantCount(currentCaseActivityId, data.currentParticipants, data.maxParticipants);
+                        } else {
+                            showErrorToast('報名失敗', data.message);
+                        }
+                    })
+                    .fail(function () {
+                        showErrorToast('連線錯誤', '報名時發生網路錯誤，請稍後再試');
+                    })
+                    .always(function () {
+                        $('#confirmCaseRegistration').prop('disabled', false).text('確認報名');
+                    });
+            });
+        </script>
 }
+

@@ -81,60 +81,84 @@ namespace NGOPlatformWeb.Controllers
 
             int caseId = int.Parse(caseIdClaim.Value);
 
+            // 🔹 撈出未領取
+            var unreceived = _context.RegularSuppliesNeeds
+                .Include(r => r.Supply)
+                    .ThenInclude(s => s.SupplyCategory)
+                .Where(r => r.CaseId == caseId && r.Status == "pending")
+                .Select(r => new SupplyRecordItem
+                {
+                    Name = r.Supply.SupplyName,
+                    Category = r.Supply.SupplyCategory.SupplyCategoryName,
+                    Quantity = r.Quantity,
+                    ApplyDate = r.ApplyDate,
+                    PickupDate = r.PickupDate,
+                    Status = r.Status,
+                    ImageUrl = r.Supply.ImageUrl
+                })
+                .OrderByDescending(r => r.ApplyDate)
+                .ToList();
+
+            // 🔹 撈出已領取 + 訪談物資
+            var received = _context.RegularSuppliesNeeds
+                .Include(r => r.Supply)
+                    .ThenInclude(s => s.SupplyCategory)
+                .Where(r => r.CaseId == caseId && (r.Status == "collected"))
+                .Select(r => new SupplyRecordItem
+                {
+                    Name = r.Supply.SupplyName,
+                    Category = r.Supply.SupplyCategory.SupplyCategoryName,
+                    Quantity = r.Quantity,
+                    ApplyDate = r.ApplyDate,
+                    PickupDate = r.PickupDate,
+                    Status = r.Status,
+                    ImageUrl = r.Supply.ImageUrl
+                })
+                .Union(
+                    _context.EmergencySupplyNeeds
+                        .Where(e => e.CaseId == caseId && e.Status == "Completed")
+                        .Select(e => new SupplyRecordItem
+                        {
+                            Name = e.SupplyName,
+                            Category = "緊急物資",
+                            Quantity = e.Quantity,
+                            ApplyDate = e.CreatedDate ?? DateTime.Now,
+                            PickupDate = e.UpdatedDate ?? DateTime.Now,
+                            Status = "訪談物資",
+                            ImageUrl = e.ImageUrl ?? "/images/emergency-default.png"
+                        })
+                )
+                .OrderByDescending(s => s.PickupDate)
+                .ToList();
+
+            // 🔹 合併全部，用來統計，但排除掉「訪談物資」
+            var allSupplies = unreceived
+                .Concat(received.Where(s => s.Status != "訪談物資"))
+                .ToList();
+
+            // 🔥 統計各類別的總數量
+            var categoryStats = allSupplies
+                .GroupBy(s => s.Category)
+                .Select(g => new CategoryStat
+                {
+                    CategoryName = g.Key ?? "未分類",
+                    TotalQuantity = g.Sum(x => x.Quantity),
+                    ItemCount = g.Count()
+                })
+                .ToList();
+
+            // 🔹 填入 ViewModel
             var viewModel = new SupplyRecordViewModel
             {
-                UnreceivedSupplies = _context.RegularSuppliesNeeds
-        .Include(r => r.Supply)
-            .ThenInclude(s => s.SupplyCategory)
-        .Where(r => r.CaseId == caseId && r.Status == "pending")
-        .Select(r => new SupplyRecordItem
-        {
-            Name = r.Supply.SupplyName,
-            Category = r.Supply.SupplyCategory.SupplyCategoryName,
-            Quantity = r.Quantity,
-            ApplyDate = r.ApplyDate,
-            PickupDate = r.PickupDate,
-            Status = r.Status,
-            ImageUrl = r.Supply.ImageUrl
-        })
-        .OrderByDescending(r => r.ApplyDate)
-        .ToList(),
-
-                ReceivedSupplies =
-    _context.RegularSuppliesNeeds
-        .Include(r => r.Supply)
-        .ThenInclude(s => s.SupplyCategory)
-        .Where(r => r.CaseId == caseId && (r.Status == "collected"))
-        .Select(r => new SupplyRecordItem
-        {
-            Name = r.Supply.SupplyName,
-            Category = r.Supply.SupplyCategory.SupplyCategoryName,
-            Quantity = r.Quantity,
-            ApplyDate = r.ApplyDate,
-            PickupDate = r.PickupDate,
-            Status = r.Status,
-            ImageUrl = r.Supply.ImageUrl
-        })
-.Union(
-    _context.EmergencySupplyNeeds
-        .Where(e => e.CaseId == caseId && e.Status == "Completed")
-        .Select(e => new SupplyRecordItem
-        {
-            Name = e.SupplyName,
-            Category = "緊急物資",
-            Quantity = e.Quantity,
-            ApplyDate = e.CreatedDate ?? DateTime.Now,
-            PickupDate = e.UpdatedDate ?? DateTime.Now,
-            Status = "訪談物資",  // ← 統一映射成訪談物資
-            ImageUrl = e.ImageUrl ?? "/images/emergency-default.png"
-        })
-)
-    .OrderByDescending(s => s.PickupDate) // ✅ 依領取時間排序
-            .ToList()
-
+                UnreceivedSupplies = unreceived,
+                ReceivedSupplies = received,
+                // 如果有 EmergencySupplies 要另外撈的話可以加
+                CategoryStats = categoryStats
             };
+
             return View(viewModel);
         }
+
 
         [HttpGet]
         // 個案活動清單頁面 - 顯示已報名的活動（使用rich UI pattern）
