@@ -17,7 +17,7 @@ namespace NGOPlatformWeb.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUserDashboardData(int userId)
+        public IActionResult GetUserDashboardData(int userId)
         {
             // 目前不需要圖表，但保留API以備未來使用
             return Json(new { message = "Dashboard API ready for future use" });

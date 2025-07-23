@@ -1,9 +1,10 @@
-/* 現代化 Footer 樣式 */
+/* 現代化 Footer 樣式 - 與新主題協調 */
 .modern-footer {
-    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
     position: relative;
     overflow: hidden;
     margin-top: auto;
+    border-top: 1px solid rgba(226, 232, 240, 0.1);
 }
 
 /* 波浪形頂部設計 */

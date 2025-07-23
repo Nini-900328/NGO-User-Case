@@ -7,24 +7,98 @@
 .activity-item {
     display: flex;
     align-items: center;
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;
-    background: #f8f9fa;
-    border-radius: 12px;
-    transition: background-color 0.3s ease;
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+    background: var(--bg-white);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-light);
+    transition: background-color 0.15s ease;
 }
 
 .activity-item:hover {
-    background: #e9ecef;
+    background: var(--bg-light);
 }
 
 .activity-thumb {
     width: 50px;
     height: 50px;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     object-fit: cover;
-    margin-right: 1rem;
+    margin-right: var(--spacing-md);
     flex-shrink: 0;
+}
+
+/* ================================
+   活動清單效能優化樣式
+   ================================ */
+
+/* 優化版活動項目 - 減少重繪和回流 */
+.activity-item-optimized {
+    will-change: transform; /* 提示瀏覽器即將變化的屬性 */
+    transform: translateZ(0); /* 啟用硬體加速 */
+    contain: layout style paint; /* 限制重繪範圍 */
+}
+
+/* 背景圖縮略圖 - 替代img標籤 */
+.activity-thumb-bg {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-sm);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-right: var(--spacing-md);
+    flex-shrink: 0;
+    /* 效能優化 */
+    transform: translateZ(0); /* 啟用硬體加速 */
+    will-change: background-image; /* 優化背景圖變化 */
+    contain: strict; /* 嚴格包含，避免影響其他元素 */
+    /* 預設佔位圖 */
+    background-color: var(--bg-light);
+    position: relative;
+}
+
+/* 圖片載入失敗時的佔位符 */
+.activity-thumb-bg::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23999' viewBox='0 0 24 24'%3E%3Cpath d='M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.3;
+}
+
+/* 最近活動區域整體優化 */
+.recent-activities-optimized {
+    /* 虛擬滾動優化 */
+    contain: layout style;
+    /* 減少重繪範圍 */
+    isolation: isolate;
+}
+
+/* 滾動條優化 */
+.recent-activities-optimized::-webkit-scrollbar {
+    width: 6px;
+}
+
+.recent-activities-optimized::-webkit-scrollbar-track {
+    background: var(--bg-light);
+    border-radius: 3px;
+}
+
+.recent-activities-optimized::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+    transition: background 0.2s ease;
+}
+
+.recent-activities-optimized::-webkit-scrollbar-thumb:hover {
+    background: #999;
 }
 
 .activity-info {
@@ -34,7 +108,7 @@
 
 .activity-name {
     font-weight: 600;
-    color: #2c3e50;
+    color: var(--text-primary);
     margin-bottom: 0.25rem;
     font-size: 0.9rem;
     white-space: nowrap;
@@ -60,13 +134,14 @@
 .purchase-item {
     padding: 0.75rem;
     margin-bottom: 0.5rem;
-    background: #f8f9fa;
-    border-radius: 12px;
-    transition: background-color 0.3s ease;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    transition: background-color 0.15s ease;
 }
 
 .purchase-item:hover {
-    background: #e9ecef;
+    background: #f8f9fa;
 }
 
 .purchase-info {
@@ -126,19 +201,19 @@
 
 /* 認購總覽特殊樣式 */
 .purchase-overview .stat-number {
-    color: #dc3545;
+    color: #6f42c1;
 }
 
 .purchase-overview .overview-header h5 {
-    color: #dc3545;
+    color: #6f42c1;
 }
 
 .purchase-overview .view-all-btn {
-    color: #dc3545;
+    color: #6f42c1;
 }
 
 .purchase-overview .view-all-btn:hover {
-    color: #bd2130;
+    color: #5a2d91;
 }
 
 /* Case主題的活動總覽 */

@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
             left: 0 !important;
             width: 100vw !important;
             height: 100vh !important;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%) !important;
+            background: linear-gradient(135deg, #374151 0%, #4b5563 50%, #374151 100%) !important;
             z-index: 999999 !important;
             opacity: 1 !important;
             pointer-events: none !important;
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
             left: 0 !important;
             width: 100vw !important;
             height: 100vh !important;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%) !important;
+            background: linear-gradient(135deg, #374151 0%, #4b5563 50%, #374151 100%) !important;
             z-index: 999999 !important;
             opacity: 1 !important;
             pointer-events: none !important;
