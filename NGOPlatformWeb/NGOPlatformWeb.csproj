@@ -6,16 +6,30 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- 完全禁用靜態網站資產相關功能來避免重複鍵錯誤 -->
+    <StaticWebAssetCompressionLevel>None</StaticWebAssetCompressionLevel>
+    <EnablePrecompression>false</EnablePrecompression>
+    <GenerateStaticWebAssetsManifest>false</GenerateStaticWebAssetsManifest>
+    <EnableStaticWebAssets>false</EnableStaticWebAssets>
+    <UseStaticWebAssets>false</UseStaticWebAssets>
+    <StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>
+    <IncludeStaticWebAssetsInPublish>false</IncludeStaticWebAssetsInPublish>
+  </PropertyGroup>
+
   <ItemGroup>
-    <!-- 移除已壓縮檔，避免 DiscoverPrecompressedAssets 出錯 -->
-    <Content Remove="wwwroot\js\*.gz" />
-    <Content Remove="wwwroot\css\caseshopping - 複製.css" />
-    <Content Remove="wwwroot\css\Organization - 複製 %282%29.css" />
-    <Content Remove="wwwroot\css\Organization - 複製.css" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.6" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
   </ItemGroup>
+
+  <!-- 完全跳過靜態網站資產相關任務 -->
+  <Target Name="DiscoverPrecompressedAssets" />
+  <Target Name="GenerateStaticWebAssetsManifest" />
+  <Target Name="ResolveStaticWebAssetsInputs" />
+  <Target Name="DefineStaticWebAssets" />
+  <Target Name="ProcessStaticWebAssets" />
 
 </Project>
