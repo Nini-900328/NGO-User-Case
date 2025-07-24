@@ -139,87 +139,116 @@
 }
 
 .achievement-card.featured {
-    background: white !important;
+    background: linear-gradient(135deg, #c0392b 0%, #8e44ad 100%) !important;
     border-radius: 20px !important;
-    padding: 2rem !important;
-    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.06) !important;
+    padding: 1.5rem !important;
+    box-shadow: 0 8px 25px rgba(192, 57, 43, 0.25) !important;
     position: relative !important;
     overflow: hidden !important;
-    border: 1px solid rgba(102, 126, 234, 0.1) !important;
+    border: 1px solid rgba(192, 57, 43, 0.2) !important;
     display: flex !important;
-    flex-direction: column !important;
-    justify-content: space-between !important;
-    min-height: 180px !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 1.5rem !important;
+    height: 120px !important;
+    min-height: 120px !important;
+    color: white !important;
 }
 
 .achievement-header {
     display: flex !important;
+    flex-direction: column !important;
     align-items: center !important;
-    justify-content: space-between !important;
-    margin-bottom: 1.5rem !important;
+    gap: 0.5rem !important;
+    flex-shrink: 0 !important;
+}
+
+.achievement-content {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    text-align: left !important;
+}
+
+.achievement-decoration {
+    display: none !important;
 }
 
 .achievement-icon.featured-icon {
-    width: 60px !important;
-    height: 60px !important;
-    background: linear-gradient(135deg, #667eea, #764ba2) !important;
-    border-radius: 15px !important;
+    width: 36px !important;
+    height: 36px !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-radius: 9px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     color: white !important;
-    font-size: 24px !important;
+    font-size: 16px !important;
+    flex-shrink: 0 !important;
 }
 
 .achievement-badge {
-    background: rgba(102, 126, 234, 0.1) !important;
-    color: #667eea !important;
-    padding: 0.5rem 1rem !important;
-    border-radius: 10px !important;
-    font-size: 12px !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    padding: 0.25rem 0.75rem !important;
+    border-radius: 8px !important;
+    font-size: 10px !important;
     font-weight: 600 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.5px !important;
 }
 
 .achievement-number {
-    font-size: 48px !important;
+    font-size: 28px !important;
     font-weight: 700 !important;
-    color: #2c3e50 !important;
+    color: white !important;
     line-height: 1 !important;
-    margin-bottom: 0.5rem !important;
+    margin-bottom: 0.2rem !important;
 }
 
 .achievement-label {
-    font-size: 20px !important;
+    font-size: 15px !important;
     font-weight: 600 !important;
-    color: #2c3e50 !important;
-    margin-bottom: 0.5rem !important;
+    color: white !important;
+    margin-bottom: 0.1rem !important;
+    line-height: 1.2 !important;
 }
 
 .achievement-subtitle {
-    font-size: 16px !important;
-    color: #6c757d !important;
-    line-height: 1.6 !important;
+    font-size: 12px !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
 }
 
-.stat-card.modern {
-    background: white !important;
+/* 統計卡片 - 水平佈局設計（仿照活動介面） */
+div.stat-card.modern,
+.stats-grid .stat-card.modern {
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%) !important;
     border-radius: 12px !important;
     padding: 1.5rem !important;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.08) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06) !important;
     border: 1px solid #f0f0f0 !important;
     transition: all 0.3s ease !important;
     display: flex !important;
-    flex-direction: column !important;
+    flex-direction: row !important;
     align-items: center !important;
-    text-align: center !important;
+    text-align: left !important;
     position: relative !important;
-    justify-content: center !important;
-    min-height: 180px !important;
+    gap: 1rem !important;
+    height: 120px !important;
+    min-height: 120px !important;
 }
 
-.stat-card.modern:hover {
+/* 個別統計卡片底色 */
+.stats-grid .stat-card.modern:nth-child(2) { background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%) !important; }
+.stats-grid .stat-card.modern:nth-child(3) { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%) !important; }
+.stats-grid .stat-card.modern:nth-child(4) { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important; }
+.stats-grid .stat-card.modern:nth-child(5) { background: linear-gradient(135deg, #e9d5ff 0%, #ddd6fe 100%) !important; }
+
+div.stat-card.modern:hover,
+.stats-grid .stat-card.modern:hover {
     transform: translateY(-2px) !important;
     box-shadow: 0 8px 32px rgba(0,0,0,0.12) !important;
 }
@@ -231,9 +260,10 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    margin-bottom: 1rem !important;
     font-size: 20px !important;
     color: white !important;
+    flex-shrink: 0 !important;
+    margin: 0 !important;
 }
 
 .stat-icon.blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important; }
@@ -241,18 +271,31 @@
 .stat-icon.orange { background: linear-gradient(135deg, #f59e0b, #d97706) !important; }
 .stat-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important; }
 
+/* 統計內容區域 */
+.stat-content {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    min-width: 0 !important;
+}
+
 .stat-number {
     font-size: 36px !important;
     font-weight: 700 !important;
     color: #2c3e50 !important;
     line-height: 1 !important;
-    margin-bottom: 0.5rem !important;
+    margin: 0 0 0.25rem 0 !important;
+    flex-shrink: 0 !important;
 }
 
 .stat-label {
     font-size: 14px !important;
     color: #6c757d !important;
     font-weight: 500 !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
 }
 
 /* 圖表區域樣式 */
@@ -363,11 +406,12 @@
 
 /* records-section 容器 */
 .records-section {
-    background: #ffffff !important;
+    background: linear-gradient(135deg, rgba(254, 255, 255, 0.8) 0%, rgba(250, 252, 254, 0.8) 100%) !important;
     border-radius: 20px !important;
     overflow: hidden !important;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.08) !important;
-    border: 1px solid #f0f0f0 !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;
+    border: 1px solid rgba(240, 240, 240, 0.6) !important;
+    backdrop-filter: blur(5px) !important;
     margin: 0 !important;
     padding: 0 !important;
 }
@@ -423,7 +467,7 @@
 .tab-btn.active {
     background: white !important;
     color: #2c3e50 !important;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.08) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
 }
 
 .tab-count {
@@ -448,71 +492,81 @@
     flex-direction: column !important;
     gap: 24px !important;
     padding: 30px !important;
-    background: #ffffff !important;
-    border-radius: 20px !important;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08) !important;
+    background: linear-gradient(135deg, rgba(252, 253, 254, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%) !important;
+    /*border-radius: 20px !important;*/
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04) !important;
+    border: 1px solid rgba(203, 213, 225, 0.2) !important;
+    backdrop-filter: blur(5px) !important;
     margin: 0 !important;
 }
 
 /* 援助故事卡片 */
 .donation-story-card {
-    background: linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(241, 245, 249, 0.95) 100%) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(252, 253, 254, 0.7) 100%) !important;
     border-radius: 16px !important;
     overflow: hidden !important;
-    box-shadow: 0 3px 20px rgba(0,0,0,0.15) !important;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.04) !important;
     transition: all 0.3s ease !important;
     margin: 0 !important;
     padding: 0 !important;
-    border: 1px solid rgba(203, 213, 225, 0.6) !important;
-    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(203, 213, 225, 0.3) !important;
+    backdrop-filter: blur(8px) !important;
 }
 
 .donation-story-card:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.06) !important;
 }
 
 .donation-story-card.emergency-type {
-    border-left: 4px solid #fd7e14 !important;
-    background: linear-gradient(135deg, rgba(254, 242, 242, 0.95) 0%, rgba(252, 231, 243, 0.95) 100%) !important;
+    border-left: 4px solid #e67e22 !important;
+    background: linear-gradient(135deg, #fffcf8 0%, #fef9f4 100%) !important;
+    box-shadow: 0 2px 12px rgba(230, 126, 34, 0.08) !important;
+    border: 1px solid rgba(230, 126, 34, 0.12) !important;
 }
 
-.donation-story-card.emergency-type .story-header {
-    background: rgba(255, 255, 255, 0.8) !important;
-    backdrop-filter: blur(5px) !important;
-}
+/* 已在後面統一定義，此處刪除重複 */
 
 .donation-story-card.package-type {
     border-left: 4px solid #3498db !important;
-    background: linear-gradient(135deg, rgba(239, 246, 255, 0.95) 0%, rgba(219, 234, 254, 0.95) 100%) !important;
+    background: linear-gradient(135deg, #fafcfe 0%, #f4f9fd 100%) !important;
+    box-shadow: 0 2px 12px rgba(52, 152, 219, 0.08) !important;
+    border: 1px solid rgba(52, 152, 219, 0.12) !important;
 }
 
-.donation-story-card.package-type .story-header {
-    background: rgba(255, 255, 255, 0.8) !important;
-    backdrop-filter: blur(5px) !important;
-}
-
-/* 故事標題區 */
+/* 故事標題區 - 統一定義 */
 .story-header {
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
     gap: 20px !important;
     padding: 24px !important;
-    background: white !important;
-    border-bottom: 1px solid #f0f2f5 !important;
+    background: rgba(255, 255, 255, 0.4) !important;
+    border-bottom: 1px solid rgba(240, 242, 245, 0.6) !important;
+    backdrop-filter: blur(3px) !important;
+}
+
+/* 針對不同卡片類型的標題背景 */
+.donation-story-card.package-type .story-header {
+    background: linear-gradient(135deg, #e4f0fc 0%, #d6e9fc 100%) !important;
+    border-bottom: 1px solid rgba(52, 152, 219, 0.2) !important;
+}
+
+.donation-story-card.emergency-type .story-header {
+    background: linear-gradient(135deg, #fdf0e9 0%, #fcebe1 100%) !important;
+    border-bottom: 1px solid rgba(230, 126, 34, 0.2) !important;
 }
 
 .story-timeline {
     flex-shrink: 0 !important;
     text-align: center !important;
     padding: 12px !important;
-    background: rgba(255, 255, 255, 0.9) !important;
+    background: rgba(253, 254, 255, 0.8) !important;
     border-radius: 12px !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-    border: 1px solid rgba(203, 213, 225, 0.5) !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+    border: 1px solid rgba(203, 213, 225, 0.3) !important;
     min-width: 80px !important;
-    backdrop-filter: blur(5px) !important;
+    backdrop-filter: blur(3px) !important;
 }
 
 .story-date {
@@ -575,26 +629,40 @@
     flex-shrink: 0 !important;
     text-align: center !important;
     padding: 16px 20px !important;
-    background: linear-gradient(135deg, rgba(248, 250, 252, 0.9) 0%, rgba(255, 255, 255, 0.85) 100%) !important;
+    background: linear-gradient(135deg, rgba(251, 252, 253, 0.7) 0%, rgba(253, 254, 255, 0.65) 100%) !important;
     border-radius: 8px !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08) !important;
-    border: 1px solid rgba(203, 213, 225, 0.5) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    border: 1px solid rgba(203, 213, 225, 0.3) !important;
     position: relative !important;
     min-width: 120px !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
-    backdrop-filter: blur(5px) !important;
+    backdrop-filter: blur(3px) !important;
 }
 
 .donation-story-card.emergency-type .story-amount {
-    border-color: rgba(253, 126, 20, 0.3) !important;
-    background: linear-gradient(135deg, rgba(254, 242, 242, 0.9) 0%, rgba(255, 245, 245, 0.85) 100%) !important;
+    border-color: rgba(230, 126, 34, 0.3) !important;
+    background: linear-gradient(135deg, #fef7f0 0%, #fdf2e9 100%) !important;
+    box-shadow: 0 2px 8px rgba(230, 126, 34, 0.1) !important;
 }
 
 .donation-story-card.package-type .story-amount {
     border-color: rgba(52, 152, 219, 0.3) !important;
-    background: linear-gradient(135deg, rgba(239, 246, 255, 0.9) 0%, rgba(219, 234, 254, 0.85) 100%) !important;
+    background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%) !important;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.1) !important;
+}
+
+.donation-story-card.emergency-type .story-timeline {
+    background: linear-gradient(135deg, #fff9f5 0%, #fef6f0 100%) !important;
+    border: 1px solid rgba(230, 126, 34, 0.2) !important;
+    box-shadow: 0 1px 4px rgba(230, 126, 34, 0.08) !important;
+}
+
+.donation-story-card.package-type .story-timeline {
+    background: linear-gradient(135deg, #f8fcff 0%, #f0f9ff 100%) !important;
+    border: 1px solid rgba(52, 152, 219, 0.2) !important;
+    box-shadow: 0 1px 4px rgba(52, 152, 219, 0.08) !important;
 }
 
 
@@ -723,7 +791,7 @@
 
 .supply-item:hover {
     transform: translateY(-1px) !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
 }
 
 .supply-image {
@@ -1147,7 +1215,7 @@
     padding: 80px 40px !important;
     background: #ffffff !important;
     border-radius: 20px !important;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.08) !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
     margin: 0 !important;
 }
 
@@ -1180,13 +1248,13 @@
 
 /* 感謝區塊容器 - 使用更兼容的方法 */
 .purchase-records-page .container.py-5:last-of-type {
-    margin-bottom: 8rem !important;
-    padding-bottom: 4rem !important;
+    margin-bottom: 1rem !important;
+    padding-bottom: 1rem !important;
 }
 
 /* 或直接針對body添加底部間距 */
 .profile-page {
-    padding-bottom: 8rem !important;
+    padding-bottom: 2rem !important;
 }
 
 /* 感謝區塊設計 */
@@ -1195,7 +1263,7 @@
     border-radius: 20px !important;
     color: white !important;
     padding: 60px 40px !important;
-    margin: 0 0 6rem 0 !important;
+    margin: 0 0 2rem 0 !important;
 }
 
 .gratitude-content {
@@ -1643,4 +1711,151 @@
     0% { opacity: 1; }
     50% { opacity: 0.6; }
     100% { opacity: 1; }
+}
+
+/* ===== 從頁面內 style 標籤移過來的樣式 ===== */
+
+/* 成就徽章和時間軸區域 */
+.achievement-badges-card,
+.activity-timeline-card {
+    background: rgba(252, 253, 254, 0.8) !important;
+    border: 1px solid rgba(203, 213, 225, 0.3) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
+    backdrop-filter: blur(5px) !important;
+    border-radius: 20px !important;
+}
+
+/* 成就徽章樣式 */
+.badge-item.earned {
+    background: rgba(252, 248, 240, 0.7) !important;
+    border: 1px solid rgba(245, 158, 11, 0.4) !important;
+    backdrop-filter: blur(3px) !important;
+    border-radius: 12px !important;
+}
+
+.badge-item.locked {
+    background: rgba(248, 250, 252, 0.5) !important;
+    border: 1px solid rgba(203, 213, 225, 0.25) !important;
+    backdrop-filter: blur(3px) !important;
+    border-radius: 12px !important;
+}
+
+/* 時間軸設計優化 */
+.timeline-container {
+    position: relative !important;
+}
+
+.timeline-container::before {
+    display: none !important;
+}
+
+.timeline-item {
+    background: rgba(250, 251, 252, 0.8) !important;
+    border-radius: 12px !important;
+    padding: 1.25rem !important;
+    margin-bottom: 1rem !important;
+    backdrop-filter: blur(3px) !important;
+    border: 1px solid rgba(203, 213, 225, 0.2) !important;
+    position: relative !important;
+}
+
+.timeline-marker {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    margin-right: 1rem !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.timeline-marker.delivered {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+}
+
+.timeline-marker.processing {
+    background: linear-gradient(135deg, #ffc107, #fd7e14) !important;
+}
+
+.timeline-marker.donated {
+    background: linear-gradient(135deg, #007bff, #0056b3) !important;
+}
+
+.timeline-item::before,
+.timeline-item::after,
+.timeline-marker::before,
+.timeline-marker::after {
+    display: none !important;
+}
+
+/* 覆蓋和統一認購紀錄卡片樣式 */
+.donation-story-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(252, 253, 254, 0.7) 100%) !important;
+    border: 1px solid rgba(203, 213, 225, 0.3) !important;
+    backdrop-filter: blur(8px) !important;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.04) !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    transition: all 0.3s ease !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.donation-story-card.emergency-type {
+    background: linear-gradient(135deg, rgba(251, 248, 246, 0.7) 0%, rgba(249, 246, 245, 0.65) 100%) !important;
+    border-left: 3px solid #e67e22 !important;
+    border: 1px solid rgba(230, 126, 34, 0.15) !important;
+}
+
+.donation-story-card.package-type {
+    background: linear-gradient(135deg, rgba(247, 250, 252, 0.7) 0%, rgba(245, 249, 252, 0.65) 100%) !important;
+    border-left: 3px solid #5dade2 !important;
+    border: 1px solid rgba(93, 173, 226, 0.15) !important;
+}
+
+/* 已在前面統一定義，此處刪除重複 */
+
+.story-timeline {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 1px solid rgba(203, 213, 225, 0.3) !important;
+}
+
+.story-amount {
+    background: rgba(248, 250, 252, 0.9) !important;
+    border: 1px solid rgba(203, 213, 225, 0.3) !important;
+}
+
+.donation-story-card .impact-footer {
+    background: rgba(248, 250, 252, 0.5) !important;
+    border-top: 1px solid rgba(203, 213, 225, 0.2) !important;
+}
+
+.donation-story-card.emergency-type .impact-footer {
+    background: linear-gradient(135deg, #fffaf7 0%, #fef7f0 100%) !important;
+    border-top: 1px solid rgba(230, 126, 34, 0.15) !important;
+    box-shadow: inset 0 1px 3px rgba(230, 126, 34, 0.05) !important;
+}
+
+.donation-story-card.package-type .impact-footer {
+    background: linear-gradient(135deg, #fbfcff 0%, #f5faff 100%) !important;
+    border-top: 1px solid rgba(52, 152, 219, 0.15) !important;
+    box-shadow: inset 0 1px 3px rgba(52, 152, 219, 0.05) !important;
+}
+
+/* 覆蓋區域容器樣式 */
+.records-section {
+    background: linear-gradient(135deg, rgba(254, 255, 255, 0.8) 0%, rgba(250, 252, 254, 0.8) 100%) !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;
+    border: 1px solid rgba(240, 240, 240, 0.6) !important;
+    backdrop-filter: blur(5px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.records-header {
+    background: rgba(248, 250, 252, 0.8) !important;
 }

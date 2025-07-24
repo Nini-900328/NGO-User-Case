@@ -561,9 +561,9 @@
     color: white !important;
 }
 
-/* 確保活動紀錄頁面保持原有的白色背景 */
+/* 活動紀錄頁面容器設定 - 與深色主題配合 */
 body .container.py-5 {
-    background: white !important;
+    background: transparent !important;
     background-image: none !important;
     min-height: auto !important;
     margin: 0 auto !important;
@@ -576,14 +576,14 @@ body .container.py-5::before {
     content: none !important;
 }
 
-/* 確保不受其他漸層背景影響 */
+/* 確保不受其他背景影響，使用透明背景讓深色主題生效 */
 body {
-    background: white !important;
+    background: transparent !important;
 }
 
-/* 特別針對活動紀錄頁面 */
+/* 特別針對活動紀錄頁面 - 使用透明背景 */
 [data-title="活動報名紀錄"] .container.py-5,
 .container.py-5:has(.page-header) {
-    background: white !important;
+    background: transparent !important;
     background-image: none !important;
 }

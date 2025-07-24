@@ -32,7 +32,7 @@
 
 /* Footer 內容區域 */
 .footer-content {
-    padding: 140px 0 60px 0;
+    padding: 140px 0 10px 0;
     position: relative;
     z-index: 2;
 }
@@ -316,7 +316,7 @@
 /* Footer 底部 */
 .footer-bottom {
     background: rgba(0, 0, 0, 0.3);
-    padding: 25px 0;
+    padding: 5px 0;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 

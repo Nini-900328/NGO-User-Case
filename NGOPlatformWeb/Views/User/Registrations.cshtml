@@ -11,38 +11,76 @@
     <style>
         /* 改善活動紀錄頁面的整體配色 - 減少過多的白色區塊 */
         
-        /* 頁面標題區域 - 使用半透明背景 */
+        /* 頁面標題區域 - 與整體主題一致的背景 */
         .page-header {
-            background: rgba(255, 255, 255, 0.9) !important;
-            backdrop-filter: blur(10px) !important;
-            border: 1px solid rgba(203, 213, 225, 0.3) !important;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%) !important;
+            backdrop-filter: blur(12px) !important;
+            border: 1px solid rgba(226, 232, 240, 0.6) !important;
             border-radius: 20px !important;
             padding: 2rem !important;
+            box-shadow: 0 8px 32px rgba(30, 41, 59, 0.12) !important;
         }
         
-        /* 統計卡片 - 根據功能使用不同色彩主題 */
-        .stat-card.total-registrations {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.1) 100%) !important;
-            border: 1px solid rgba(59, 130, 246, 0.2) !important;
-            backdrop-filter: blur(10px) !important;
+        /* 統計卡片 - 使用一致的背景樣式與設計系統色彩 */
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%) !important;
+            backdrop-filter: blur(12px) !important;
+            border: 1px solid rgba(226, 232, 240, 0.6) !important;
+            box-shadow: 0 8px 32px rgba(30, 41, 59, 0.12) !important;
+            border-radius: 16px !important;
+            transition: all 0.3s ease !important;
+            position: relative !important;
+            overflow: hidden !important;
         }
         
-        .stat-card.active-registrations {
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(21, 128, 61, 0.1) 100%) !important;
-            border: 1px solid rgba(34, 197, 94, 0.2) !important;
-            backdrop-filter: blur(10px) !important;
+        .stat-card:hover {
+            box-shadow: 0 12px 40px rgba(30, 41, 59, 0.18) !important;
+            transform: translateY(-2px) !important;
         }
         
-        .stat-card.upcoming-activities {
-            background: linear-gradient(135deg, rgba(249, 115, 22, 0.15) 0%, rgba(194, 65, 12, 0.1) 100%) !important;
-            border: 1px solid rgba(249, 115, 22, 0.2) !important;
-            backdrop-filter: blur(10px) !important;
+        /* 統計卡片左側色彩標識 */
+        .stat-card.total-registrations::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border-radius: 16px 0 0 16px;
         }
         
-        .stat-card.completed-activities {
-            background: linear-gradient(135deg, rgba(147, 51, 234, 0.15) 0%, rgba(126, 34, 206, 0.1) 100%) !important;
-            border: 1px solid rgba(147, 51, 234, 0.2) !important;
-            backdrop-filter: blur(10px) !important;
+        .stat-card.active-registrations::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(135deg, #22c55e, #15803d);
+            border-radius: 16px 0 0 16px;
+        }
+        
+        .stat-card.upcoming-activities::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(135deg, #f97316, #c2410c);
+            border-radius: 16px 0 0 16px;
+        }
+        
+        .stat-card.completed-activities::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(135deg, #9333ea, #7e22ce);
+            border-radius: 16px 0 0 16px;
         }
         
         /* 統計卡片圖標顏色調整 */
@@ -66,12 +104,18 @@
             color: white !important;
         }
         
-        /* 活動卡片 - 使用半透明背景並根據狀態區分 */
+        /* 活動卡片 - 與整體主題一致的背景 */
         .activity-card {
-            background: rgba(255, 255, 255, 0.9) !important;
-            backdrop-filter: blur(8px) !important;
-            border: 1px solid rgba(203, 213, 225, 0.4) !important;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%) !important;
+            backdrop-filter: blur(12px) !important;
+            border: 1px solid rgba(226, 232, 240, 0.6) !important;
             border-radius: 16px !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .activity-card:hover {
+            box-shadow: 0 12px 40px rgba(30, 41, 59, 0.18) !important;
+            transform: translateY(-2px) !important;
         }
         
         /* 根據活動狀態添加左邊框 */
@@ -91,23 +135,25 @@
             border-left: 4px solid #f97316 !important;
         }
         
-        /* 篩選按鈕區域 */
+        /* 篩選按鈕區域 - 與整體主題一致 */
         .filter-section {
-            background: rgba(248, 250, 252, 0.8) !important;
-            backdrop-filter: blur(5px) !important;
-            border: 1px solid rgba(203, 213, 225, 0.3) !important;
+            background: linear-gradient(135deg, rgba(248, 250, 252, 0.9) 0%, rgba(226, 232, 240, 0.8) 100%) !important;
+            backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(226, 232, 240, 0.6) !important;
             border-radius: 16px !important;
             padding: 1.5rem !important;
             margin-bottom: 2rem !important;
+            box-shadow: 0 4px 20px rgba(30, 41, 59, 0.08) !important;
         }
         
-        /* 活動列表容器 */
+        /* 活動列表容器 - 與整體主題一致 */
         .activities-section {
-            background: rgba(255, 255, 255, 0.95) !important;
-            backdrop-filter: blur(10px) !important;
-            border: 1px solid rgba(203, 213, 225, 0.3) !important;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%) !important;
+            backdrop-filter: blur(12px) !important;
+            border: 1px solid rgba(226, 232, 240, 0.6) !important;
             border-radius: 20px !important;
             padding: 2rem !important;
+            box-shadow: 0 8px 32px rgba(30, 41, 59, 0.12) !important;
         }
         
         /* 確保所有卡片都有統一的圓角和陰影 */
@@ -118,6 +164,11 @@
         .activities-section {
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
         }
+
+        /* 統一背景設定 - 移除不一致的cornsilk背景 */
+        .gray-bg {
+            background: transparent !important;
+        }
     </style>
 }
 
@@ -125,7 +176,7 @@
     ViewBag.BodyClass = "profile-page";
 }
 
-<div class="container py-5">
+<div class="container py-5 gray-bg">
     <!-- 頁面標題和返回按鈕 -->
     <div class="page-header mb-5">
         <div class="row align-items-center">
@@ -292,27 +343,6 @@
         }
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        // 輕量化的背景設置，僅針對主要內容區域
-        document.addEventListener('DOMContentLoaded', function() {
-            // 僅設置頁面主要內容的背景
-            const mainContent = document.querySelector('main');
-            const container = document.querySelector('.container.py-5');
-            
-            if (mainContent) {
-                mainContent.style.background = 'white';
-            }
-            
-            if (container) {
-                container.style.background = 'white';
-                container.style.backgroundImage = 'none';
-            }
-        });
-    </script>
-}
-
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

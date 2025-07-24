@@ -8,7 +8,7 @@ body.profile-page {
     background: var(--page-bg) !important;
     min-height: 100vh;
     margin: 0;
-    padding: 0;
+    padding-bottom: 0 !important;
 }
 
 /* 確保主內容區域沒有底部間距 */
