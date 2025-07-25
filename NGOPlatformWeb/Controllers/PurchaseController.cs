@@ -91,7 +91,7 @@ namespace NGOPlatformWeb.Controllers
         // 直接購買單項物資 - 準備付款資料並跳轉到付款頁面
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DirectPurchase(int? supplyId = null, int quantity = 1, int? emergencyNeedId = null)
+        public async Task<IActionResult> DirectPurchase(int? supplyId = null, int quantity = 1, int? emergencyNeedId = null)
         {
             try
             {
@@ -120,6 +120,12 @@ namespace NGOPlatformWeb.Controllers
                         return RedirectToAction("Index");
                     }
 
+                    // 查詢個案描述
+                    string? caseDescription = null;
+                    var caseEntity = await _context.Cases
+                        .FirstOrDefaultAsync(c => c.CaseId == emergencyNeed.CaseId);
+                    caseDescription = caseEntity?.Description;
+
                     // 建立緊急物資付款資料模型（緊急物資預設單價為100元）
                     var paymentModel = new PaymentViewModel
                     {
@@ -130,6 +136,7 @@ namespace NGOPlatformWeb.Controllers
                         SupplyType = "emergency",
                         EmergencyNeedId = emergencyNeedId,
                         CaseId = emergencyNeed.CaseId,
+                        CaseDescription = caseDescription,
                         MaxQuantity = remainingQuantity,
                         IsLoggedIn = User.Identity?.IsAuthenticated ?? false
                     };
@@ -445,7 +452,7 @@ namespace NGOPlatformWeb.Controllers
                         if (emergencyNeed != null && emergencyNeed.CollectedQuantity >= emergencyNeed.Quantity && emergencyNeed.Status == "Fundraising")
                         {
                             await _context.Database.ExecuteSqlRawAsync(
-                                "UPDATE EmergencySupplyNeeds SET Status = 'Reviewing' WHERE EmergencyNeedId = {0}",
+                                "UPDATE EmergencySupplyNeeds SET Status = 'Completed' WHERE EmergencyNeedId = {0}",
                                 emergencyNeedId);
                         }
                     }
@@ -803,14 +810,65 @@ namespace NGOPlatformWeb.Controllers
             var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == order.UserId);
             var donorName = user?.Name ?? "匿名捐贈者";
             
+            // 取得訂單詳情
+            var orderDetail = order.OrderDetails.FirstOrDefault();
+            var supplyName = "物資捐贈";
+            var quantity = 0;
+            var isEmergency = false;
+            int? caseId = null;
+
+            if (orderDetail != null)
+            {
+                if (orderDetail.EmergencyNeedId.HasValue)
+                {
+                    // 緊急物資
+                    var emergency = await _context.EmergencySupplyNeeds
+                        .FirstOrDefaultAsync(e => e.EmergencyNeedId == orderDetail.EmergencyNeedId.Value);
+                    if (emergency != null)
+                    {
+                        supplyName = emergency.SupplyName ?? "緊急物資";
+                        isEmergency = true;
+                        caseId = emergency.CaseId;
+                    }
+                }
+                else
+                {
+                    // 一般物資
+                    var supply = await _context.Supplies
+                        .FirstOrDefaultAsync(s => s.SupplyId == orderDetail.SupplyId);
+                    if (supply != null)
+                    {
+                        supplyName = supply.SupplyName ?? "一般物資";
+                    }
+                }
+                quantity = orderDetail.Quantity;
+            }
+            
+            // 如果是緊急訂單，也從主訂單取得緊急需求資訊
+            if (order.EmergencyNeedId.HasValue && !isEmergency)
+            {
+                var emergency = await _context.EmergencySupplyNeeds
+                    .FirstOrDefaultAsync(e => e.EmergencyNeedId == order.EmergencyNeedId.Value);
+                if (emergency != null)
+                {
+                    supplyName = emergency.SupplyName ?? "緊急物資";
+                    isEmergency = true;
+                    caseId = emergency.CaseId;
+                }
+            }
+
             var viewModel = new OrderResultViewModel
             {
                 OrderNumber = order.OrderNumber!,
                 OrderDate = order.OrderDate,
+                SupplyName = supplyName,
+                Quantity = quantity,
                 TotalPrice = order.TotalPrice,
                 PaymentStatus = order.PaymentStatus!,
                 PaymentMethod = "ECPay",
-                DonorName = donorName
+                DonorName = donorName,
+                IsEmergency = isEmergency,
+                CaseId = caseId
             };
 
             return View("Success", viewModel);

@@ -7,15 +7,14 @@ namespace NGOPlatformWeb.Models.Entity
         [Key]
         public int UserId { get; set; }
 
-        [Required]
         [StringLength(10)]
         public string ?IdentityNumber { get; set; }
 
         [Required]
         [EmailAddress]
+        [StringLength(100)]
         public string ?Email { get; set; }
 
-        [Required]
         [StringLength(60)]
         public string ?Password { get; set; }
 
@@ -25,7 +24,7 @@ namespace NGOPlatformWeb.Models.Entity
         [StringLength(50)]
         public string ?Name { get; set; }
         
-        [StringLength(500)]
+        [StringLength(255)]
         public string ?ProfileImage { get; set; }
     }
 }

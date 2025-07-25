@@ -351,15 +351,14 @@
     display: none;
     opacity: 0;
     transform: translateY(20px);
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 /* 展開狀態的成就項目 */
-.achievements-expanded .achievement-item.achievement-hidden {
+.achievement-item.achievement-hidden.show {
     display: block;
     opacity: 1;
     transform: translateY(0);
-    animation: slideInUp 0.4s ease forwards;
 }
 
 /* 成就展開按鈕區域 */

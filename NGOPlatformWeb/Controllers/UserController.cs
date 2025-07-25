@@ -142,7 +142,6 @@ namespace NGOPlatformWeb.Controllers
                 Email = user.Email,
                 Phone = user.Phone,
                 IdentityNumber = user.IdentityNumber,
-                Password = user.Password,
                 ProfileImage = user.ProfileImage ?? _imageUploadService.GetDefaultProfileImage("user")
             };
 
@@ -177,8 +176,13 @@ namespace NGOPlatformWeb.Controllers
             user.Name = vm.Name;
             user.Phone = vm.Phone;
             user.IdentityNumber = vm.IdentityNumber;
-            user.Password = _passwordService.HashPassword(vm.Password);
             user.ProfileImage = newImagePath;
+            
+            // 只有當用戶輸入新密碼時才更新密碼
+            if (!string.IsNullOrWhiteSpace(vm.NewPassword))
+            {
+                user.Password = _passwordService.HashPassword(vm.NewPassword);
+            }
 
             _context.SaveChanges();
 

@@ -49,10 +49,10 @@ namespace NGOPlatformWeb.Controllers
             {
                 await SignInAsync(
                     httpContext: HttpContext,
-                    email: user.Email ?? "",
                     id: user.UserId.ToString(),
                     name: user.Name ?? "使用者",
-                    role: "User"
+                    role: "User",
+                    email: user.Email ?? ""
                 );
 
                 return RedirectToAction("Index", "Home");
@@ -70,10 +70,10 @@ namespace NGOPlatformWeb.Controllers
 
                 await SignInAsync(
                     httpContext: HttpContext,
-                    email: caseLogin.Email ?? "",
                     id: caseLogin.CaseId.ToString(),
                     name: caseName,
-                    role: "Case"
+                    role: "Case",
+                    email: caseLogin.Email ?? ""
                 );
 
                 return RedirectToAction("Index", "Home");
@@ -139,10 +139,10 @@ namespace NGOPlatformWeb.Controllers
             // 自動登入
             await SignInAsync(
                 httpContext: HttpContext,
-                email: newUser.Email,
                 id: newUser.UserId.ToString(),
                 name: newUser.Name,
-                role: "User"
+                role: "User",
+                email: newUser.Email
             );
 
             // 檢查新用戶成就 (註冊時可能有初始成就)
@@ -362,9 +362,152 @@ namespace NGOPlatformWeb.Controllers
             }
         }
 
+        // POST: /Auth/ExternalLogin
+        [HttpPost]
+        public IActionResult ExternalLogin(string provider)
+        {
+            // 設定外部登入的回調路徑
+            var redirectUrl = Url.Action("ExternalLoginCallback", "Auth");
+            
+            var authenticationProperties = new Microsoft.AspNetCore.Authentication.AuthenticationProperties
+            {
+                RedirectUri = redirectUrl
+            };
+            
+            return Challenge(authenticationProperties, provider);
+        }
+
+        // GET: /signin-google (Google OAuth 預設回調路徑)
+        [HttpGet("/signin-google")]
+        public async Task<IActionResult> GoogleCallback()
+        {
+            return await ExternalLoginCallback();
+        }
+
+        // GET: /Auth/ExternalLoginCallback
+        public async Task<IActionResult> ExternalLoginCallback()
+        {
+            try
+            {
+                // 獲取外部登入資訊
+                var info = await HttpContext.AuthenticateAsync(Microsoft.AspNetCore.Authentication.Google.GoogleDefaults.AuthenticationScheme);
+                
+                if (!info.Succeeded)
+                {
+                    TempData["ErrorMessage"] = "Google 登入失敗，請重試";
+                    return RedirectToAction("Login");
+                }
+
+                // 從 Google 獲取用戶資訊
+                var email = info.Principal?.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+                var name = info.Principal?.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value;
+                var picture = info.Principal?.FindFirst("urn:google:picture")?.Value;
+
+                if (string.IsNullOrEmpty(email))
+                {
+                    TempData["ErrorMessage"] = "無法獲取 Google 帳號信箱";
+                    return RedirectToAction("Login");
+                }
+
+                // 檢查用戶是否已存在於 Users 表
+                var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+                
+                if (existingUser == null)
+                {
+                    // 處理可能過長的資料
+                    var userName = name ?? "Google 用戶";
+                    if (userName.Length > 50) userName = userName.Substring(0, 50);
+                    
+                    var profileImageUrl = picture;
+                    if (!string.IsNullOrEmpty(profileImageUrl) && profileImageUrl.Length > 255) 
+                        profileImageUrl = profileImageUrl.Substring(0, 255);
+                    
+                    // 如果 Google 沒有提供頭像，設定預設頭像
+                    if (string.IsNullOrEmpty(profileImageUrl))
+                    {
+                        profileImageUrl = "/images/user-avatar-circle.svg";
+                    }
+                    
+                    var userEmail = email;
+                    if (!string.IsNullOrEmpty(userEmail) && userEmail.Length > 100)
+                        userEmail = userEmail.Substring(0, 100);
+                    
+                    // 首次登入，自動創建新用戶
+                    // 為Google OAuth用戶生成暫時識別碼（15碼，用戶後續需要更新為真實身分證號）
+                    var tempIdentityNumber = $"TEMP{DateTime.Now:yyyyMMddHHmmss}";
+                    
+                    var newUser = new User
+                    {
+                        Email = userEmail,
+                        Name = userName,
+                        ProfileImage = profileImageUrl,
+                        Password = "GOOGLE_OAUTH_USER", // 第三方登入用戶的特殊標記
+                        Phone = null,
+                        IdentityNumber = tempIdentityNumber // 暫時識別碼，用戶需要在個人資料頁更新
+                    };
+
+                    _context.Users.Add(newUser);
+                    await _context.SaveChangesAsync();
+
+                    // 檢查新用戶成就
+                    try
+                    {
+                        var newAchievements = await _achievementService.CheckAndAwardAchievements(newUser.UserId);
+                        if (newAchievements.Any())
+                        {
+                            TempData["NewAchievements"] = string.Join(",", newAchievements);
+                        }
+                    }
+                    catch
+                    {
+                        // 成就檢查失敗不影響登入流程
+                    }
+
+                    existingUser = newUser;
+                }
+                else
+                {
+                    // 檢查用戶是否有自定義上傳的頭像
+                    bool hasCustomAvatar = !string.IsNullOrEmpty(existingUser.ProfileImage) && 
+                                          existingUser.ProfileImage.StartsWith("/images/profiles/profile_");
+                    
+                    // 只有在用戶沒有自定義頭像時，才用 Google 頭像更新
+                    // 如果用戶有自定義頭像，保持用戶選擇，不被 Google 頭像覆蓋
+                    if (!hasCustomAvatar && !string.IsNullOrEmpty(picture) && existingUser.ProfileImage != picture)
+                    {
+                        existingUser.ProfileImage = picture.Length > 255 ? picture.Substring(0, 255) : picture;
+                        _context.Users.Update(existingUser);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
+                // 執行登入
+                await SignInAsync(
+                    httpContext: HttpContext,
+                    id: existingUser.UserId.ToString(),
+                    name: existingUser.Name ?? "使用者",
+                    role: "User",
+                    email: existingUser.Email ?? ""
+                );
+
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "登入過程發生錯誤，請重試";
+                return RedirectToAction("Login");
+            }
+        }
+
         // 密碼驗證輔助方法 - 支援 BCrypt 和明文密碼
         private bool ValidatePassword(string inputPassword, string storedPassword)
         {
+            // Google OAuth 用戶不能用傳統方式登入
+            if (storedPassword == "GOOGLE_OAUTH_USER")
+            {
+                return false;
+            }
+            
             // BCrypt 加密密碼驗證
             if (storedPassword.StartsWith("$2a$"))
             {

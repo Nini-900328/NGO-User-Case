@@ -37,6 +37,7 @@ namespace NGOPlatformWeb.Models.ViewModels.Purchase
         public string? SupplyType { get; set; }
         public int? EmergencyNeedId { get; set; }
         public int? CaseId { get; set; }
+        public string? CaseDescription { get; set; } // 個案需求描述
         public int? MaxQuantity { get; set; } // 緊急需求的剩餘數量上限
 
         // 捐贈者資訊

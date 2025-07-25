@@ -94,7 +94,7 @@
             
             <div class="stat-card modern">
                 <div class="stat-icon orange">
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-home"></i>
                 </div>
                 <div class="stat-content">
                     <div class="stat-number">@(Model.Orders.Count())</div>
@@ -104,11 +104,11 @@
             
             <div class="stat-card modern">
                 <div class="stat-icon purple">
-                    <i class="fas fa-calendar-alt"></i>
+                    <i class="fas fa-bolt"></i>
                 </div>
                 <div class="stat-content">
-                    <div class="stat-number">@(Model.Orders.Any() ? (DateTime.Now - Model.Orders.OrderByDescending(o => o.OrderDate).First().OrderDate).Days : 0)</div>
-                    <div class="stat-label">天前活動</div>
+                    <div class="stat-number">@(Model.Orders.Count(o => o.IsEmergencyOrder))</div>
+                    <div class="stat-label">緊急響應</div>
                 </div>
             </div>
         </div>
@@ -122,7 +122,7 @@
                 <div class="activity-timeline-card">
                     <div class="timeline-header">
                         <h4 class="timeline-title">
-                            <i class="fas fa-heart text-danger me-2"></i>
+                            <i class="fas fa-clock text-primary me-2"></i>
                             最近動態
                         </h4>
                         <p class="timeline-subtitle">您的愛心足跡</p>
