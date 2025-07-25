@@ -62,7 +62,7 @@ namespace NGOPlatformWeb.Controllers
                 SupplyId = supplyId,
                 Quantity = quantity,
                 ApplyDate = DateTime.Now,
-                Status = "未領取"
+                Status = "pending"
             };
 
             _context.RegularSuppliesNeeds.Add(need);
