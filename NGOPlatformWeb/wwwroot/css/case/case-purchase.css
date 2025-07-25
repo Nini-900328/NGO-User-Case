@@ -27,6 +27,7 @@ body {
     align-items: center;
     /* ❌ 不要再加 max-width 和 padding，否則就重複了 */
 }
+
 .top-card-left {
     display: flex;
     align-items: center;
@@ -87,6 +88,7 @@ body {
     align-items: flex-start;
     min-height: 60vh; /* ✨ 撐開高度，避免 footer 跑上來 */
 }
+
 
 
 /* ====== 狀態卡片區塊 ====== */
@@ -158,6 +160,7 @@ body {
 
     .status-card-icon.purple {
         background: linear-gradient(135deg,#a855f7,#ec4899);
+
     }
 
 /* ====== 左側外層清單背景 ====== */
@@ -169,6 +172,7 @@ body {
     padding: 1rem;
     margin: 0; /* ❗ 不要左右多 margin */
     box-sizing: border-box;
+
 }
 
     .list-wrapper:hover {
@@ -268,6 +272,7 @@ body {
 }
 
 
+
     .stats-panel:hover {
         box-shadow: 0 4px 14px rgba(0,0,0,0.12);
         transition: all 0.3s ease;
@@ -323,3 +328,4 @@ body {
 .right-content {
     flex: 1;
 }
+
