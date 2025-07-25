@@ -366,18 +366,14 @@ namespace NGOPlatformWeb.Controllers
         [HttpPost]
         public IActionResult ExternalLogin(string provider)
         {
-            Console.WriteLine($"=== ExternalLogin 開始，Provider: {provider} ===");
-            
             // 設定外部登入的回調路徑
             var redirectUrl = Url.Action("ExternalLoginCallback", "Auth");
-            Console.WriteLine($"回調網址: {redirectUrl}");
             
             var authenticationProperties = new Microsoft.AspNetCore.Authentication.AuthenticationProperties
             {
                 RedirectUri = redirectUrl
             };
             
-            Console.WriteLine("準備跳轉到 Google OAuth...");
             return Challenge(authenticationProperties, provider);
         }
 
@@ -393,17 +389,11 @@ namespace NGOPlatformWeb.Controllers
         {
             try
             {
-                // 詳細除錯日誌
-                Console.WriteLine("=== ExternalLoginCallback 開始 ===");
-                
                 // 獲取外部登入資訊
                 var info = await HttpContext.AuthenticateAsync(Microsoft.AspNetCore.Authentication.Google.GoogleDefaults.AuthenticationScheme);
                 
-                Console.WriteLine($"認證結果: {info.Succeeded}");
-                
                 if (!info.Succeeded)
                 {
-                    Console.WriteLine("Google 認證失敗");
                     TempData["ErrorMessage"] = "Google 登入失敗，請重試";
                     return RedirectToAction("Login");
                 }
@@ -411,53 +401,19 @@ namespace NGOPlatformWeb.Controllers
                 // 從 Google 獲取用戶資訊
                 var email = info.Principal?.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
                 var name = info.Principal?.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value;
-                
-                // 嘗試多種可能的頭像 claim 名稱
-                var picture = info.Principal?.FindFirst("picture")?.Value ?? 
-                             info.Principal?.FindFirst("urn:google:profile:picture")?.Value ?? 
-                             info.Principal?.FindFirst("urn:google:picture")?.Value ??
-                             info.Principal?.FindFirst("profile_image")?.Value ??
-                             info.Principal?.FindFirst("image")?.Value ??
-                             info.Principal?.FindFirst("avatar")?.Value;
-
-                Console.WriteLine($"獲取到的用戶資訊:");
-                Console.WriteLine($"Email: {email}");
-                Console.WriteLine($"Name: {name}");
-                Console.WriteLine($"Picture: {picture}");
-                
-                // 詳細除錯：列出所有 Google 回傳的 claims
-                Console.WriteLine("=== 開始列出所有 Google Claims ===");
-                var allClaims = info.Principal?.Claims?.ToList();
-                Console.WriteLine($"總共有 {allClaims?.Count ?? 0} 個 claims");
-                if (allClaims != null)
-                {
-                    foreach (var claim in allClaims)
-                    {
-                        Console.WriteLine($"[CLAIM] Type: '{claim.Type}' | Value: '{claim.Value}'");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("沒有任何 claims");
-                }
-                Console.WriteLine("=== Claims 列表結束 ===");
+                var picture = info.Principal?.FindFirst("urn:google:picture")?.Value;
 
                 if (string.IsNullOrEmpty(email))
                 {
-                    Console.WriteLine("Email 為空");
                     TempData["ErrorMessage"] = "無法獲取 Google 帳號信箱";
                     return RedirectToAction("Login");
                 }
 
                 // 檢查用戶是否已存在於 Users 表
-                Console.WriteLine("檢查用戶是否存在...");
-                Console.WriteLine($"要檢查的Email: {email}");
                 var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
                 
                 if (existingUser == null)
                 {
-                    Console.WriteLine("用戶不存在，創建新用戶...");
-                    
                     // 處理可能過長的資料
                     var userName = name ?? "Google 用戶";
                     if (userName.Length > 50) userName = userName.Substring(0, 50);
@@ -469,19 +425,12 @@ namespace NGOPlatformWeb.Controllers
                     // 如果 Google 沒有提供頭像，設定預設頭像
                     if (string.IsNullOrEmpty(profileImageUrl))
                     {
-                        profileImageUrl = "/images/user-avatar-circle.svg"; // 預設 Google OAuth 用戶頭像
-                        Console.WriteLine("Google 未提供頭像，使用預設頭像");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Google 提供的頭像: {profileImageUrl}");
+                        profileImageUrl = "/images/user-avatar-circle.svg";
                     }
                     
                     var userEmail = email;
                     if (!string.IsNullOrEmpty(userEmail) && userEmail.Length > 100)
                         userEmail = userEmail.Substring(0, 100);
-                    
-                    Console.WriteLine($"處理後的資料 - Name: {userName}, Email: {userEmail}, ProfileImage: {profileImageUrl}");
                     
                     // 首次登入，自動創建新用戶
                     // 為Google OAuth用戶生成暫時識別碼（15碼，用戶後續需要更新為真實身分證號）
@@ -498,27 +447,7 @@ namespace NGOPlatformWeb.Controllers
                     };
 
                     _context.Users.Add(newUser);
-                    Console.WriteLine("正在保存用戶到資料庫...");
-                    
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-                        Console.WriteLine($"新用戶已創建，ID: {newUser.UserId}");
-                    }
-                    catch (Exception dbEx)
-                    {
-                        Console.WriteLine($"資料庫保存錯誤: {dbEx.Message}");
-                        if (dbEx.InnerException != null)
-                        {
-                            Console.WriteLine($"內部錯誤: {dbEx.InnerException.Message}");
-                            if (dbEx.InnerException.InnerException != null)
-                            {
-                                Console.WriteLine($"深層錯誤: {dbEx.InnerException.InnerException.Message}");
-                            }
-                        }
-                        Console.WriteLine($"StackTrace: {dbEx.StackTrace}");
-                        throw; // 重新拋出例外
-                    }
+                    await _context.SaveChangesAsync();
 
                     // 檢查新用戶成就
                     try
@@ -529,9 +458,8 @@ namespace NGOPlatformWeb.Controllers
                             TempData["NewAchievements"] = string.Join(",", newAchievements);
                         }
                     }
-                    catch (Exception achEx)
+                    catch
                     {
-                        Console.WriteLine($"成就檢查失敗: {achEx.Message}");
                         // 成就檢查失敗不影響登入流程
                     }
 
@@ -539,11 +467,16 @@ namespace NGOPlatformWeb.Controllers
                 }
                 else
                 {
-                    Console.WriteLine($"用戶已存在，ID: {existingUser.UserId}");
+                    // 更新現有用戶的頭像（如果 Google 提供了新的頭像 URL）
+                    if (!string.IsNullOrEmpty(picture) && existingUser.ProfileImage != picture)
+                    {
+                        existingUser.ProfileImage = picture.Length > 255 ? picture.Substring(0, 255) : picture;
+                        _context.Users.Update(existingUser);
+                        await _context.SaveChangesAsync();
+                    }
                 }
 
                 // 執行登入
-                Console.WriteLine("執行登入...");
                 await SignInAsync(
                     httpContext: HttpContext,
                     id: existingUser.UserId.ToString(),
@@ -552,14 +485,11 @@ namespace NGOPlatformWeb.Controllers
                     email: existingUser.Email ?? ""
                 );
 
-                Console.WriteLine("登入成功，重導向到首頁");
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"ExternalLoginCallback 錯誤: {ex.Message}");
-                Console.WriteLine($"StackTrace: {ex.StackTrace}");
-                TempData["ErrorMessage"] = $"登入過程發生錯誤: {ex.Message}";
+                TempData["ErrorMessage"] = "登入過程發生錯誤，請重試";
                 return RedirectToAction("Login");
             }
         }

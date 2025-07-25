@@ -1,5 +1,5 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.EntityFrameworkCore;
 using NGOPlatformWeb.Models.Entity;
 using NGOPlatformWeb.Services;
@@ -51,6 +51,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Scope.Add("openid");
         options.Scope.Add("profile");
         options.Scope.Add("email");
+        
+        // 明確映射 Google 的 picture claim（官方文檔標準做法）
+        options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
+        
+        // 確保獲取完整的用戶資訊
+        options.SaveTokens = true;
     });
 var app = builder.Build();
 
