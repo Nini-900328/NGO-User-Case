@@ -467,8 +467,13 @@ namespace NGOPlatformWeb.Controllers
                 }
                 else
                 {
-                    // 更新現有用戶的頭像（如果 Google 提供了新的頭像 URL）
-                    if (!string.IsNullOrEmpty(picture) && existingUser.ProfileImage != picture)
+                    // 檢查用戶是否有自定義上傳的頭像
+                    bool hasCustomAvatar = !string.IsNullOrEmpty(existingUser.ProfileImage) && 
+                                          existingUser.ProfileImage.StartsWith("/images/profiles/profile_");
+                    
+                    // 只有在用戶沒有自定義頭像時，才用 Google 頭像更新
+                    // 如果用戶有自定義頭像，保持用戶選擇，不被 Google 頭像覆蓋
+                    if (!hasCustomAvatar && !string.IsNullOrEmpty(picture) && existingUser.ProfileImage != picture)
                     {
                         existingUser.ProfileImage = picture.Length > 255 ? picture.Substring(0, 255) : picture;
                         _context.Users.Update(existingUser);

@@ -13,7 +13,7 @@
                 
                 <!-- 返回按鈕和付款流程進度條 -->
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                    <a href="@Url.Action("Index")" class="back-button">
                         <i class="fas fa-arrow-left me-2"></i>返回選擇
                     </a>
                 </div>
@@ -90,9 +90,20 @@
                                                 }
                                             </div>
                                         }
-                                        @if (Model.CaseId.HasValue)
+                                        @if (Model.CaseId.HasValue && !string.IsNullOrEmpty(Model.CaseDescription))
                                         {
-                                            <div class="case-info">個案 #@Model.CaseId</div>
+                                            string displayText = Model.CaseDescription switch
+                                            {
+                                                "經濟困難" => "援助對象：經濟困難個案",
+                                                "健康問題" => "援助對象：健康照護個案",
+                                                "家庭問題" => "援助對象：家庭困難個案",
+                                                "行為問題" => "援助對象：行為輔導個案",
+                                                "學習困難" => "援助對象：學習支援個案",
+                                                "情緒困擾" => "援助對象：情緒輔導個案",
+                                                "其他困難" => "援助對象：特殊需求個案",
+                                                _ => $"援助對象：{Model.CaseDescription}個案"
+                                            };
+                                            <div class="case-info">@displayText</div>
                                         }
                                         @if (Model.SupplyType == "emergency" && Model.MaxQuantity.HasValue)
                                         {
@@ -349,18 +360,24 @@
                     // ECPay 直接提交，不需要等待時間
                     this.submit();
                 } else {
-                    // 模擬付款處理時間
-                    setTimeout(() => {
-                        this.submit();
-                    }, 2000);
+                    this.submit();
                 }
             });
             
             // 卡號格式化
-            $('input[placeholder="4111 1111 1111 1111"]').on('input', function() {
+            $('input[placeholder="1234 5678 9012 3456"]').on('input', function() {
                 let value = $(this).val().replace(/\s/g, '');
                 let formattedValue = value.replace(/(.{4})/g, '$1 ').trim();
                 $(this).val(formattedValue);
+            });
+            
+            // 有效期限格式化 (MM/YY)
+            $('input[placeholder="MM/YY"]').on('input', function() {
+                let value = $(this).val().replace(/\D/g, '');
+                if (value.length >= 2) {
+                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                }
+                $(this).val(value);
             });
         });
     </script>

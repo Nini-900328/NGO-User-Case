@@ -6,6 +6,38 @@
     position: relative;
 }
 
+/* 返回按鈕 - 融入紫色背景的半透明設計 */
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.back-button i {
+    font-size: 13px;
+    opacity: 0.9;
+}
+
 .payment-page::before {
     content: '';
     position: absolute;
@@ -238,24 +270,17 @@
 }
 
 .case-info {
-    color: #2b6cb0;
-    font-size: 13px;
-    font-weight: 600;
+    color: #4a5568;
+    font-size: 14px;
+    font-weight: 500;
     margin-bottom: 12px;
-    padding: 8px 14px;
-    background: linear-gradient(135deg, #ebf8ff, #dbeafe);
-    border-radius: 10px;
+    padding: 10px 16px;
+    background: rgba(74, 85, 104, 0.08);
+    border-radius: 8px;
     display: inline-block;
-    border: 2px solid #93c5fd;
-    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15);
-    position: relative;
-}
-
-.case-info::before {
-    content: '#';
-    font-weight: 700;
-    margin-right: 2px;
-    color: #3b82f6;
+    border: 1px solid rgba(74, 85, 104, 0.2);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.3px;
 }
 
 .quantity {
