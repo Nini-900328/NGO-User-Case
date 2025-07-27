@@ -40,12 +40,29 @@
                                         {
                                             <span class="emergency-badge"><i class="fas fa-exclamation-triangle"></i> 緊急需求</span>
                                         }
+                                        @if (Model.SupplyName.Contains("組合包"))
+                                        {
+                                            <span class="package-badge"><i class="fas fa-gift"></i> 組合包</span>
+                                        }
                                     </div>
                                 </div>
                                 
                                 <div class="detail-item">
                                     <label>捐贈數量</label>
-                                    <div class="detail-value">@Model.Quantity 份</div>
+                                    <div class="detail-value">
+                                        @if (Model.SupplyName.Contains("組合包") || Model.SupplyName.Contains("套組"))
+                                        {
+                                            <span>@Model.Quantity 組</span>
+                                        }
+                                        else if (Model.Quantity > 0)
+                                        {
+                                            <span>@Model.Quantity 份</span>
+                                        }
+                                        else
+                                        {
+                                            <span>1 份</span>
+                                        }
+                                    </div>
                                 </div>
                                 
                                 @if (Model.CaseId.HasValue)

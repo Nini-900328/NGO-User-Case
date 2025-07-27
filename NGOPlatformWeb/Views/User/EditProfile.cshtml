@@ -23,7 +23,10 @@
             <div class="profile-sidebar">
                 <!-- 使用者頭像區域 -->
                 <div class="profile-avatar">
-                    <img src="@Model.ProfileImage" alt="目前頭像" id="currentAvatar" />
+                    <img src="@(Model.ProfileImage ?? "/images/user-default-new.svg")" 
+                         alt="目前頭像" 
+                         id="currentAvatar" 
+                         onerror="this.src='/images/user-default-new.svg'" />
                 </div>
                 
                 <!-- 基本資訊顯示 -->
@@ -64,8 +67,11 @@
                         <h5><i class="fas fa-camera me-2"></i>個人頭像</h5>
                         <div class="avatar-upload-section">
                             <div class="current-avatar-preview">
-                                <img src="@Model.ProfileImage" alt="目前頭像" id="currentAvatar" 
-                                     class="avatar-preview-img" />
+                                <img src="@(Model.ProfileImage ?? "/images/user-default-new.svg")" 
+                                     alt="目前頭像" 
+                                     id="currentAvatar" 
+                                     class="avatar-preview-img"
+                                     onerror="this.src='/images/user-default-new.svg'" />
                             </div>
                             <div class="upload-controls">
                                 <input type="file" name="profileImageFile" id="profileImageFile" 

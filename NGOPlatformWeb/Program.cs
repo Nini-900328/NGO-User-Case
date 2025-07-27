@@ -11,10 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.IdleTimeout = TimeSpan.FromHours(2); // 與認證 Cookie 一致
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
-    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SameSite = SameSiteMode.None; // 允許跨域時保持 Cookie，改為 None 以支援 Ngrok
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // 必須使用 Secure 當 SameSite=None
 });
 
 // Add Data Protection for OAuth state management
@@ -39,8 +40,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         options.LoginPath = "/Auth/Login";
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(10); // 改為 10 分鐘
+        options.ExpireTimeSpan = TimeSpan.FromHours(2); // 延長到 2 小時，足夠完成付款流程
         options.SlidingExpiration = true; // 啟用滑動過期（每次活動重置時間）
+        
+        // 修復跨域付款時的 Cookie 設定
+        options.Cookie.SameSite = SameSiteMode.None; // 允許跨域時保持 Cookie，改為 None 以支援 Ngrok
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // 必須使用 Secure 當 SameSite=None
+        options.Cookie.HttpOnly = true; // 防止 XSS 攻擊
+        options.Cookie.IsEssential = true; // 確保 Cookie 不被 GDPR 政策阻擋
     })
     .AddGoogle(options =>
     {
