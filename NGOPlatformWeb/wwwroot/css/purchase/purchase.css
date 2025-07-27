@@ -923,8 +923,49 @@
     font-size: 0.875rem;
     color: var(--gray-600);
     text-align: center;
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--space-lg);
     line-height: 1.5;
+}
+
+.purchase-page .package-quantity {
+    margin-bottom: var(--space-xl);
+    text-align: center;
+}
+
+.purchase-page .package-quantity label {
+    font-size: 0.9rem;
+    color: var(--gray-700);
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+    display: block;
+}
+
+.purchase-page .quantity-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    background: white;
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
+
+.purchase-page .quantity-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.purchase-page .quantity-select:hover {
+    border-color: var(--gray-300);
 }
 
 .purchase-page .package-btn {

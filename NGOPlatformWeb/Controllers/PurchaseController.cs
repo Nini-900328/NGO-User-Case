@@ -13,11 +13,13 @@ namespace NGOPlatformWeb.Controllers
     {
         private readonly NGODbContext _context;
         private readonly EcpayService _ecpayService;
+        private readonly IConfiguration _configuration;
 
-        public PurchaseController(NGODbContext context, EcpayService ecpayService)
+        public PurchaseController(NGODbContext context, EcpayService ecpayService, IConfiguration configuration)
         {
             _context = context;
             _ecpayService = ecpayService;
+            _configuration = configuration;
         }
 
         // 主要捐贈頁面 - 顯示緊急需求和常規物資供民眾認購
@@ -34,6 +36,10 @@ namespace NGOPlatformWeb.Controllers
                 {
                     var rawEmergencyNeeds = _context.EmergencySupplyNeeds
                         .Where(e => e.Status == "Fundraising" && e.CollectedQuantity < e.Quantity)
+                        .OrderBy(e => e.Priority == "Urgent" ? 1 : 
+                                      e.Priority == "High" ? 2 : 
+                                      e.Priority == "Normal" ? 3 : 4)
+                        .ThenByDescending(e => (decimal)(e.Quantity - e.CollectedQuantity) / e.Quantity) // 剩餘比例高的優先
                         .Take(6) // 限制顯示6個緊急需求項目
                         .ToList();
 
@@ -233,7 +239,7 @@ namespace NGOPlatformWeb.Controllers
         // 組合包購買 - 根據實際物資價格計算組合包總價
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult BuyPackage(string packageType)
+        public IActionResult BuyPackage(string packageType, int quantity = 1)
         {
             // 根據實際物資價格計算組合包價格
             var (name, price) = packageType switch
@@ -251,13 +257,20 @@ namespace NGOPlatformWeb.Controllers
                 return RedirectToAction("Index");
             }
 
+            // 驗證數量範圍
+            if (quantity < 1 || quantity > 3)
+            {
+                TempData["Error"] = "數量必須在1-3份之間";
+                return RedirectToAction("Index");
+            }
+
             // 建立組合包付款資料模型
             var paymentModel = new PaymentViewModel
             {
                 SupplyId = -1, // 組合包標記（-1表示非單項物資）
                 SupplyName = name,
-                Quantity = 1,
-                TotalPrice = price,
+                Quantity = quantity,
+                TotalPrice = price * quantity,
                 SupplyType = "package",
                 IsLoggedIn = User.Identity?.IsAuthenticated ?? false
             };
@@ -312,7 +325,7 @@ namespace NGOPlatformWeb.Controllers
                 }
                 
                 // 產生訂單編號
-                var orderNumber = await GenerateOrderNumberAsync();
+                var orderNumber = GenerateOrderNumber();
                 
                 // 檢查是否為組合包
                 bool isPackage = model.SupplyType == "package";
@@ -375,7 +388,7 @@ namespace NGOPlatformWeb.Controllers
                             OrderNumber = orderNumber,
                             OrderDate = DateTime.Now,
                             TotalPrice = model.TotalPrice,
-                            PaymentStatus = "已付款",
+                            PaymentStatus = model.PaymentMethod == "ecpay" ? "待付款" : "已付款",
                             PaymentMethod = model.PaymentMethod,
                             OrderSource = "package"
                         };
@@ -388,18 +401,24 @@ namespace NGOPlatformWeb.Controllers
                         
                         foreach (var (supplyId, quantity) in packageItems)
                         {
-                            // 增加物資庫存（民眾捐款讓NGO採購物資）
                             var supply = await _context.Supplies.FirstOrDefaultAsync(s => s.SupplyId == supplyId);
                             if (supply != null)
                             {
-                                supply.SupplyQuantity += quantity;
+                                // 只有非ECPay付款才立即更新庫存，ECPay等回調確認後再更新
+                                if (model.PaymentMethod != "ecpay")
+                                {
+                                    // 增加物資庫存（民眾捐款讓NGO採購物資）
+                                    // 庫存更新 = 基本數量 x 組合包數量
+                                    supply.SupplyQuantity += quantity * model.Quantity;
+                                }
                                 
                                 // 創建訂單明細（使用實際物資價格）
+                                // 注意：quantity 是基本數量，要乘以用戶選擇的組合包數量
                                 var orderDetail = new UserOrderDetail
                                 {
                                     UserOrderId = order.UserOrderId,
                                     SupplyId = supplyId,
-                                    Quantity = quantity,
+                                    Quantity = quantity * model.Quantity, // 基本數量 x 組合包數量
                                     UnitPrice = supply.SupplyPrice ?? 0, // 使用實際物資價格
                                     OrderSource = "package"
                                 };
@@ -421,13 +440,14 @@ namespace NGOPlatformWeb.Controllers
                     }
                     else
                     {
-                        // 未登入用戶也要增加庫存（匹名捐贈）
+                        // 未登入用戶也要增加庫存（匿名捐贈）
                         foreach (var (supplyId, quantity) in packageItems)
                         {
                             var supply = await _context.Supplies.FirstOrDefaultAsync(s => s.SupplyId == supplyId);
-                            if (supply != null)
+                            if (supply != null && model.PaymentMethod != "ecpay")
                             {
-                                supply.SupplyQuantity += quantity;
+                                // 庫存更新 = 基本數量 x 組合包數量
+                                supply.SupplyQuantity += quantity * model.Quantity;
                             }
                         }
                     }
@@ -437,23 +457,27 @@ namespace NGOPlatformWeb.Controllers
                     // 如果是緊急需求，只處理緊急物資表，不涉及物資總表
                     if (model.EmergencyNeedId.HasValue)
                     {
-                        // 使用原始 SQL 更新以避免觸發器衝突
-                        var emergencyNeedId = model.EmergencyNeedId.Value;
-                        var quantity = model.Quantity;
-                        
-                        await _context.Database.ExecuteSqlRawAsync(
-                            "UPDATE EmergencySupplyNeeds SET CollectedQuantity = CollectedQuantity + {0}, UpdatedDate = {1} WHERE EmergencyNeedId = {2}",
-                            quantity, DateTime.Now, emergencyNeedId);
-                        
-                        // 檢查是否需要更新狀態
-                        var emergencyNeed = await _context.EmergencySupplyNeeds
-                            .FirstOrDefaultAsync(e => e.EmergencyNeedId == emergencyNeedId);
-                        
-                        if (emergencyNeed != null && emergencyNeed.CollectedQuantity >= emergencyNeed.Quantity && emergencyNeed.Status == "Fundraising")
+                        // 只有非ECPay付款才立即更新庫存，ECPay等回調確認後再更新
+                        if (model.PaymentMethod != "ecpay")
                         {
+                            // 使用原始 SQL 更新以避免觸發器衝突
+                            var emergencyNeedId = model.EmergencyNeedId.Value;
+                            var quantity = model.Quantity;
+                            
                             await _context.Database.ExecuteSqlRawAsync(
-                                "UPDATE EmergencySupplyNeeds SET Status = 'Completed' WHERE EmergencyNeedId = {0}",
-                                emergencyNeedId);
+                                "UPDATE EmergencySupplyNeeds SET CollectedQuantity = CollectedQuantity + {0}, UpdatedDate = {1} WHERE EmergencyNeedId = {2}",
+                                quantity, DateTime.Now, emergencyNeedId);
+                            
+                            // 檢查是否需要更新狀態
+                            var emergencyNeed = await _context.EmergencySupplyNeeds
+                                .FirstOrDefaultAsync(e => e.EmergencyNeedId == emergencyNeedId);
+                            
+                            if (emergencyNeed != null && emergencyNeed.CollectedQuantity >= emergencyNeed.Quantity && emergencyNeed.Status == "Fundraising")
+                            {
+                                await _context.Database.ExecuteSqlRawAsync(
+                                    "UPDATE EmergencySupplyNeeds SET Status = 'Completed' WHERE EmergencyNeedId = {0}",
+                                    emergencyNeedId);
+                            }
                         }
                     }
                     else
@@ -468,8 +492,12 @@ namespace NGOPlatformWeb.Controllers
                                 return View("Payment", model);
                             }
 
-                            // 認購物資：增加物資庫存（民眾捐錢讓NGO採購物資）
-                            supply.SupplyQuantity += model.Quantity;
+                            // 只有非ECPay付款才立即更新庫存，ECPay等回調確認後再更新
+                            if (model.PaymentMethod != "ecpay")
+                            {
+                                // 認購物資：增加物資庫存（民眾捐錢讓NGO採購物資）
+                                supply.SupplyQuantity += model.Quantity;
+                            }
                         }
                     }
 
@@ -493,7 +521,7 @@ namespace NGOPlatformWeb.Controllers
                                     OrderNumber = orderNumber,
                                     OrderDate = DateTime.Now,
                                     TotalPrice = model.TotalPrice,
-                                    PaymentStatus = "已付款",
+                                    PaymentStatus = model.PaymentMethod == "ecpay" ? "待付款" : "已付款",
                                     PaymentMethod = model.PaymentMethod,
                                     OrderSource = model.EmergencyNeedId.HasValue ? "emergency" : "regular",
                                     EmergencyNeedId = model.EmergencyNeedId
@@ -578,6 +606,8 @@ namespace NGOPlatformWeb.Controllers
                     ViewBag.DebugReturnUrl = returnUrl;
                     ViewBag.DebugClientBackUrl = clientBackUrl;
                     ViewBag.DebugOrderNumber = order.OrderNumber;
+                    ViewBag.UseNgrok = _configuration.GetValue<bool>("ECPay:UseNgrok");
+                    ViewBag.NgrokUrl = _configuration.GetValue<string>("ECPay:NgrokUrl");
                     
                     var paymentForm = _ecpayService.CreatePayment(order, returnUrl!, clientBackUrl!);
 
@@ -645,20 +675,12 @@ namespace NGOPlatformWeb.Controllers
             };
         }
 
-        // 產生訂單編號: NGO{yyyyMMdd}{序號} 例如 NGO20250715001
-        private async Task<string> GenerateOrderNumberAsync()
+        // 產生訂單編號: NGO{yyyyMMddHHmmss} 例如 NGO20250727143052
+        // 使用時間戳記確保絕對唯一性，符合業界標準
+        private string GenerateOrderNumber()
         {
-            var today = DateTime.Now.ToString("yyyyMMdd");
-            var prefix = $"NGO{today}";
-            
-            // 取得今日已有訂單數量來產生下一個序號
-            var todayOrders = await _context.UserOrders
-                .Where(o => o.OrderDate.Date == DateTime.Now.Date)
-                .CountAsync();
-            
-            // 序號格式化為3位數字（001, 002, 003...）
-            var sequence = (todayOrders + 1).ToString("D3");
-            return $"{prefix}{sequence}";
+            var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+            return $"NGO{timestamp}";
         }
 
         // 智慧型預設圖片選擇 - 根據物資名稱自動匹配圖片
@@ -697,7 +719,7 @@ namespace NGOPlatformWeb.Controllers
                 var order = new UserOrder
                 {
                     UserId = model.UserId ?? 0,
-                    OrderNumber = GenerateOrderNumberAsync().Result,
+                    OrderNumber = GenerateOrderNumber(),
                     OrderDate = DateTime.Now,
                     TotalPrice = model.TotalPrice,
                     PaymentStatus = "待付款",
@@ -727,6 +749,14 @@ namespace NGOPlatformWeb.Controllers
                 // 產生 ECPay 付款表單
                 var returnUrl = Url.Action("EcpayCallback", "Purchase", null, Request.Scheme);
                 var clientBackUrl = Url.Action("PaymentSuccess", "Purchase", null, Request.Scheme);
+                
+                // 調試信息
+                ViewBag.DebugReturnUrl = returnUrl;
+                ViewBag.DebugClientBackUrl = clientBackUrl;
+                ViewBag.DebugOrderNumber = order.OrderNumber;
+                ViewBag.UseNgrok = _configuration.GetValue<bool>("ECPay:UseNgrok");
+                ViewBag.NgrokUrl = _configuration.GetValue<string>("ECPay:NgrokUrl");
+                
                 var paymentForm = _ecpayService.CreatePayment(order, returnUrl!, clientBackUrl!);
 
                 ViewBag.PaymentForm = paymentForm;
@@ -754,11 +784,25 @@ namespace NGOPlatformWeb.Controllers
         public IActionResult EcpayCallback()
         {
             var parameters = Request.Form.ToDictionary(x => x.Key, x => x.Value.ToString());
-            var success = _ecpayService.ProcessCallback(parameters);
             
             // 記錄回調參數供調試
             var merchantTradeNo = parameters.GetValueOrDefault("MerchantTradeNo");
             var rtnCode = parameters.GetValueOrDefault("RtnCode");
+            var tradeNo = parameters.GetValueOrDefault("TradeNo");
+            
+            Console.WriteLine($"=== ECPay 回調 ===");
+            Console.WriteLine($"MerchantTradeNo: {merchantTradeNo}");
+            Console.WriteLine($"RtnCode: {rtnCode}");
+            Console.WriteLine($"TradeNo: {tradeNo}");
+            Console.WriteLine($"所有回調參數:");
+            foreach (var param in parameters)
+            {
+                Console.WriteLine($"  {param.Key} = {param.Value}");
+            }
+            
+            var success = _ecpayService.ProcessCallback(parameters);
+            
+            Console.WriteLine($"回調處理結果: {(success ? "成功" : "失敗")}");
             
             return Content(success ? "1|OK" : "0|ERROR");
         }
@@ -810,38 +854,120 @@ namespace NGOPlatformWeb.Controllers
             var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == order.UserId);
             var donorName = user?.Name ?? "匿名捐贈者";
             
-            // 取得訂單詳情
-            var orderDetail = order.OrderDetails.FirstOrDefault();
+            // 取得訂單詳情 - 修復數量顯示問題
             var supplyName = "物資捐贈";
             var quantity = 0;
             var isEmergency = false;
             int? caseId = null;
 
-            if (orderDetail != null)
+            if (order.OrderDetails.Any())
             {
-                if (orderDetail.EmergencyNeedId.HasValue)
+                // 檢查是否為組合包訂單（通過訂單來源判斷）
+                var isPackageOrder = order.OrderSource == "package";
+                
+                if (isPackageOrder)
                 {
-                    // 緊急物資
-                    var emergency = await _context.EmergencySupplyNeeds
-                        .FirstOrDefaultAsync(e => e.EmergencyNeedId == orderDetail.EmergencyNeedId.Value);
-                    if (emergency != null)
+                    // 組合包：需要從 OrderDetail 計算出組合包數量
+                    // 因為每個 OrderDetail 的 Quantity = 基本數量 x 組合包數量
+                    // 我們取第一個物資的數量來反推組合包數量
+                    var firstDetail = order.OrderDetails.FirstOrDefault();
+                    if (firstDetail != null)
                     {
-                        supplyName = emergency.SupplyName ?? "緊急物資";
-                        isEmergency = true;
-                        caseId = emergency.CaseId;
+                        // 根據組合包類型確定基本倍數來計算組合包數量
+                        // 醫療包第一項是口罩2盒，食物包第一項是糙米3包，清潔包第一項是洗髮精1瓶
+                        var baseQuantity = firstDetail.SupplyId switch
+                        {
+                            14 => 2, // 醫療包 - 口罩基本2盒
+                            3 => 3,  // 食物包 - 糙米基本3包  
+                            16 => 1, // 清潔包 - 洗髮精基本1瓶
+                            _ => 1
+                        };
+                        quantity = firstDetail.Quantity / baseQuantity;
+                        
+                        // 組合包名稱處理
+                        var supply = await _context.Supplies
+                            .FirstOrDefaultAsync(s => s.SupplyId == firstDetail.SupplyId);
+                        
+                        // 根據第一個物資判斷組合包類型
+                        supplyName = firstDetail.SupplyId switch
+                        {
+                            14 => "醫療照護套組", // 口罩
+                            3 => "營養食物套組",  // 糙米
+                            16 => "清潔護理套組", // 洗髮精
+                            _ => "愛心組合包"
+                        };
+                    }
+                    else
+                    {
+                        quantity = 1;
+                        supplyName = "愛心組合包";
+                    }
+                }
+                else if (order.OrderDetails.Count > 1)
+                {
+                    // 多個物資的情況（非組合包）
+                    quantity = order.OrderDetails.Sum(od => od.Quantity);
+                    var supplyNames = new List<string>();
+                    
+                    foreach (var detail in order.OrderDetails)
+                    {
+                        if (detail.EmergencyNeedId.HasValue)
+                        {
+                            var emergency = await _context.EmergencySupplyNeeds
+                                .FirstOrDefaultAsync(e => e.EmergencyNeedId == detail.EmergencyNeedId.Value);
+                            if (emergency != null)
+                            {
+                                supplyNames.Add($"{emergency.SupplyName}({detail.Quantity}份)");
+                                isEmergency = true;
+                                caseId = emergency.CaseId;
+                            }
+                        }
+                        else
+                        {
+                            var supply = await _context.Supplies
+                                .FirstOrDefaultAsync(s => s.SupplyId == detail.SupplyId);
+                            if (supply != null)
+                            {
+                                supplyNames.Add($"{supply.SupplyName}({detail.Quantity}份)");
+                            }
+                        }
+                    }
+                    
+                    supplyName = string.Join("、", supplyNames);
+                    if (supplyNames.Count > 2)
+                    {
+                        supplyName = $"多項物資 (共{quantity}份)";
                     }
                 }
                 else
                 {
-                    // 一般物資
-                    var supply = await _context.Supplies
-                        .FirstOrDefaultAsync(s => s.SupplyId == orderDetail.SupplyId);
-                    if (supply != null)
+                    // 單一物資
+                    var orderDetail = order.OrderDetails.First();
+                    quantity = orderDetail.Quantity;
+                    
+                    if (orderDetail.EmergencyNeedId.HasValue)
                     {
-                        supplyName = supply.SupplyName ?? "一般物資";
+                        // 緊急物資
+                        var emergency = await _context.EmergencySupplyNeeds
+                            .FirstOrDefaultAsync(e => e.EmergencyNeedId == orderDetail.EmergencyNeedId.Value);
+                        if (emergency != null)
+                        {
+                            supplyName = emergency.SupplyName ?? "緊急物資";
+                            isEmergency = true;
+                            caseId = emergency.CaseId;
+                        }
+                    }
+                    else
+                    {
+                        // 一般物資
+                        var supply = await _context.Supplies
+                            .FirstOrDefaultAsync(s => s.SupplyId == orderDetail.SupplyId);
+                        if (supply != null)
+                        {
+                            supplyName = supply.SupplyName ?? "一般物資";
+                        }
                     }
                 }
-                quantity = orderDetail.Quantity;
             }
             
             // 如果是緊急訂單，也從主訂單取得緊急需求資訊
@@ -872,6 +998,97 @@ namespace NGOPlatformWeb.Controllers
             };
 
             return View("Success", viewModel);
+        }
+
+        // 重新付款功能
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> RetryPayment(int orderId)
+        {
+            // 調試信息
+            Console.WriteLine($"RetryPayment 被調用，OrderId: {orderId}");
+            
+            var userIdStr = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            Console.WriteLine($"UserIdStr: {userIdStr}");
+            
+            if (!int.TryParse(userIdStr, out int userId))
+            {
+                Console.WriteLine("用戶身份驗證失敗");
+                TempData["Error"] = "用戶身份驗證失敗";
+                return RedirectToAction("Login", "Auth");
+            }
+            
+            Console.WriteLine($"UserId: {userId}");
+
+            // 查找用戶的未付款訂單
+            var order = await _context.UserOrders
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Supply)
+                .FirstOrDefaultAsync(o => o.UserOrderId == orderId && o.UserId == userId);
+
+            if (order == null)
+            {
+                TempData["Error"] = $"找不到指定的訂單 (OrderId: {orderId}, UserId: {userId})";
+                return RedirectToAction("PurchaseRecords", "User");
+            }
+
+            // 只允許重新付款未付款或失敗的訂單
+            if (order.PaymentStatus != "待付款" && order.PaymentStatus != "付款失敗")
+            {
+                TempData["Error"] = "此訂單無法重新付款";
+                return RedirectToAction("PurchaseRecords", "User");
+            }
+
+            // 檢查訂單是否太舊（比如超過24小時）
+            if ((DateTime.Now - order.OrderDate).TotalHours > 24)
+            {
+                TempData["Error"] = "訂單已過期，請重新下單";
+                return RedirectToAction("PurchaseRecords", "User");
+            }
+
+            try
+            {
+                // 為重新付款生成新的訂單號（ECPay 限制20字元）
+                var timestamp = DateTime.Now.ToString("mmss"); // 4位數字，更短
+                var baseOrderNumber = order.OrderNumber;
+                
+                // 如果已經是重新付款的訂單號，替換時間戳部分
+                if (baseOrderNumber.Contains("R") && baseOrderNumber.Length > 18)
+                {
+                    baseOrderNumber = baseOrderNumber.Substring(0, baseOrderNumber.LastIndexOf("R"));
+                }
+                
+                // 確保總長度不超過20字元：基礎號(15) + R(1) + 時間戳(4) = 20
+                if (baseOrderNumber.Length > 15)
+                {
+                    baseOrderNumber = baseOrderNumber.Substring(0, 15);
+                }
+                
+                var newOrderNumber = $"{baseOrderNumber}R{timestamp}";
+                order.OrderNumber = newOrderNumber;
+                order.PaymentStatus = "待付款";
+                await _context.SaveChangesAsync();
+
+                // 產生 ECPay 付款表單
+                var returnUrl = Url.Action("EcpayCallback", "Purchase", null, Request.Scheme);
+                var clientBackUrl = Url.Action("PaymentSuccess", "Purchase", new { MerchantTradeNo = order.OrderNumber }, Request.Scheme);
+                
+                // 調試信息
+                ViewBag.DebugReturnUrl = returnUrl;
+                ViewBag.DebugClientBackUrl = clientBackUrl;
+                ViewBag.DebugOrderNumber = order.OrderNumber;
+                ViewBag.UseNgrok = _configuration.GetValue<bool>("ECPay:UseNgrok");
+                ViewBag.NgrokUrl = _configuration.GetValue<string>("ECPay:NgrokUrl");
+                
+                var paymentForm = _ecpayService.CreatePayment(order, returnUrl!, clientBackUrl!);
+
+                ViewBag.PaymentForm = paymentForm;
+                return View("EcpayRedirect");
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "重新付款時發生錯誤: " + ex.Message;
+                return RedirectToAction("PurchaseRecords", "User");
+            }
         }
     }
 }

@@ -100,7 +100,7 @@
                     <div class="emergency-card">
                         <!-- 優先級標籤 -->
                         <div class="emergency-indicator @(item.Priority == "Urgent" ? "urgent" : item.Priority == "High" ? "high" : item.Priority == "Low" ? "low" : "normal")">
-                            @(item.Priority == "Urgent" ? "極緊急" : item.Priority == "High" ? "高優先" : item.Priority == "Low" ? "低優先" : "一般")
+                            @(item.Priority == "Urgent" ? "極緊急" : item.Priority == "High" ? "高優先" : item.Priority == "Low" ? "低優先" : "普通")
                         </div>
                         
                         <div class="card-img">
@@ -221,7 +221,15 @@
                         <div class="package-item"><i class="fas fa-check"></i><span>紗布繃帶 x 5組</span></div>
                     </div>
                     <p class="package-desc">適合需要醫療照護的長者或慢性病患</p>
-                    <button class="package-btn medical" onclick="buyPackage('medical')">
+                    <div class="package-quantity">
+                        <label>捐贈數量：</label>
+                        <select class="quantity-select" id="medical-quantity" onchange="updatePackagePrice('medical', 705)">
+                            <option value="1">1組 (NT$ 705)</option>
+                            <option value="2">2組 (NT$ 1,410)</option>
+                            <option value="3">3組 (NT$ 2,115)</option>
+                        </select>
+                    </div>
+                    <button class="package-btn medical" onclick="buyPackageWithQuantity('medical')">
                         <span>立即捐贈</span><i class="fas fa-arrow-right"></i>
                     </button>
                 </div>
@@ -242,7 +250,15 @@
                         <div class="package-item"><i class="fas fa-check"></i><span>豆奶 x 12瓶</span></div>
                     </div>
                     <p class="package-desc">提供一周基本營養需求，幫助家庭度過困難</p>
-                    <button class="package-btn food" onclick="buyPackage('food')">
+                    <div class="package-quantity">
+                        <label>捐贈數量：</label>
+                        <select class="quantity-select" id="food-quantity" onchange="updatePackagePrice('food', 605)">
+                            <option value="1">1組 (NT$ 605)</option>
+                            <option value="2">2組 (NT$ 1,210)</option>
+                            <option value="3">3組 (NT$ 1,815)</option>
+                        </select>
+                    </div>
+                    <button class="package-btn food" onclick="buyPackageWithQuantity('food')">
                         <span>立即捐贈</span><i class="fas fa-arrow-right"></i>
                     </button>
                 </div>
@@ -263,7 +279,15 @@
                         <div class="package-item"><i class="fas fa-check"></i><span>濕紙巾 x 5包</span></div>
                     </div>
                     <p class="package-desc">維持基本清潔衛生，提升生活品質</p>
-                    <button class="package-btn hygiene" onclick="buyPackage('hygiene')">
+                    <div class="package-quantity">
+                        <label>捐贈數量：</label>
+                        <select class="quantity-select" id="hygiene-quantity" onchange="updatePackagePrice('hygiene', 415)">
+                            <option value="1">1組 (NT$ 415)</option>
+                            <option value="2">2組 (NT$ 830)</option>
+                            <option value="3">3組 (NT$ 1,245)</option>
+                        </select>
+                    </div>
+                    <button class="package-btn hygiene" onclick="buyPackageWithQuantity('hygiene')">
                         <span>立即捐贈</span><i class="fas fa-arrow-right"></i>
                     </button>
                 </div>
@@ -481,6 +505,20 @@
         
         // 直接購買函數
         function directPurchase(supplyId, quantity, emergencyNeedId, supplyType) {
+            // 找到被點擊的按鈕並顯示載入狀態
+            const clickedBtn = event.target.closest('button');
+            if (clickedBtn) {
+                const originalText = clickedBtn.innerHTML;
+                clickedBtn.disabled = true;
+                clickedBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>處理中...';
+                
+                // 設定超時恢復按鈕狀態
+                setTimeout(() => {
+                    clickedBtn.disabled = false;
+                    clickedBtn.innerHTML = originalText;
+                }, 10000);
+            }
+            
             // 創建表單並提交
             const form = $('<form>', {
                 'method': 'POST',
@@ -520,6 +558,20 @@
         
         // 組合包購買函數
         function buyPackage(packageType) {
+            // 找到被點擊的按鈕並顯示載入狀態
+            const clickedBtn = event.target.closest('button');
+            if (clickedBtn) {
+                const originalText = clickedBtn.innerHTML;
+                clickedBtn.disabled = true;
+                clickedBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>處理中...';
+                
+                // 設定超時恢復按鈕狀態
+                setTimeout(() => {
+                    clickedBtn.disabled = false;
+                    clickedBtn.innerHTML = originalText;
+                }, 10000);
+            }
+            
             // 創建表單並提交到組合包購買API
             const form = $('<form>', {
                 'method': 'POST',
@@ -530,6 +582,66 @@
                 'type': 'hidden',
                 'name': 'packageType',
                 'value': packageType
+            }));
+            
+            // 添加防偽令牌
+            form.append($('<input>', {
+                'type': 'hidden',
+                'name': '__RequestVerificationToken',
+                'value': $('input[name="__RequestVerificationToken"]').val()
+            }));
+            
+            $('body').append(form);
+            form.submit();
+        }
+        
+        // 更新組合包價格顯示
+        function updatePackagePrice(packageType, basePrice) {
+            const quantity = parseInt(document.getElementById(packageType + '-quantity').value);
+            const totalPrice = basePrice * quantity;
+            
+            // 更新卡片上的價格顯示
+            const priceElement = document.querySelector(`.${packageType}-bg .package-price`);
+            if (priceElement) {
+                priceElement.textContent = `NT$ ${totalPrice.toLocaleString()}`;
+            }
+        }
+        
+        // 帶數量的組合包購買函數
+        function buyPackageWithQuantity(packageType) {
+            // 找到被點擊的按鈕並顯示載入狀態
+            const clickedBtn = event.target.closest('button');
+            if (clickedBtn) {
+                const originalText = clickedBtn.innerHTML;
+                clickedBtn.disabled = true;
+                clickedBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>處理中...';
+                
+                // 設定超時恢復按鈕狀態
+                setTimeout(() => {
+                    clickedBtn.disabled = false;
+                    clickedBtn.innerHTML = originalText;
+                }, 10000);
+            }
+            
+            // 取得選擇的數量
+            const quantity = parseInt(document.getElementById(packageType + '-quantity').value) || 1;
+            
+            // 創建表單並提交到組合包購買API
+            const form = $('<form>', {
+                'method': 'POST',
+                'action': '@Url.Action("BuyPackage", "Purchase")'
+            });
+            
+            form.append($('<input>', {
+                'type': 'hidden',
+                'name': 'packageType',
+                'value': packageType
+            }));
+            
+            form.append($('<input>', {
+                'type': 'hidden',
+                'name': 'quantity',
+                'value': quantity
             }));
             
             // 添加防偽令牌

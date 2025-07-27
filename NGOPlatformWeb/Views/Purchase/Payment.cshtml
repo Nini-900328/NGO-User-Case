@@ -371,13 +371,74 @@
                 $(this).val(formattedValue);
             });
             
-            // 有效期限格式化 (MM/YY)
+            // 有效期限格式化和驗證 (MM/YY)
             $('input[placeholder="MM/YY"]').on('input', function() {
                 let value = $(this).val().replace(/\D/g, '');
-                if (value.length >= 2) {
-                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                let formattedValue = '';
+                
+                if (value.length > 0) {
+                    // 處理月份 (01-12)
+                    let month = value.substring(0, 2);
+                    if (month.length === 1) {
+                        formattedValue = month;
+                    } else if (month.length === 2) {
+                        // 限制月份為 01-12
+                        let monthNum = parseInt(month);
+                        if (monthNum < 1) {
+                            month = '01';
+                        } else if (monthNum > 12) {
+                            month = '12';
+                        }
+                        formattedValue = month;
+                        
+                        // 處理年份 (限制在合理範圍內)
+                        if (value.length > 2) {
+                            let year = value.substring(2, 4);
+                            let yearNum = parseInt(year);
+                            let currentYear = new Date().getFullYear() % 100;
+                            
+                            // 限制年份範圍：當前年份到+15年
+                            if (year.length === 2) {
+                                if (yearNum < currentYear) {
+                                    // 如果小於當前年份，可能是下個世紀（如：當前25，輸入30表示2030）
+                                    // 但如果太小就調整（如：輸入05表示2005，應該調整為25）
+                                    if (yearNum < currentYear - 50) {
+                                        year = currentYear.toString().padStart(2, '0');
+                                    }
+                                } else if (yearNum > currentYear + 15) {
+                                    // 超過15年的設為最大值
+                                    year = (currentYear + 15).toString().padStart(2, '0');
+                                }
+                            }
+                            formattedValue += '/' + year;
+                        }
+                    }
                 }
-                $(this).val(value);
+                
+                $(this).val(formattedValue);
+            });
+            
+            // 有效期限失焦驗證
+            $('input[placeholder="MM/YY"]').on('blur', function() {
+                let value = $(this).val();
+                if (value.length === 5 && value.includes('/')) {
+                    let [month, year] = value.split('/');
+                    let currentDate = new Date();
+                    let currentYear = currentDate.getFullYear() % 100; // 取後兩位
+                    let currentMonth = currentDate.getMonth() + 1;
+                    
+                    let cardYear = parseInt(year);
+                    let cardMonth = parseInt(month);
+                    
+                    // 檢查是否過期
+                    if (cardYear < currentYear || (cardYear === currentYear && cardMonth < currentMonth)) {
+                        $(this).addClass('is-invalid');
+                        $(this).after('<div class="invalid-feedback">信用卡已過期</div>');
+                    } else {
+                        $(this).removeClass('is-invalid');
+                        $(this).siblings('.invalid-feedback').remove();
+                    }
+                }
             });
         });
     </script>

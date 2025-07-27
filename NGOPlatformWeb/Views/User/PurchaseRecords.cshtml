@@ -263,6 +263,10 @@
                         <span>全部</span>
                         <span class="tab-count">@(Model.Orders.Count(o => o.IsEmergencyOrder || o.OrderSource == "package"))</span>
                     </button>
+                    <button class="tab-btn" data-filter="unpaid">
+                        <span>未付款</span>
+                        <span class="tab-count">@(Model.Orders.Count(o => (o.IsEmergencyOrder || o.OrderSource == "package") && (o.PaymentStatus == "待付款" || o.PaymentStatus == "付款失敗")))</span>
+                    </button>
                     <button class="tab-btn" data-filter="emergency">
                         <span>緊急援助</span>
                         <span class="tab-count">@(Model.Orders.Count(o => o.IsEmergencyOrder))</span>
@@ -282,6 +286,7 @@
                 {
                     <div class="donation-story-card @(order.IsEmergencyOrder ? "emergency-type" : "package-type")" 
                          data-type="@(order.IsEmergencyOrder ? "emergency" : "package")"
+                         data-payment-status="@order.PaymentStatus"
                          data-order-id="@order.OrderId">
                         
                         <!-- 援助故事標題 -->
@@ -452,10 +457,28 @@
                                 </div>
                             </div>
                             <div class="quick-actions">
-                                <button class="action-btn secondary" onclick="window.print()">
-                                    <i class="fas fa-download"></i>
-                                    <span>下載收據</span>
-                                </button>
+                                @if (order.PaymentStatus == "待付款")
+                                {
+                                    <a href="@Url.Action("RetryPayment", "Purchase", new { orderId = order.OrderId })" 
+                                       class="action-btn primary">
+                                        <i class="fas fa-credit-card"></i>
+                                        <span>重新付款</span>
+                                    </a>
+                                }
+                                else if (order.PaymentStatus == "已付款")
+                                {
+                                    <button class="action-btn secondary" onclick="window.print()">
+                                        <i class="fas fa-download"></i>
+                                        <span>下載收據</span>
+                                    </button>
+                                }
+                                else if (order.PaymentStatus == "付款失敗")
+                                {
+                                    <a href="@Url.Action("RetryPayment", "Purchase", new { orderId = order.OrderId })" class="action-btn warning">
+                                        <i class="fas fa-redo"></i>
+                                        <span>重試付款</span>
+                                    </a>
+                                }
                             </div>
                         </div>
                     </div>
@@ -539,8 +562,11 @@
                     
                     storyCards.forEach(card => {
                         const cardType = card.dataset.type;
+                        const paymentStatus = card.dataset.paymentStatus;
                         
                         if (filter === 'all') {
+                            card.style.display = 'block';
+                        } else if (filter === 'unpaid' && (paymentStatus === '待付款' || paymentStatus === '付款失敗')) {
                             card.style.display = 'block';
                         } else if (filter === 'emergency' && cardType === 'emergency') {
                             card.style.display = 'block';

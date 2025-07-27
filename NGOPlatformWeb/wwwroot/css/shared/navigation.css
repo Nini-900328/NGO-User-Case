@@ -320,10 +320,27 @@ nav.navbar .user-welcome-btn:hover {
         border-color: rgba(34, 197, 94, 0.5) !important;
     }
     
-    .user-welcome-btn {
-        flex: 1;
-        background: linear-gradient(135deg, #4b5563, #6b7280);
-        color: white;
+    .modern-navbar .user-welcome-btn,
+    nav.navbar .user-welcome-btn {
+        flex: 1 !important;
+        background: linear-gradient(135deg, #4b5563, #6b7280) !important;
+        color: white !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 6px !important;
+        padding: 8px 16px !important;
+        font-weight: 500 !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .modern-navbar .user-welcome-btn:hover,
+    nav.navbar .user-welcome-btn:hover,
+    .modern-navbar .user-welcome-btn:focus,
+    nav.navbar .user-welcome-btn:focus {
+        background: linear-gradient(135deg, #6b7280, #9ca3af) !important;
+        color: white !important;
+        border-color: rgba(255, 255, 255, 0.3) !important;
+        transform: none !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
     }
 }
 
