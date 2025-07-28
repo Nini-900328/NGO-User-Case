@@ -270,6 +270,20 @@ nav.navbar .user-welcome-btn:hover {
     .modern-navbar .nav-link {
         color: #2d3748 !important;
         margin: 4px 0;
+        display: flex !important;
+        align-items: center !important;
+        padding: 12px 16px !important;
+    }
+    
+    .modern-navbar .nav-link i {
+        width: 18px !important;
+        margin-right: 10px !important;
+        font-size: 14px !important;
+        vertical-align: middle !important;
+    }
+    
+    .modern-navbar .nav-link .ms-1 {
+        margin-left: 0 !important;
     }
     
     .modern-navbar .nav-link:hover {
@@ -290,16 +304,33 @@ nav.navbar .user-welcome-btn:hover {
         justify-content: center;
     }
     
-    .modern-navbar .btn-outline-light-modern {
-        color: #2d3748;
-        border-color: rgba(45, 55, 72, 0.2);
+    .modern-navbar .btn-outline-light-modern,
+    nav.navbar .btn-outline-light-modern {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+        color: #2d3748 !important;
+        border: 1px solid rgba(45, 55, 72, 0.3) !important;
         flex: 1;
     }
     
-    .modern-navbar .btn-outline-light-modern:hover {
-        background: linear-gradient(135deg, #4b5563, #6b7280);
-        color: white;
-        border-color: transparent;
+    .modern-navbar .btn-outline-light-modern,
+    .modern-navbar .btn-outline-light-modern *,
+    nav.navbar .btn-outline-light-modern,
+    nav.navbar .btn-outline-light-modern * {
+        color: #2d3748 !important;
+    }
+    
+    .modern-navbar .btn-outline-light-modern:hover,
+    nav.navbar .btn-outline-light-modern:hover {
+        background: linear-gradient(135deg, #2d3748, #4a5568) !important;
+        color: white !important;
+        border-color: transparent !important;
+    }
+    
+    .modern-navbar .btn-outline-light-modern:hover,
+    .modern-navbar .btn-outline-light-modern:hover *,
+    nav.navbar .btn-outline-light-modern:hover,
+    nav.navbar .btn-outline-light-modern:hover * {
+        color: white !important;
     }
     
     .social-worker-btn {
@@ -307,17 +338,33 @@ nav.navbar .user-welcome-btn:hover {
         margin-bottom: 8px;
     }
     
-    .modern-navbar .register-btn {
+    .modern-navbar .register-btn,
+    nav.navbar .register-btn {
         flex: 1;
+        background: linear-gradient(135deg, #f0fdf4, #dcfce7) !important;
         color: #22c55e !important;
-        border-color: rgba(34, 197, 94, 0.3) !important;
-        background: transparent !important;
+        border: 1px solid rgba(34, 197, 94, 0.4) !important;
     }
     
-    .modern-navbar .register-btn:hover {
-        background: rgba(34, 197, 94, 0.1) !important;
-        color: #16a34a !important;
-        border-color: rgba(34, 197, 94, 0.5) !important;
+    .modern-navbar .register-btn,
+    .modern-navbar .register-btn *,
+    nav.navbar .register-btn,
+    nav.navbar .register-btn * {
+        color: #22c55e !important;
+    }
+    
+    .modern-navbar .register-btn:hover,
+    nav.navbar .register-btn:hover {
+        background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+        color: white !important;
+        border-color: transparent !important;
+    }
+    
+    .modern-navbar .register-btn:hover,
+    .modern-navbar .register-btn:hover *,
+    nav.navbar .register-btn:hover,
+    nav.navbar .register-btn:hover * {
+        color: white !important;
     }
     
     .modern-navbar .user-welcome-btn,
