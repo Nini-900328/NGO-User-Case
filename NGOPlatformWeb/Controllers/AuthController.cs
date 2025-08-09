@@ -19,13 +19,15 @@ namespace NGOPlatformWeb.Controllers
         private readonly EmailService _emailService;
         private readonly PasswordService _passwordService;
         private readonly AchievementService _achievementService;
+        private readonly PasswordMigrationService _passwordMigrationService;
 
-        public AuthController(NGODbContext context, EmailService emailService, PasswordService passwordService, AchievementService achievementService)
+        public AuthController(NGODbContext context, EmailService emailService, PasswordService passwordService, AchievementService achievementService, PasswordMigrationService passwordMigrationService)
         {
             _context = context;
             _emailService = emailService;
             _passwordService = passwordService;
             _achievementService = achievementService;
+            _passwordMigrationService = passwordMigrationService;
         }
 
         // GET: /Auth/Login
@@ -515,6 +517,21 @@ namespace NGOPlatformWeb.Controllers
             }
             // 向下兼容明文密碼
             return inputPassword == storedPassword;
+        }
+
+        // 管理端點：執行Case密碼遷移
+        [HttpPost]
+        public async Task<IActionResult> MigrateCasePasswords()
+        {
+            try
+            {
+                await _passwordMigrationService.MigrateCasePasswordsAsync();
+                return Json(new { success = true, message = "Case密碼遷移完成" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"密碼遷移失敗: {ex.Message}" });
+            }
         }
 
     }

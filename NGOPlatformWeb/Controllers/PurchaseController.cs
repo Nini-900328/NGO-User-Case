@@ -132,13 +132,15 @@ namespace NGOPlatformWeb.Controllers
                         .FirstOrDefaultAsync(c => c.CaseId == emergencyNeed.CaseId);
                     caseDescription = caseEntity?.Description;
 
-                    // 建立緊急物資付款資料模型（緊急物資預設單價為100元）
+                    // 建立緊急物資付款資料模型 - 根據物資類型設定合理價格
+                    decimal unitPrice = GetEmergencySupplyPrice(emergencyNeed.SupplyName ?? "");
+                    
                     var paymentModel = new PaymentViewModel
                     {
                         // 緊急物資不需要 SupplyId，完全獨立於物資總表
                         SupplyName = emergencyNeed.SupplyName ?? "未知物資",
                         Quantity = quantity,
-                        TotalPrice = 100 * quantity, // 緊急物資固定單價100元
+                        TotalPrice = unitPrice * quantity, // 根據物資類型計算價格
                         SupplyType = "emergency",
                         EmergencyNeedId = emergencyNeedId,
                         CaseId = emergencyNeed.CaseId,
@@ -970,16 +972,31 @@ namespace NGOPlatformWeb.Controllers
                 }
             }
             
-            // 如果是緊急訂單，也從主訂單取得緊急需求資訊
+            // 如果是緊急訂單，從 EmergencyPurchaseRecords 取得資訊和數量
             if (order.EmergencyNeedId.HasValue && !isEmergency)
             {
-                var emergency = await _context.EmergencySupplyNeeds
-                    .FirstOrDefaultAsync(e => e.EmergencyNeedId == order.EmergencyNeedId.Value);
-                if (emergency != null)
+                var emergencyRecord = await _context.EmergencyPurchaseRecords
+                    .FirstOrDefaultAsync(e => e.UserOrderId == order.UserOrderId);
+                    
+                if (emergencyRecord != null)
                 {
-                    supplyName = emergency.SupplyName ?? "緊急物資";
+                    supplyName = emergencyRecord.SupplyName ?? "緊急物資";
+                    quantity = emergencyRecord.Quantity; // 從緊急認購記錄取得正確數量
                     isEmergency = true;
-                    caseId = emergency.CaseId;
+                    caseId = emergencyRecord.CaseId;
+                }
+                else
+                {
+                    // 如果找不到緊急認購記錄，從需求表取得基本資訊
+                    var emergency = await _context.EmergencySupplyNeeds
+                        .FirstOrDefaultAsync(e => e.EmergencyNeedId == order.EmergencyNeedId.Value);
+                    if (emergency != null)
+                    {
+                        supplyName = emergency.SupplyName ?? "緊急物資";
+                        quantity = 1; // 預設數量
+                        isEmergency = true;
+                        caseId = emergency.CaseId;
+                    }
                 }
             }
 
@@ -1089,6 +1106,65 @@ namespace NGOPlatformWeb.Controllers
                 TempData["Error"] = "重新付款時發生錯誤: " + ex.Message;
                 return RedirectToAction("PurchaseRecords", "User");
             }
+        }
+
+        /// <summary>
+        /// 根據緊急物資名稱取得合理價格（基於網路市價）
+        /// </summary>
+        private decimal GetEmergencySupplyPrice(string supplyName)
+        {
+            return supplyName?.ToLower() switch
+            {
+                // 醫療相關
+                var name when name.Contains("血糖機") || name.Contains("血糖檢測") => 800m,
+                var name when name.Contains("醫療急救包") || name.Contains("急救包") => 350m,
+                var name when name.Contains("體溫計") || name.Contains("溫度計") => 150m,
+                var name when name.Contains("血壓計") => 1200m,
+                
+                // 嬰幼兒用品
+                var name when name.Contains("尿布") && (name.Contains("小孩") || name.Contains("嬰兒") || name.Contains("幼兒")) => 12m, // 每片
+                var name when name.Contains("尿布") && name.Contains("成人") => 15m, // 每片成人尿布
+                var name when name.Contains("紙尿褲") && name.Contains("成人") => 18m, // 每片成人紙尿褲
+                var name when name.Contains("紙尿褲") && (name.Contains("小孩") || name.Contains("嬰兒")) => 10m, // 每片嬰兒紙尿褲
+                var name when name.Contains("奶粉") => 450m,
+                var name when name.Contains("副食品") || name.Contains("嬰兒食品") => 80m,
+                
+                // 保暖用品
+                var name when name.Contains("棉被") && name.Contains("冬季") => 800m,
+                var name when name.Contains("棉被") => 600m,
+                var name when name.Contains("毛衣") || name.Contains("保暖衣") => 350m,
+                var name when name.Contains("毛毯") => 400m,
+                var name when name.Contains("睡袋") => 1200m,
+                
+                // 食物類
+                var name when name.Contains("即食") && name.Contains("罐頭") => 35m,
+                var name when name.Contains("罐頭") => 30m,
+                var name when name.Contains("泡麵") || name.Contains("速食麵") => 25m,
+                var name when name.Contains("米") && name.Contains("包") => 150m, // 一包米
+                var name when name.Contains("食用油") => 120m,
+                var name when name.Contains("麵條") || name.Contains("麵食") => 80m,
+                
+                // 家電用品
+                var name when name.Contains("微波爐") => 2500m,
+                var name when name.Contains("電熱水壺") => 800m,
+                var name when name.Contains("電風扇") => 1200m,
+                var name when name.Contains("電暖器") => 1500m,
+                
+                // 清潔用品
+                var name when name.Contains("洗髮精") => 120m,
+                var name when name.Contains("沐浴乳") => 100m,
+                var name when name.Contains("洗衣精") => 150m,
+                var name when name.Contains("衛生紙") => 80m,
+                var name when name.Contains("濕紙巾") => 60m,
+                
+                // 學習用品
+                var name when name.Contains("筆記本") || name.Contains("作業本") => 30m,
+                var name when name.Contains("文具") => 50m,
+                var name when name.Contains("書包") => 300m,
+                
+                // 預設價格
+                _ => 100m
+            };
         }
     }
 }
