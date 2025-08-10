@@ -99,6 +99,6 @@
 
 一般民眾 → 可進行活動瀏覽、報名、物資認購、查看個資與記錄
 
-個案 → 可進行專屬活動報名、物資選購、物資紀錄查詢（含訪談物資）
+個案 → 可進行專屬活動報名、物資選購、物資/活動紀錄查詢（含訪談物資）
 
 <img width="768" height="322" alt="NGO_User_Case_Frontend_Flowchart" src="https://github.com/user-attachments/assets/13479503-1a70-4c49-b45a-e7a3075ad610" />
